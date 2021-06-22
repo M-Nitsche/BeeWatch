@@ -76,7 +76,7 @@ def choose_floorplan_randomly(list):
     return random.choice(list)
 
 
-def get_obj_positions(obj, bkg, size, count=1, margin=100):
+def get_obj_positions(obj, bkg, size, count=1, margin=0):
     obj_w, obj_h = [], []
     x_positions, y_positions = [], []
     bkg_w, bkg_h = bkg.size
@@ -345,5 +345,5 @@ def run_create_synthetic_images(config=None):
 
 
 if __name__ == "__main__":
-    bee_config = BeeConfig(name='training', num_images=100, label_map='label_map', root='../')
+    bee_config = BeeConfig(name='train', num_images=1000, label_map='label_map', root='../')
     run_create_synthetic_images(config=bee_config)
