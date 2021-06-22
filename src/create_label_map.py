@@ -6,7 +6,7 @@ def create_label_map(objs_path, label_map_path):
 
     # Read class names in object folder
 
-    classes = ['Bee']
+    classes = ['bee']
 
     # save label_map as json for Mask R-CNN
     label_map = {}
