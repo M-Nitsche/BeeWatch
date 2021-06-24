@@ -16,10 +16,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>174</xmin>
-			<ymin>451</ymin>
-			<xmax>266</xmax>
-			<ymax>523</ymax>
+			<xmin>19</xmin>
+			<ymin>494</ymin>
+			<xmax>75</xmax>
+			<ymax>550</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -27,10 +27,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>102</xmin>
-			<ymin>335</ymin>
-			<xmax>150</xmax>
-			<ymax>415</ymax>
+			<xmin>285</xmin>
+			<ymin>380</ymin>
+			<xmax>347</xmax>
+			<ymax>433</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -38,10 +38,76 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>367</xmin>
-			<ymin>103</ymin>
-			<xmax>551</xmax>
-			<ymax>300</ymax>
+			<xmin>61</xmin>
+			<ymin>150</ymin>
+			<xmax>106</xmax>
+			<ymax>216</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>500</xmin>
+			<ymin>276</ymin>
+			<xmax>566</xmax>
+			<ymax>321</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>358</xmin>
+			<ymin>424</ymin>
+			<xmax>438</xmax>
+			<ymax>503</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>490</xmin>
+			<ymin>47</ymin>
+			<xmax>583</xmax>
+			<ymax>115</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>544</xmin>
+			<ymin>362</ymin>
+			<xmax>706</xmax>
+			<ymax>529</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>87</xmin>
+			<ymin>319</ymin>
+			<xmax>254</xmax>
+			<ymax>481</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>198</xmin>
+			<ymin>89</ymin>
+			<xmax>360</xmax>
+			<ymax>256</ymax>
 		</bndbox>
 	</object>
 </annotation>

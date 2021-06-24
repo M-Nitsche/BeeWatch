@@ -13,7 +13,6 @@ class BeeConfig(object):
     BACKGROUNDS_PATH = 'dataset/raw/flower_bushes_data/'
 
 
-    NUM_IMAGES = 10
 
     # Folder names
     IMAGE_DIR = 'images'

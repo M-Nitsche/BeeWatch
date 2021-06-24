@@ -16,10 +16,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>825</xmin>
-			<ymin>588</ymin>
-			<xmax>887</xmax>
-			<ymax>650</ymax>
+			<xmin>620</xmin>
+			<ymin>646</ymin>
+			<xmax>702</xmax>
+			<ymax>732</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -27,10 +27,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>680</xmin>
-			<ymin>365</ymin>
-			<xmax>729</xmax>
-			<ymax>414</ymax>
+			<xmin>789</xmin>
+			<ymin>540</ymin>
+			<xmax>833</xmax>
+			<ymax>584</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -38,10 +38,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>104</xmin>
-			<ymin>160</ymin>
-			<xmax>301</xmax>
-			<ymax>344</ymax>
+			<xmin>942</xmin>
+			<ymin>133</ymin>
+			<xmax>986</xmax>
+			<ymax>177</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -49,10 +49,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>633</xmin>
-			<ymin>100</ymin>
-			<xmax>716</xmax>
-			<ymax>195</ymax>
+			<xmin>56</xmin>
+			<ymin>697</ymin>
+			<xmax>96</xmax>
+			<ymax>719</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -60,10 +60,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>335</xmin>
-			<ymin>111</ymin>
-			<xmax>431</xmax>
-			<ymax>206</ymax>
+			<xmin>858</xmin>
+			<ymin>483</ymin>
+			<xmax>898</xmax>
+			<ymax>505</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -71,10 +71,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>151</xmin>
-			<ymin>383</ymin>
-			<xmax>246</xmax>
-			<ymax>479</ymax>
+			<xmin>684</xmin>
+			<ymin>436</ymin>
+			<xmax>706</xmax>
+			<ymax>476</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -82,9 +82,64 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>434</xmin>
-			<ymin>508</ymin>
-			<xmax>487</xmax>
+			<xmin>942</xmin>
+			<ymin>518</ymin>
+			<xmax>964</xmax>
+			<ymax>558</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>950</xmin>
+			<ymin>296</ymin>
+			<xmax>1020</xmax>
+			<ymax>357</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>928</xmin>
+			<ymin>47</ymin>
+			<xmax>1005</xmax>
+			<ymax>131</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>236</xmin>
+			<ymin>240</ymin>
+			<xmax>311</xmax>
+			<ymax>306</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>829</xmin>
+			<ymin>302</ymin>
+			<xmax>899</xmax>
+			<ymax>363</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>666</xmin>
+			<ymin>506</ymin>
+			<xmax>727</xmax>
 			<ymax>576</ymax>
 		</bndbox>
 	</object>
@@ -93,10 +148,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>783</xmin>
-			<ymin>264</ymin>
-			<xmax>836</xmax>
-			<ymax>332</ymax>
+			<xmin>408</xmin>
+			<ymin>452</ymin>
+			<xmax>502</xmax>
+			<ymax>563</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -104,10 +159,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>415</xmin>
-			<ymin>438</ymin>
-			<xmax>495</xmax>
-			<ymax>507</ymax>
+			<xmin>592</xmin>
+			<ymin>18</ymin>
+			<xmax>719</xmax>
+			<ymax>156</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -115,10 +170,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>317</xmin>
-			<ymin>237</ymin>
-			<xmax>375</xmax>
-			<ymax>310</ymax>
+			<xmin>702</xmin>
+			<ymin>362</ymin>
+			<xmax>768</xmax>
+			<ymax>407</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -126,10 +181,120 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>682</xmin>
-			<ymin>255</ymin>
-			<xmax>735</xmax>
-			<ymax>323</ymax>
+			<xmin>785</xmin>
+			<ymin>212</ymin>
+			<xmax>835</xmax>
+			<ymax>283</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>490</xmin>
+			<ymin>608</ymin>
+			<xmax>558</xmax>
+			<ymax>701</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>368</xmin>
+			<ymin>643</ymin>
+			<xmax>456</xmax>
+			<ymax>725</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>881</xmin>
+			<ymin>647</ymin>
+			<xmax>995</xmax>
+			<ymax>757</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>201</xmin>
+			<ymin>23</ymin>
+			<xmax>283</xmax>
+			<ymax>111</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>292</xmin>
+			<ymin>325</ymin>
+			<xmax>374</xmax>
+			<ymax>413</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>419</xmin>
+			<ymin>69</ymin>
+			<xmax>505</xmax>
+			<ymax>151</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>193</xmin>
+			<ymin>448</ymin>
+			<xmax>261</xmax>
+			<ymax>500</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>738</xmin>
+			<ymin>449</ymin>
+			<xmax>806</xmax>
+			<ymax>501</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>89</xmin>
+			<ymin>398</ymin>
+			<xmax>171</xmax>
+			<ymax>484</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>281</xmin>
+			<ymin>646</ymin>
+			<xmax>349</xmax>
+			<ymax>698</ymax>
 		</bndbox>
 	</object>
 </annotation>

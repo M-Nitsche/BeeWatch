@@ -16,10 +16,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>828</xmin>
-			<ymin>213</ymin>
-			<xmax>921</xmax>
-			<ymax>303</ymax>
+			<xmin>688</xmin>
+			<ymin>245</ymin>
+			<xmax>765</xmax>
+			<ymax>315</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -27,10 +27,142 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>721</xmin>
-			<ymin>257</ymin>
-			<xmax>765</xmax>
-			<ymax>301</ymax>
+			<xmin>428</xmin>
+			<ymin>610</ymin>
+			<xmax>481</xmax>
+			<ymax>672</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>234</xmin>
+			<ymin>121</ymin>
+			<xmax>296</xmax>
+			<ymax>174</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>195</xmin>
+			<ymin>412</ymin>
+			<xmax>257</xmax>
+			<ymax>465</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>547</xmin>
+			<ymin>665</ymin>
+			<xmax>591</xmax>
+			<ymax>709</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>775</xmin>
+			<ymin>337</ymin>
+			<xmax>868</xmax>
+			<ymax>405</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>778</xmin>
+			<ymin>583</ymin>
+			<xmax>846</xmax>
+			<ymax>676</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>114</xmin>
+			<ymin>22</ymin>
+			<xmax>212</xmax>
+			<ymax>97</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>789</xmin>
+			<ymin>178</ymin>
+			<xmax>882</xmax>
+			<ymax>246</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>306</xmin>
+			<ymin>460</ymin>
+			<xmax>386</xmax>
+			<ymax>535</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>924</xmin>
+			<ymin>265</ymin>
+			<xmax>969</xmax>
+			<ymax>331</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>425</xmin>
+			<ymin>548</ymin>
+			<xmax>491</xmax>
+			<ymax>593</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>176</xmin>
+			<ymin>339</ymin>
+			<xmax>242</xmax>
+			<ymax>418</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Bee</name>
+		<pose>Front</pose>
+		<truncated>0</truncated>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>680</ymin>
+			<xmax>46</xmax>
+			<ymax>746</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -39,9 +171,9 @@
 		<truncated>0</truncated>
 		<bndbox>
 			<xmin>339</xmin>
-			<ymin>204</ymin>
-			<xmax>383</xmax>
-			<ymax>248</ymax>
+			<ymin>574</ymin>
+			<xmax>427</xmax>
+			<ymax>655</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -49,10 +181,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>731</xmin>
-			<ymin>186</ymin>
-			<xmax>779</xmax>
-			<ymax>266</ymax>
+			<xmin>946</xmin>
+			<ymin>568</ymin>
+			<xmax>996</xmax>
+			<ymax>639</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -60,10 +192,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>833</xmin>
-			<ymin>444</ymin>
-			<xmax>881</xmax>
-			<ymax>524</ymax>
+			<xmin>50</xmin>
+			<ymin>446</ymin>
+			<xmax>121</xmax>
+			<ymax>496</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -71,10 +203,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>369</xmin>
-			<ymin>135</ymin>
-			<xmax>417</xmax>
-			<ymax>215</ymax>
+			<xmin>574</xmin>
+			<ymin>309</ymin>
+			<xmax>668</xmax>
+			<ymax>420</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -82,10 +214,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>558</xmin>
-			<ymin>108</ymin>
-			<xmax>638</xmax>
-			<ymax>156</ymax>
+			<xmin>498</xmin>
+			<ymin>540</ymin>
+			<xmax>592</xmax>
+			<ymax>651</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -93,65 +225,10 @@
 		<pose>Front</pose>
 		<truncated>0</truncated>
 		<bndbox>
-			<xmin>650</xmin>
-			<ymin>135</ymin>
-			<xmax>727</xmax>
-			<ymax>195</ymax>
-		</bndbox>
-	</object>
-	<object>
-		<name>Bee</name>
-		<pose>Front</pose>
-		<truncated>0</truncated>
-		<bndbox>
-			<xmin>128</xmin>
-			<ymin>512</ymin>
-			<xmax>200</xmax>
-			<ymax>567</ymax>
-		</bndbox>
-	</object>
-	<object>
-		<name>Bee</name>
-		<pose>Front</pose>
-		<truncated>0</truncated>
-		<bndbox>
-			<xmin>601</xmin>
-			<ymin>424</ymin>
-			<xmax>686</xmax>
-			<ymax>516</ymax>
-		</bndbox>
-	</object>
-	<object>
-		<name>Bee</name>
-		<pose>Front</pose>
-		<truncated>0</truncated>
-		<bndbox>
-			<xmin>336</xmin>
-			<ymin>440</ymin>
-			<xmax>464</xmax>
-			<ymax>568</ymax>
-		</bndbox>
-	</object>
-	<object>
-		<name>Bee</name>
-		<pose>Front</pose>
-		<truncated>0</truncated>
-		<bndbox>
-			<xmin>153</xmin>
-			<ymin>341</ymin>
-			<xmax>281</xmax>
-			<ymax>469</ymax>
-		</bndbox>
-	</object>
-	<object>
-		<name>Bee</name>
-		<pose>Front</pose>
-		<truncated>0</truncated>
-		<bndbox>
-			<xmin>665</xmin>
-			<ymin>400</ymin>
-			<xmax>829</xmax>
-			<ymax>564</ymax>
+			<xmin>610</xmin>
+			<ymin>438</ymin>
+			<xmax>721</xmax>
+			<ymax>532</ymax>
 		</bndbox>
 	</object>
 </annotation>

@@ -9,28 +9,6 @@ import random
 import itertools
 
 
-
-# Class that inherits from the Class Annotated_Object
-class Annotated_Unknown_Object(Annotated_Object):
-
-    def __init__(self, name, pose, truncated, difficult, bndBox):
-        Annotated_Object.__init__(self, name, pose, truncated, difficult, bndBox)
-        self.name = name
-        self.pose = pose
-        self.truncated = truncated
-        self.difficult = difficult
-        self.bndBox = bndBox
-
-    def toPascalVOCFormat(self):
-        output = "<unknown_object>"
-        output += "\n\t<name>" + 'Bee' + "</name>" #replace Bee with str(self.name)
-        output += "\n\t<pose>" + str(self.pose) + "</pose>"
-        output += "\n\t<truncated>" + str(self.truncated) + "</truncated>"
-        output = appendPascalVOC(output, self.bndBox.toPascalVOCFormat())
-        output += "\n</unknown_object>"
-        return output
-
-
 # Helper functions
 def get_backgrounds(config):
     base_bkgs_path = config.BACKGROUNDS_PATH
