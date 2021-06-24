@@ -11,9 +11,8 @@ class BeeConfig(object):
 
     #Background
     BACKGROUNDS_PATH = 'dataset/raw/flower_bushes_data/'
-    #BACKGROUNDS_PATH = '/Users/AndreaViktoria/Desktop/SS2021/AISS_Projekt/BeeWatch/dataset/raw/flower_bushes_data'
 
-    NUM_IMAGES = 10
+
 
     # Folder names
     IMAGE_DIR = 'images'
