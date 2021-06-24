@@ -54,7 +54,7 @@ class Annotated_Object:
 
     def toPascalVOCFormat(self):
         output = "<object>"
-        output += "\n\t<name>" + 'Bee' + "</name>"   #str(self.name)
+        output += "\n\t<name>" + "bee" + "</name>"
         output += "\n\t<pose>" + str(self.pose) + "</pose>"
         output += "\n\t<truncated>" + str(self.truncated) + "</truncated>"
         output = appendPascalVOC(output, self.bndBox.toPascalVOCFormat())
