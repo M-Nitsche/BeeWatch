@@ -39,40 +39,21 @@ def get_backgrounds(config):
     return bkg_images
 
 
-def get_symbols(config=None):
+def get_bees(config=None):
     objs_path = config.CLASSES_PATH
 
     obj_images = [f for f in os.listdir(objs_path)
                   if not f.startswith(".") and f.endswith('.png')]
     return obj_images
 
-def resize_icons():
-    #resize icons in order for them to have similar sizes
-    path='/data/raw/validation_floorplans/electrical_plans/02_DRESO-Projekte/04_icons_transparent_all/original/'
-    for index, file in enumerate(os.listdir(path)):
-        img = Image.open(path +file)
-        if img.size[0]>img.size[1]:
-            basewidth=150
-            wpercent = (basewidth / float(img.size[0]))
-            hsize = int((float(img.size[1]) * float(wpercent)))
-            img = img.resize((basewidth, hsize), Image.ANTIALIAS)
-        else:
-            baseheight=150
-            hpercent = (baseheight / float(img.size[1]))
-            wsize = int((float(img.size[0]) * float(hpercent)))
-            img = img.resize((wsize, baseheight), Image.ANTIALIAS)
-
-        name='/data/raw/validation_floorplans/electrical_plans/02_DRESO-Projekte/04_icons_transparent_all/resized/'+file
-        img.save(name)
 
 
 
-
-def draw_random_subset_of_icons(list, size):
+def draw_random_subset_of_bees(list, size):
     return random.sample(list, min(size, len(list)))
 
 
-def choose_floorplan_randomly(list):
+def choose_flower_bushes_randomly(list):
     return random.choice(list)
 
 
@@ -110,8 +91,7 @@ def resize_image(img, mutate_size, rotate=True):
     # resize_rate = random.choice(sizes)
     img = img.resize([int(img.width * mutate_size), int(img.height * mutate_size)], Image.BILINEAR)
 
-    # if rotate is a list, rotate_angle is randomly chosen from the list
-    # otherwise rotate_angle is between 0 and 360
+
     random_num=random.randint(0, 10)
     if rotate:
         if random_num < 8 :                    #isinstance(rotate, list)
@@ -207,35 +187,35 @@ def run_create_synthetic_images(config=None):
 
         random.seed(n)
 
-        floorplan = choose_floorplan_randomly(bkg_images)
-        icons = get_symbols(config=config)
+        flower_bush = choose_flower_bushes_randomly(bkg_images)
+        bees = get_bees(config=config)
 
-        number_icons_per_image = random.randint(config.MIN_NUM_OBJECT_PER_IMAGE, config.MAX_NUM_OBJECT_PER_IMAGE)
-        icons = draw_random_subset_of_icons(icons, number_icons_per_image)
+        number_bees_per_image = random.randint(config.MIN_NUM_OBJECT_PER_IMAGE, config.MAX_NUM_OBJECT_PER_IMAGE)
+        bees = draw_random_subset_of_bees(bees, number_bees_per_image)
         # Duplicate each icon
-        for i in range(len(icons)):
+        for i in range(len(bees)):
             for x in range(random.randint(*config.RANGE_NUM_EQUAL_OBJECTS)):
-                icons.append(icons[i])
+                bees.append(bees[i])
 
 
 
 
-        # Load the background floorplan
-        bkg_img = Image.open(config.BACKGROUNDS_PATH + floorplan)
+        # Load the background flower bush
+        bkg_img = Image.open(config.BACKGROUNDS_PATH + flower_bush)
         bkg_img = bkg_img.convert('RGBA')
         bkg_x, bkg_y = bkg_img.size
 
-        # Load icon objects
+        # Load bee objects
         # Initialize lists for Pascal VOC Format
         processed_bnd_boxes = []
         objects = []
         obj_coordinates = []
-        icon_size_list = []
+        bee_size_list = []
         # Copy background
         bkg_w_obj = bkg_img.copy()
 
-        # print('Number of symbols: ', len(icons))
-        for i, idx in enumerate(icons):
+
+        for i, idx in enumerate(bees):
 
             i_path = config.CLASSES_PATH + idx
             obj_img = Image.open(i_path)
@@ -243,13 +223,13 @@ def run_create_synthetic_images(config=None):
             obj_img  = obj_img.resize((width, height))
             #print(obj_img.size)
             obj_img = obj_img.convert('RGBA')
-            label_class = idx.split("_transparent.png")[0]
+            label_class = idx.split(".png")[0]
             #print(label_class)
 
             # Generate images with different sizes of symbols
             # Get an array of random obj positions (from top-left corner)
             icon_size = random.choice(icon_sizes)
-            icon_size_list.append(icon_size)
+            bee_size_list.append(icon_size)
             obj_h, obj_w, x_pos, y_pos = get_obj_positions(obj=obj_img, bkg=bkg_img, size=icon_size, count=1)
             obj_h = obj_h[0]
             obj_w = obj_w[0]
@@ -272,14 +252,14 @@ def run_create_synthetic_images(config=None):
                 if row1 in obj_coordinates:
                     counter+=1
                     index = obj_coordinates.index(row1)
-                    del icons[index]            #remove/comment out for icons to overlap
+                    del bees[index]            #remove/comment out for icons to overlap
                     del obj_coordinates[index]  #remove(comment out for icons to overlap
 
         # print('Länge der icons removed: ', len(icons))
         # print('Länge der object coordinates removed: ', len(obj_coordinates))
 
 
-        for i, idx in enumerate(icons):
+        for i, idx in enumerate(bees):
 
             i_path = config.CLASSES_PATH + idx
             obj_img = Image.open(i_path)
@@ -287,13 +267,13 @@ def run_create_synthetic_images(config=None):
 
             obj_img  = obj_img.resize((width, height))
             obj_img = obj_img.convert('RGBA')
-            label_class = idx.split("_transparent.png")[0]
+            label_class ='bee'       #idx.split(".png")[0]
             #print(label_class)
             #print(obj_img.size)
 
 
             # Create synthetic images based on positions
-            obj_img, mask = resize_image(obj_img, mutate_size=icon_size_list[i], rotate=[0, 90, 180, 270])
+            obj_img, mask = resize_image(obj_img, mutate_size=bee_size_list[i], rotate=[0, 90, 180, 270])
             obj_img = blur_image(obj_img)
             obj_img= filter_image(obj_img)
             bkg_w_obj.alpha_composite(obj_img, dest=(obj_coordinates[i][0], obj_coordinates[i][1])) #(x_pos, y_pos)
@@ -341,7 +321,7 @@ def run_create_synthetic_images(config=None):
         ann_file.close()
 
     total_images = len([f for f in os.listdir(output_images) if not f.startswith(".")])
-    print(f'Done! Created {total_images} synthetic training images (known classes).')
+    print(f'Done! Created {total_images} synthetic training images.')
 
 
 if __name__ == "__main__":
