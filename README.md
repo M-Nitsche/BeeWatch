@@ -30,17 +30,9 @@ Images where eather taken as a single photo, or a video was taken and then decon
 Images with various different backgrounds (flowers) are included - and selection of sample images can be seen below.
 
 <p float="left">
-  <img src="/doku_resources/image_1.jpg" width="100" />
-  <img src="/doku_resources/image_2.jpg" width="100" /> 
-  <img src="/doku_resources/image_3.jpg" width="100" />
+  <img src="/doku_resources/image_1.jpg" width="350" />
+  <img src="/doku_resources/image_2.jpg" width="350" /> 
+  <img src="/doku_resources/image_3.jpg" width="350" />
+  <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
-
-
-
-
-
-            |  
-:-------------------------:|:-------------------------:
-![](doku_resources/image_1.jpg)  |  ![](doku_resources/image_2.jpg)
-![](doku_resources/image_3.jpg)  |  ![](doku_resources/image_4.jpg)
 
