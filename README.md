@@ -1,5 +1,7 @@
 # BeeWatch
 
+## Motivation
+
 
 
 
@@ -36,3 +38,7 @@ Images with various different backgrounds (flowers) are included - and selection
   <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
 
+### Additonal data generation
+
+
+# Model
