@@ -29,6 +29,16 @@ The final Dataset consists of 1.814 images with 104 null examples. Each image ha
 Images where eather taken as a single photo, or a video was taken and then deconstructed into single frames. To turn videos into single frames [FFmpeg](https://www.ffmpeg.org) was used. 
 Images with various different backgrounds (flowers) are included - and selection of sample images can be seen below.
 
+<p float="left">
+  <img src="/doku_resources/image_1.jpg" width="100" />
+  <img src="/doku_resources/image_2.jpg" width="100" /> 
+  <img src="/doku_resources/image_3.jpg" width="100" />
+</p>
+
+
+
+
+
             |  
 :-------------------------:|:-------------------------:
 ![](doku_resources/image_1.jpg)  |  ![](doku_resources/image_2.jpg)
