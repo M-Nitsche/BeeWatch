@@ -1,6 +1,6 @@
 """TensorFlow JSON-to-TFRecord converter
 
-usage: json_to_tfrecords.py [-h] [-x JSON_DIR] [-l LABELS_PATH] [-o OUTPUT_PATH] [-i IMAGE_DIR] [-c CSV_PATH]
+usage: json_to_tfrecords.py [-h] [-j JSON_DIR] [-l LABELS_PATH] [-o OUTPUT_PATH] [-i IMAGE_DIR] [-c CSV_PATH]
 
 arguments:
     -j, --json_dir       Path to the folder where the JSON file is stored
