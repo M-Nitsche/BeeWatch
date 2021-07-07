@@ -1,0 +1,12 @@
+Augmentation:
+- Without resize and pad augmentation
+- No brightness augmentation as synthetic data is already augmenting brightness & contrast
+- Only Horizontal Flip so far
+Image resizer:
+- fixed_shape_resizer (to 640x640x3)
+- EfficientDet d1 only supports 3 channels (no grayscaling)
+- Training for 30.000 steps, batch size 4 (i.e. 120 epochs)
+
+Learning rate:
+- WarmUp for initial 2500 steps (from 0.001 to 0.08) to not damage already learned lower level features
+- LR-Decay towards zero over 30.000 steps (as long as training is defined)
