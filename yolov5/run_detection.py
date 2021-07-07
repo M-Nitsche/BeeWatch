@@ -163,15 +163,15 @@ class Detector(object):
                 # Write results
 
                 for *xyxy, conf, cls in reversed(det):
-                    if self.save_txt:  # Write to file
-                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)
+                    xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)
                                           ) / gn).view(-1).tolist()  # normalized xywh
-                        # label format
-                        line = (
+                    # label format
+                    line = (
                             cls, *xywh, conf) if self.save_conf else (cls, *xywh)
+                    if self.save_txt:  # Write to file
                         with open(txt_path + '.txt', 'a') as f:
                             f.write(('%g ' * len(line)).rstrip() % line + '\n')
-                        res_list.append(line)
+                    res_list.append(line)
 
                     if self.save_img or self.save_crop or self.view_img:  # Add bbox to image
                         c = int(cls)  # integer class
