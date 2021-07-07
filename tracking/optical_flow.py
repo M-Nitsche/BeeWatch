@@ -7,7 +7,7 @@ if __name__ == '__main__':
     lk_params = dict(winSize=(15, 15), maxLevel=2, criteria=(cv.TERM_CRITERIA_EPS | cv.TERM_CRITERIA_COUNT, 10, 0.03))
     color = (0, 255, 0)
 
-    cap = cv.VideoCapture("video_data/bees_demo.mp4")
+    cap = cv.VideoCapture("../dataset/video_data/bees_demo1.mp4")
     ret, first_frame = cap.read()
     prev_gray = cv.cvtColor(first_frame, cv.COLOR_BGR2GRAY)
     prev = cv.goodFeaturesToTrack(prev_gray, mask=None, **feature_params)
