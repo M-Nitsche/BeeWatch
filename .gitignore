@@ -13,3 +13,5 @@ dataset/final_data+synth+mosaic_rebalanced
 *.json
 *.mp4
 *.tfevents.*
+dataset/**/*.jpg
+dataset/**/*.xml

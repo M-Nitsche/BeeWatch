@@ -28,7 +28,7 @@ For the initial labeling the [VGG Image Annotator](http://www.robots.ox.ac.uk/~v
 
 The final Dataset consists of 1.814 images with 104 null examples. Each image has 1.1 annotations on average with results in 2.047 annotation overall with one class [bee]. Images are annotated with bounding boxes.
 
-**Dataset**
+### Dataset
 
 | Image source  | count         |
 | ------------- |:-------------:|
@@ -45,7 +45,19 @@ Images with various different backgrounds (flowers) are included - and selection
   <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
 
-### Additonal data generation
+### Mosaic dataset
+The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. Therefore we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. 
+As the quality of the queried images heavily depend on the search string, we evaluated various keywords in advance. The search strings were iteratively evluated by a brief review of the responses and resulted in the following final search string: "bee flowers", "flowers" and "flower bushes". The latter were used for the [synthetic dataset generation](####Synthetic-dataset-generation) as background images.
+
+
+After labeling bees in the downloaded datasets following the procedure presented in the [labeling section](###labeling) we used them to generate mosaic data. The mosaic augmentation is originally motivated in the YOLOv4 release and contributes significantly to its performance boost ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4%20-%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf)). In order to scale down the queried bee images and benefit from the stated performance increase in model implementations beside YOLOv4/5 we generated 1000 mosaic images 3x4 and the corresponding new annotation files (see [mosaic_data_augmentation.ipynb](dataset/mosaic_data_augmentation.ipynb)). The probability of a bee image to be chosen for a individual mosaic tile was set to 0.3. The following shows an example mosaic image:
+
+![example-mosaic-image](doku_resources/mosaic_image.jpg)
+
+### Synthetic dataset generation
 
 
 # Model
+
+# References
+
