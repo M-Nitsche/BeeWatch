@@ -25,8 +25,8 @@ from run_detection import Detector
 from centroid_tr import CentroidTracker
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--weights', nargs='+', type=str, default='./runs/train/exp7/weights/best.pt', help='model.pt path(s)')
-parser.add_argument('--source', type=str, default='../dataset/video_data/bees_demo1.mp4', help='file/dir/URL/glob, 0 for webcam')
+parser.add_argument('--weights', nargs='+', type=str, default='./best.pt', help='model.pt path(s)')
+parser.add_argument('--source', type=str, default='../bees_demo1.mp4', help='file/dir/URL/glob, 0 for webcam')
 parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
 parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
 parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
@@ -54,6 +54,7 @@ parser.add_argument('--maxDisappeared', default=5, help='maximum consecutive fra
 parser.add_argument('--save_tracking_img', default=True, help='if tracking image results and images should be safed')
 parser.add_argument('--save_tracking_text', default=True, help='if tracking text results and images should be safed')
 parser.add_argument('--show_tracking', default=True, help='view tracking')
+parser.add_argument('--show_trajectories', default=True, help='view tracking trajectories')
 
 args = parser.parse_args()
 print(colorstr('detect: ') + ', '.join(f'{k}={v}' for k, v in vars(opt).items()))
@@ -88,6 +89,7 @@ else:
 # det.mode = dataset.__dict__["mode"]
 
 counter = 0
+track_list = [[]] # the placement in the list represents the ID
 
 for path, img, im0s, vid_cap in dataset:
     counter += 1
@@ -129,9 +131,22 @@ for path, img, im0s, vid_cap in dataset:
         # draw both the ID of the object and the centroid of the
         # object on the output frame
         text = "ID {}".format(objectID)
+        # place centroid into track_list
+        if len(track_list) > objectID:
+            track_list[objectID].append([list(centroid)])
+            #print(track_list[objectID], list(centroid), track_list[objectID].append(list(centroid)))
+        else:
+            while len(track_list) <= objectID:
+                track_list.append([])
+            track_list[objectID].append([list(centroid)])
         cv2.putText(frame, text, (centroid[0] - 10, centroid[1] - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         cv2.circle(frame, (centroid[0], centroid[1]), 4, (0, 255, 0), -1)
+        if args.show_trajectories:
+            print(track_list[objectID])
+            print(np.array(track_list[objectID]))
+            cv2.polylines(img,np.array(track_list[objectID]),True,(0,255,255), thickness=5)
+            print("Here")
         if args.save_tracking_text:
             # save tracking CENTROID
             save_path = str(det.save_dir / 'tracking' / ("centroid_track_" + str(counter) + ".txt"))
