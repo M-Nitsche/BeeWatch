@@ -57,14 +57,12 @@ After labeling bees in the downloaded datasets following the procedure presented
 ## Model
 
 ## Deployment
-The Jetson Nano is a small powerful device optimized for IoT applications. It comes  with a Quad-core ARM Cortex-A57 MPCore processor, NVIDIA Maxwell architecture with 128 NVIDIA CUDA cores and 4GB RAM. 
-
-### Getting started with the Jetson Nano
-The Jetson Nano does not come with the Linux architecture already setup, instead it is the first step to write the Image File to the SD Card to boot and setup the system. 
+The Jetson Nano is a small powerful device optimized for IoT applications. It comes  with a Quad-core ARM Cortex-A57 MPCore processor, NVIDIA Maxwell architecture with 128 NVIDIA CUDA cores and 4GB RAM. The Jetson Nano does not come with the Linux architecture already setup, instead it is the first step to write the Image file to the SD Card to boot and setup the system. 
 
 ### Deployment processes
-Having setup the Jetson Nano it was not yet ready for directly detecting bees as we have not deployed the model. For our case three possible deployment options were:(1) virtual environments, traditional deployment. 
-(1) Docker: Docker has several advantages and has become quite popular in the last couple of years.  Maintaining multple applications is a quite complex process. They are written in different languages, they use different frameworks and architectures which can makes them difficult to update and to move around. 
+Having setup the Jetson Nano it was not yet ready for directly detecting bees as we have not deployed the model. For our case three possible deployment options were:(1) docker containers, (2) virtual environments, (3) traditional deployment.  
+(1) Docker: Docker has several advantages and has become quite popular in the last couple of years.  Maintaining multple applications is a quite complex process. They are written in different languages, they use different frameworks and architectures which makes them difficult to update and to move around. Docker simplifies that by using containers. A container bundles application code with related configuration files, libraries and dependencies. By doing that it can run uniformly and consistently on any infrastructure. Furthermore, it gives developers the freedom to innovate with their choice of tools, application stacks, and deployment environments for each project. Another big advantage of docker containers is that they are portable, so that software can be built locally and then deployed and ran everywhere. Having great benefits also Docker has its downsides.
+
 
 Conda noz workting.
 
