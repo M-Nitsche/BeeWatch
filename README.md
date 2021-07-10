@@ -57,9 +57,10 @@ After labeling bees in the downloaded datasets following the procedure presented
 ## Model
 
 ## Deployment
+(Christin Scheib)
 The Jetson Nano is a small powerful device optimized for IoT applications. It comes  with a Quad-core ARM Cortex-A57 MPCore processor, NVIDIA Maxwell architecture with 128 NVIDIA CUDA cores and 4GB RAM. The Jetson Nano does not come with the Linux architecture already setup, instead it is the first step to write the Image file to the SD Card to boot and setup the system. 
 
-### Deployment processes
+### Deployment process
 Having setup the Jetson Nano it was not yet ready for directly detecting bees as we have not deployed the model. For our case three possible deployment options were:(1) docker containers, (2) virtual environments, (3) traditional deployment.  
   
 (1) Docker  
@@ -95,7 +96,7 @@ After bringing everything up to date we downloaded the package installer pip and
 
  ``` 
   $ sudo apt install python3-pip
-	$ sudo apt install -y python3 venv
+  $ sudo apt install -y python3 venv
 ```
 By doing the following command we createda new virtual environment called env and activated it:
 
@@ -106,7 +107,8 @@ By doing the following command we createda new virtual environment called env an
 
 As many packages require the wheel package for installation we installed it using 
    
- ``` $ pip3 install wheel
+ ``` 
+  $ pip3 install wheel
  ``` 
 
 # References
