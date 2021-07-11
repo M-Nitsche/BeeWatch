@@ -119,9 +119,23 @@ As many packages require the wheel package for installation we installed it usin
  ``` 
   $ pip3 install wheel
  ``` 
-Now everything was setup so that we are ready to install the required packages for Yolov5. As this is based on the PyTorch framework we needed to install torch and torchvision. Unfortunately, the Jetson Nano architecture does not support the pip install version, which is why we needed to build it from source by doing the following commands 
-
-After having checked if the installation process was successful, we downloaded the remaining packages with pip . The required packages are:
+Now everything was setup so that we are ready to install the required packages for Yolov5. As this is based on the PyTorch framework we needed to install torch and torchvision. Unfortunately, the Jetson Nano architecture does not support the pip install version, which is why we needed to build it from source by doing the following commands:
+``` 
+PyTorch v1.8.0
+  $ wget https://nvidia.box.com/shared/static/p57jwntv436lfrd78inwl7iml6p13fzh.whl -O torch-1.8.0-cp36-cp36m-linux_aarch64.whl
+  $ sudo apt-get install python3-pip libopenblas-base libopenmpi-dev 
+  $ pip3 install Cython
+  $ pip3 install numpy torch-1.8.0-cp36-cp36m-linux_aarch64.whl
+  
+torchvision v0.9.0
+  $ sudo apt-get install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev
+  $ git clone --branch <version> https://github.com/pytorch/vision torchvision   # see below for version of torchvision to download
+  $ cd torchvision
+  $ export BUILD_VERSION=0.x.0  # where 0.x.0 is the torchvision version  
+  $ python3 setup.py install --user
+  $ cd ../
+``` 
+After having checked if the installation process was successful, we downloaded the remaining packages with pip. The required packages are:
 ```
   matplotlib>=3.2.2
   numpy>=1.18.5
@@ -135,7 +149,7 @@ After having checked if the installation process was successful, we downloaded t
   tensorboard>=2.4.1
   seaborn>=0.11.0
   thop 
-	pandas
+  pandas
 ```
 After completing the installation process we ran our model. Here we ran into some problems with the installation of torchvision. The model threw the error that there is no version installed which satisfies the requirements. As we did not work on multiple projects on the Jetson Nano we installed the required packages including torch and torchvision in the global site-packages directory outside of the virtual environment in order to delimit the problem with the torchvision installation. Running the model again led to a performance of roughly five frames per second (fps). 
 ```
