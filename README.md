@@ -119,6 +119,30 @@ As many packages require the wheel package for installation we installed it usin
  ``` 
   $ pip3 install wheel
  ``` 
+Now everything was setup so that we are ready to install the required packages for Yolov5. As this is based on the PyTorch framework we needed to install torch and torchvision. Unfortunately, the Jetson Nano architecture does not support the pip install version, which is why we needed to build it from source by doing the following commands 
+
+After having checked if the installation process was successful, we downloaded the remaining packages with pip . The required packages are:
+```
+  matplotlib>=3.2.2
+  numpy>=1.18.5
+  opencv-python>=4.1.2
+  Pillow
+  PyYAML>=5.3.1
+  scipy>=1.4.1
+  torch>=1.7.0
+  torchvision>=0.8.1
+  tqdm>=4.41.0
+  tensorboard>=2.4.1
+  seaborn>=0.11.0
+  thop 
+	pandas
+```
+After completing the installation process we ran our model. Here we ran into some problems with the installation of torchvision. The model threw the error that there is no version installed which satisfies the requirements. As we did not work on multiple projects on the Jetson Nano we installed the required packages including torch and torchvision in the global site-packages directory outside of the virtual environment in order to delimit the problem with the torchvision installation. Running the model again led to a performance of roughly five frames per second (fps). 
+```
+  $ python detect.py --source /home/beewatch/Downloads/bees_demo1.mp4 --weights best.pt --conf 0.3
+```
+Please note that this is the performance without tracking. As previously mentioned it is considered good practice to use a virtual environment for every project you work on. However, we could not find the error that led to the torchvision version error.
+
 
 # References
 [1] Klein, A. M., Vaissiere, B. E., Cane, J. H., Steffan-Dewenter, I., Cunningham, S. A., Kremen, C. & Tscharntke, T. (2007): Importance of pollinators in changing landscapes for world crops. Proceedings of the Royal Society B: Biological Sciences, 274, 303-313.  
