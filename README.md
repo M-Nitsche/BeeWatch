@@ -15,9 +15,9 @@ For the data collection different devices were used - a summary can be found in 
 
 | Device        | Camera/Resolution  |
 | ------------- |:-------------:|
-| IPhone 7      | 12 MP         |  
-| IPhone 11 Pro | 12 MP         |
-| x             | ...           |
+| iPhone 7      | 12 MP         |  
+| iPhone 11 Pro | 12 MP         |
+| iPhone 12 Pro | 12 MP         |
 
 
 ### Labeling
@@ -42,16 +42,25 @@ Images with various different backgrounds (flowers) are included - and selection
   <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
 
-### Mosaic dataset
-The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. Therefore we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. 
+### Additional data sources
+The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality ("Garbage in, garbage out") and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. Therefore we first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###Labeling) an additional batch of 1000 bee images and two videos, which were seperated into individual frames. Moreover, we downloaded 1000 images of flowers or bushes without any bees as these are especially usefull as null images and were used for the proceeding synthetic generation of another 1000 bee images (see [Synthetic dataset generation](####Synthetic-dataset-generation)).
+The resulting additional datasets are listed below.
+
+| Image source  | No. of images  |  No. of labels | No. of null images |
+| ------------- | ------------- | ------------- | ------------- |
+| Flickr - (Mosaic) images| 1000  |  1034 | 0
+| Flickr - Video frames | 741 (360 + 381) |  2398 | 167 
+| Synthetic images  | 1000     | 7801 | 0
+
+#### Mosaic dataset
+In order to collect another 1000 bee images we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. 
 As the quality of the queried images heavily depend on the search string, we evaluated various keywords in advance. The search strings were iteratively evluated by a brief review of the responses and resulted in the following final search string: "bee flowers", "flowers" and "flower bushes". The latter were used for the [synthetic dataset generation](####Synthetic-dataset-generation) as background images.
 
-
-After labeling bees in the downloaded datasets following the procedure presented in the [labeling section](###labeling) we used them to generate mosaic data. The mosaic augmentation is originally motivated in the YOLOv4 release and contributes significantly to its performance boost ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf)). In order to scale down the queried bee images and benefit from the stated performance increase in model implementations beside YOLOv4/5 we generated 1000 mosaic images 3x4 and the corresponding new annotation files (see [mosaic_data_augmentation.ipynb](dataset/mosaic_data_augmentation.ipynb)). The probability of a bee image to be chosen for a individual mosaic tile was set to 0.3. The following shows an example mosaic image:
+After labeling bees in the downloaded datasets following the procedure presented in the [labeling section](###labeling) we used them to generate mosaic data. The mosaic augmentation is originally motivated in the YOLOv4 release and contributes significantly to its performance boost ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf)). As the downloaded images often show only individual bees on one flower the mosaic augmentation also makes sure the data meets our use case requirements to detect bees from further distance. In order to scale down the queried bees and benefit from the stated performance increase in model implementations beside YOLOv4/5 we generated 3x4 mosaic images and the corresponding new annotation files (see [mosaic_data_augmentation.ipynb](dataset/mosaic_data_augmentation.ipynb)). The probability of a bee image to be chosen for a individual mosaic tile was set to 0.3. The following shows an example mosaic image:
 
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
-### Synthetic dataset generation
+#### Synthetic dataset generation
 
 
 ## Model
