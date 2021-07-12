@@ -293,7 +293,7 @@ class LoadWebcam_Jetson:  # for inference
             # Convert
             img = img.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
             img = np.ascontiguousarray(img)
-
+            
             return img_path, img, img0, None
         else:
             print("Unable to open camera")

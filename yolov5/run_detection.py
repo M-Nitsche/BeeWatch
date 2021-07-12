@@ -72,6 +72,8 @@ class Detector(object):
         self.save_img = not nosave and not source.endswith('.txt')  # save inference images
         if source == "Camera":
             self.webcam = True
+        else:
+            self.webcam = False
         #self.webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
          #   ('rtsp://', 'rtmp://', 'http://', 'https://'))
 
@@ -136,7 +138,7 @@ class Detector(object):
         # Process detections
         for i, det in enumerate(pred):  # detections per image
             if self.webcam:  # batch_size >= 1
-                p, s, im0, frame = path[i], f'{i}: ', im0s[i].copy(), dataset.count
+                p, s, im0, frame = path, f'{i}: ', im0s.copy(), dataset.count #path[i], f'{i}: ', im0s[i].copy(), dataset.count
             else:
                 p, s, im0, frame = path, '', im0s.copy(), getattr(dataset, 'frame', 0)
 
