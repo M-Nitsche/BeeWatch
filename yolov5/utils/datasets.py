@@ -277,7 +277,7 @@ class LoadWebcam_Jetson:  # for inference
             # Read frame
             ret_val, img0 = self.cap.read()
             print("######################################################")
-            cv2.imwrite("/home/nanoli/Documents/img.jpg", img0)
+            #cv2.imwrite("/home/nanoli/Documents/img.jpg", img0)
             print("######################################################")
             img0 = cv2.flip(img0, 1)  # flip left-right
 
