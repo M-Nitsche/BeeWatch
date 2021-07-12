@@ -233,6 +233,7 @@ class LoadImages:  # for inference
 
 class LoadWebcam_Jetson:  # for inference
     def __init__(self, img_size=640, stride=32):
+        self.mode = 'stream'
         self.img_size = img_size
         self.stride = stride
         #self.pipe = eval(pipe) if pipe.isnumeric() else pipe
