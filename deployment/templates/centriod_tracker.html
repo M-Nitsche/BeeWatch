@@ -1,0 +1,94 @@
+{% extends "./nav.html" %}
+
+{% block title %}
+Centroid Tracker
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Settings for Centriod Tracker</h1>
+        <p class="lead">Set values for the tracker</p>
+      </div>
+        <div class="text-center">
+            <p class="lead">Maximum frames till disapperarence: <span id="maxdis"></span> </p>
+            <form method="POST" action="{{ url_for('inference') }}">
+                <input class="slider" type="range" min="0" max="50" value="5" name="maxDisappeared" id="myRange" />
+                <div class="form-check form-switch">
+                    <input type="checkbox" data-toggle="toggle" id="show_trajectories_checkbox" name="show_trajectories">
+                    <label class="form-check-label" for="show_trajectories_checkbox">Show trajectories</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input type="checkbox" data-toggle="toggle" id="show_info_checkbox" name="show_info">
+                    <label class="form-check-label" for="show_info_checkbox">Show tracking information</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input type="checkbox" data-toggle="toggle" id="save_tracking_img_checkbox" name="save_tracking_img">
+                    <label class="form-check-label" for="save_tracking_img_checkbox">Save tracking images</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input type="checkbox" data-toggle="toggle" id="save_tracking_text_checkbox" name="save_tracking_text">
+                    <label class="form-check-label" for="save_tracking_text_checkbox">Save txt-files from tracking</label>
+                </div>
+                <hr/>
+                <button type="submit" class="btn btn-primary btn-lg">Submit and go to object detection</button>
+            </form>
+             <hr/>
+        </div>
+         <div>
+            <p class="lead">Arguments</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Argument</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Max. frames</th>
+              <td>Maximum frames till tracking-ID is discontinued if no bounding box is found for it.</td>
+            </tr>
+            <tr>
+              <th scope="row">Trajectories</th>
+              <td>Only the results of the Yolo object detection.</td>
+            </tr>
+            <tr>
+              <th scope="row">Tracking information</th>
+              <td>Show information of the tracker: current no. of bees by tracker and object detection, sum of detections and sum of bees by tracker.</td>
+            </tr>
+            <tr>
+              <th scope="row">Save tracking images</th>
+              <td>Save the images with tracking information - no video.</td>
+            </tr>
+            <tr>
+              <th scope="row">Save txt-files</th>
+              <td>Save text-files with tracking information.</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+<script>
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("maxdis");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+    }
+</script>
+{% endblock %}

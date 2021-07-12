@@ -1,0 +1,62 @@
+{% extends "./nav.html" %}
+
+{% block title %}
+Results
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Results</h1>
+        <p class="lead">Number of bees &#x1f41d; per frame</p>
+      </div>
+        <div class="text-center">
+            <div id="chart_div"></div>
+        </div>
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(beesframes);
+
+function beesframes() {
+      var data = new google.visualization.DataTable();
+
+      data.addColumn('number', 'X');
+      data.addColumn('number', 'Obj Det');
+
+      data.addRows(
+         {{ time_det_cur }}
+      );
+
+      var options = {
+          chart: {
+              title: 'Object detection',
+              subtitle: 'Number of Bees detected over frames'
+          },
+          hAxis: {
+              title: 'Frame'
+          },
+          vAxis: {
+              title: '# 🐝 Bees'
+          },
+          colors: ['#a52714']
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+
+    }
+</script>
+{% endblock %}

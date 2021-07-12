@@ -1,0 +1,98 @@
+{% extends "./nav.html" %}
+
+{% block title %}
+Source
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Select File</h1>
+        <p class="lead">Select a file to infer on</p>
+      </div>
+            <form class="form-inline" method='POST' action="{{ url_for('source_selected') }}">
+                <div class="text-center">
+                    <select name="file_select" class="selectpicker form-control">
+                        {% for each in file_list %}
+                            <option value="{{each}}">{{each}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <hr/>
+                <p class="lead">Options for object detection</p>
+                <div class="text-center">
+                        <div>
+                            <input type="checkbox" data-toggle="toggle" id="save_img_checkbox" name="save_img">
+                            <label class="form-check-label" for="save_img_checkbox">Save image or video with detections</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" data-toggle="toggle" id="save_txt_checkbox" name="save_txt">
+                            <label class="form-check-label" for="save_txt_checkbox">Save txt-files</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" data-toggle="toggle" id="save_conf_checkbox" name="save_conf">
+                            <label class="form-check-label" for="save_conf_checkbox">Save confidence</label>
+                        </div>
+                        <p class="lead">Confidence threshold: <span id="maxconf"></span> </p>
+                        <input class="slider" type="range" min="0" max="100" value="25" name="conf_thres" id="confThres" />
+
+                        <hr/>
+                        <button type="submit" class="btn btn-primary btn-lg">Submit and go to tracker</button>
+                        <hr/>
+
+                </div>
+
+            </form>
+        <div>
+            <p class="lead">Arguments</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Argument</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Select file</th>
+              <td>the file needs to be in the data folder. It can only be a .mp4, .avi, .jpg or .png.</td>
+            </tr>
+            <tr>
+              <th scope="row">Save image or video</th>
+              <td>Save the image or video of the Yolo detection in runs. Detection needs to run through.</td>
+            </tr>
+            <tr>
+              <th scope="row">Save txt</th>
+              <td>Save a txt-file for every image if there is a detection.</td>
+            </tr>
+            <tr>
+              <th scope="row">Confidence threshold</th>
+              <td>Choose the threshold for the bounding boxes in Yolo.</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+    </div><!-- /.container -->
+{% endblock %}
+
+
+{% block scripts %}
+{{super()}}
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+<script>
+    var slider = document.getElementById("confThres");
+    var output = document.getElementById("maxconf");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+    }
+</script>
+{% endblock %}

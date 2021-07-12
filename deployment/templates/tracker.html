@@ -1,0 +1,54 @@
+{% extends "./nav.html" %}
+
+{% block title %}
+Tracker
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Select Tracker</h1>
+        <p class="lead">Select a tracker</p>
+      </div>
+        <div class="text-center">
+            <form class="form-inline" method='POST' action="{{ url_for('tracker_selected') }}">
+                <select name="tracker_select" class="selectpicker form-control">
+                    {% for each in tracker_list %}
+                        <option value="{{each}}">{{each}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Submit tracker</button>
+            </form>
+             <hr/>
+        </div>
+        <div>
+            <p class="lead">Description tracker</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Tracker</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Centroid tracker</th>
+              <td>Centroid tracker using euclidean distance to track.</td>
+            </tr>
+            <tr>
+              <th scope="row">No tracker</th>
+              <td>Only the results of the Yolo object detection.</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+
+    </div><!-- /.container -->
+{% endblock %}
+

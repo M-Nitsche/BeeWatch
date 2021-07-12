@@ -1,0 +1,95 @@
+{% extends "./nav.html" %}
+
+{% block title %}
+Results
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        <div class="starter-template">
+            <h1>Tracker results &#x1f41d;</h1>
+            <p class="lead">Number of bees per frame</p>
+        </div>
+        <div class="text-center">
+            <div id="chart_div"></div>
+        </div>
+        <hr/>
+        <div class="starter-template">
+            <p class="lead">Bees over frames</p>
+        </div>
+        <div class="text-center">
+            <div id="timeline" style="height: 180px;"></div>
+        </div>
+
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(beesframes);
+
+function beesframes() {
+      var data = new google.visualization.DataTable();
+
+      data.addColumn('number', 'X');
+      data.addColumn('number', 'Obj Det');
+      data.addColumn('number', 'Tracking');
+      data.addColumn('number', 'Sum tracking');
+
+      data.addRows(
+         {{ time_det_cur }}
+      );
+
+      var options = {
+          chart: {
+              title: 'Object detection',
+              subtitle: 'Number of Bees detected over frames'
+          },
+          hAxis: {
+              title: 'Frame'
+          },
+          vAxis: {
+              title: '# 🐝 Bees'
+          },
+          colors: ['#a52714', '#097138', '#1433a5']
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+
+    }
+</script>
+<script>
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable({{ id_line }}, true);
+
+    var options = {
+        colors: ['#dbc914'],
+        legend:'none',
+        hAxis: {
+              title: 'Bee Ids'
+          },
+        vAxis: {
+              title: 'Frames'
+        }
+    };
+
+    var chart = new google.visualization.CandlestickChart(document.getElementById('timeline'));
+
+    chart.draw(data, options);
+  }
+</script>
+{% endblock %}
