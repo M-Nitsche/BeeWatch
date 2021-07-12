@@ -139,6 +139,8 @@ def arguments_parse():
     opt = parser.parse_args()
 
     ### TRACKER CENTERIOD
+    parser.add_argument('--show_tracking', default=True, help='view tracking')
+    parser.add_argument('--show_info', default=True, help='yield back img and info for flask')
     parser.add_argument('--yield_back', default=False, help='yield back img and info for flask')
     args = parser.parse_args()
 

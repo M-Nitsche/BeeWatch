@@ -14,6 +14,10 @@ import torch.backends.cudnn as cudnn
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
+if __name__!="__main__":
+    from tracking.centroid_tr import CentroidTracker
+else:
+    from centroid_tr import CentroidTracker
 print("Parent dir", parentdir)
 parentdir_yolo = parentdir + '/yolov5/'
 sys.path.append(parentdir_yolo)
@@ -25,7 +29,6 @@ from utils.general import check_img_size, check_requirements, check_imshow, colo
 # from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 from run_detection import Detector
-from tracking.centroid_tr import CentroidTracker
 
 
 def run_centroid_tracker(
