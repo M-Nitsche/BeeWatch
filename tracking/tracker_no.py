@@ -39,16 +39,15 @@ def run_no_tracker(
     det = Detector(**vars(opt))
 
     (H, W) = (None, None)
-
     # Dataloader
-    if det.webcam:
+    if opt.source == "Camera":
         view_img = check_imshow()
         cudnn.benchmark = True  # set True to speed up constant image size inference
         dataset = LoadWebcam_Jetson(img_size=det.imgsz, stride=det.stride)
         bs = len(dataset)  # batch_size
     else:
         dataset = LoadImages(opt.source, img_size=det.imgsz, stride=det.stride)
-        bs = 1  # batch_size
+        bs = 1  # batch_size   
 
     # set mode
     # print(dataset.__dict__["mode"])
@@ -56,7 +55,7 @@ def run_no_tracker(
 
     counter = 0
     sum_no_detected = 0  # sum over all detected bees
-
+    #print("###################################################", dataset)
     for path, img, im0s, vid_cap in dataset:
         counter += 1
         # iterate over images

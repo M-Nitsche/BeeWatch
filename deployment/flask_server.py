@@ -19,7 +19,7 @@ import numpy as np
 def arguments_parse():
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default=parentdir+'/yolov5/best.pt', help='model.pt path(s)')
-    parser.add_argument('--source', type=str, default=parentdir+'/yolov5/data/bees_demo1.mp4', help='file/dir/URL/glob, 0 for webcam')
+    parser.add_argument('--source', type=str, default=parentdir+'/yolov5/data/bees_demo1.mp4', help='file, camera for webcam')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
@@ -86,14 +86,21 @@ def index():
 def source():
     # get files in ./data/ to select and infere on
     file_list = [f for f in listdir(path_data) if isfile(join(path_data, f)) and (f[-3:] in ["mp4", "avi", "png", "jpg"])]
-    file_list = natsort.natsorted(file_list)
+    print(file_list)
+    file_list = (natsort.natsorted(file_list))
+    print(file_list)
+    file_list.append("Camera")
+    print(file_list)
     return render_template('source.html', file_list=file_list)
 
 @app.route('/source_selected', methods=['POST'])
 def source_selected():
     global opt
     global file_path
-    file_path = path_data + request.form.get('file_select')
+    if request.form.get('file_select') != "Camera":
+        file_path = path_data + request.form.get('file_select')
+    else:
+        file_path = request.form.get('file_select')
     opt.source = file_path
     print(file_path) # only file names
     if request.form.get('save_img') == "on":
@@ -275,7 +282,7 @@ def results():
 if __name__ == '__main__':
     #app.run(debug=True, ssl_context='adhoc') # ssl_context='adhoc' for https https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https
 
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=5000)
 
 
 

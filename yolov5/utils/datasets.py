@@ -236,17 +236,20 @@ class LoadWebcam_Jetson:  # for inference
         self.img_size = img_size
         self.stride = stride
         #self.pipe = eval(pipe) if pipe.isnumeric() else pipe
-        self.pipe = gstreamer_pipeline()
+        print(1280, 720, 1280, 720, 60, 0)
+        print(len([1280, 720, 1280, 720, 60, 0]))
+        self.pipe = self.gstreamer_pipeline(img_size, img_size, img_size, img_size, 10, 0)
         self.cap = cv2.VideoCapture(self.pipe, cv2.CAP_GSTREAMER)  # video capture object
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 3)  # set buffer size
     
-    def gstreamer_pipeline(
-        capture_width=1280,
-        capture_height=720,
-        display_width=1280,
-        display_height=720,
-        framerate=60,
-        flip_method=0):
+    def gstreamer_pipeline(self,
+        capture_width,
+        capture_height,
+        display_width,
+        display_height,
+        framerate,
+        flip_method):
+        #print("####################################", capture_width, capture_height, framerate, flip_method, display_width, display_height)
         return (
             "nvarguscamerasrc ! "
             "video/x-raw(memory:NVMM), "
@@ -256,14 +259,7 @@ class LoadWebcam_Jetson:  # for inference
             "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
             "videoconvert ! "
             "video/x-raw, format=(string)BGR ! appsink"
-            % (
-                capture_width,
-                capture_height,
-                framerate,
-                flip_method,
-                display_width,
-                display_height,
-            )
+            % (capture_width, capture_height, framerate, flip_method, display_width, display_height)
         )
     
     def __iter__(self):
@@ -280,6 +276,9 @@ class LoadWebcam_Jetson:  # for inference
 
             # Read frame
             ret_val, img0 = self.cap.read()
+            print("######################################################")
+            cv2.imwrite("/home/nanoli/Documents/img.jpg", img0)
+            print("######################################################")
             img0 = cv2.flip(img0, 1)  # flip left-right
 
             # Print

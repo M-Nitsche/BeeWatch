@@ -22,7 +22,7 @@ print("Parent dir", parentdir)
 parentdir_yolo = parentdir + '/yolov5/'
 sys.path.append(parentdir_yolo)
 # from models.experimental import attempt_load
-from utils.datasets import LoadStreams, LoadImages
+from utils.datasets import LoadWebcam_Jetson, LoadImages
 from utils.general import check_img_size, check_requirements, check_imshow, colorstr, non_max_suppression, \
     apply_classifier, scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path, save_one_box
 # from utils.plots import colors, plot_one_box
@@ -55,10 +55,10 @@ def run_centroid_tracker(
     (H, W) = (None, None)
 
     # Dataloader
-    if det.webcam:
+    if opt.source == "Camera":
         view_img = check_imshow()
         cudnn.benchmark = True  # set True to speed up constant image size inference
-        dataset = LoadStreams(opt.source, img_size=det.imgsz, stride=det.stride)
+        dataset = LoadWebcam_Jetson(img_size=det.imgsz, stride=det.stride)
         bs = len(dataset)  # batch_size
     else:
         dataset = LoadImages(opt.source, img_size=det.imgsz, stride=det.stride)

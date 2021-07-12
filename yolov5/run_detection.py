@@ -70,8 +70,10 @@ class Detector(object):
         self.weights = weights
 
         self.save_img = not nosave and not source.endswith('.txt')  # save inference images
-        self.webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
-            ('rtsp://', 'rtmp://', 'http://', 'https://'))
+        if source == "Camera":
+            self.webcam = True
+        #self.webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
+         #   ('rtsp://', 'rtmp://', 'http://', 'https://'))
 
         # Directories
         self.save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment run
