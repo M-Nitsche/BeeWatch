@@ -32,8 +32,9 @@ For the data collection process, pictures and videos were taken by wild bees usi
 | iPhone 12 Pro | 12 MP         |
 
 
-### Labeling
-For the initial labeling the [VGG Image Annotator](http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html) was used. With it's limited export functionalty we quickly ran into problems because we experimented with different models and frameworks which required different formats. This lead us to the holostic object detection platform [Roboflow](https://roboflow.com) which offers several export formats. 
+### Labeling 
+(David Blumenthal)
+For the initial labeling the [VGG Image Annotator](http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html) was used. In order to distribute the effort and to work efficiently, we decided that everyone should label the images they had taken themselves and then later merge them into a single data set. This quickly led to problems when merging, as e.g. label names were assigned differently or not at all. The limited export functionality (its own format, which is not common and Coco json format where we had problems exporting) made us witch to another editor, because we experimented with different models and frameworks and therefore required different formats. This lead us to the holistic object detection platform [Roboflow](https://roboflow.com) which offers several export formats. 
 
 The final Dataset consists of 1.814 images with 104 null examples. Each image has 1.1 annotations on average with results in 2.047 annotation overall with one class [bee]. Images are annotated with bounding boxes.
 
@@ -44,7 +45,7 @@ The final Dataset consists of 1.814 images with 104 null examples. Each image ha
 | [Malika Nisal Ratnayake et. al.](https://bridges.monash.edu/articles/dataset/Honeybee_video_tracking_data/12895433)| 436       |  
 | own images    | 1398           
 
-Images where eather taken as a single photo, or a video was taken and then deconstructed into single frames. To turn videos into single frames [FFmpeg](https://www.ffmpeg.org) was used. 
+Images where either taken as a single photo, or a video was taken and then deconstructed into single frames. To turn videos into single frames [FFmpeg](https://www.ffmpeg.org) was used. 
 Images with various different backgrounds (flowers) are included - and selection of sample images can be seen below.
 
 <p float="left">
@@ -76,6 +77,37 @@ After labeling bees in the downloaded datasets following the procedure presented
 
 
 ## Model
+
+### Yolov5
+(David Blumenthal)
+Yolov5 was introduced shortly after Yolov4 which was published by WongKinYiu. In the computer vision community it is disputed whether the name Yolov5 is justified, as it is not really a direct successor to Yolov4 (https://blog.roboflow.com/yolov4-versus-yolov5/). Like Yolov4, Yolov5 implements a CSP Backbone as well as the PA-Net Neck for feature aggregation.
+
+To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings. The the model was trained with the following setup:
+``` 
+!python train.py --img 640 --batch 40 --epochs 600 --data bee.yaml --weights yolov5s.pt --cache
+``` 
+
+After that we tried multiple runs with adding increasing portions of the artificial dataset to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set. 
+
+The best model is selected based on its Fitness. The Fitness function is a weighted combination of the metrics [Recall, Precision, mAP@0.5, mAP@0.5:0.95] with standard allocations of [0, 0, 0.1, 0.9]. As we are struggling with low recall, we have put more emphasis on it, and redistributed mainly from mAP@0.5:0.95. However in the evaluation the model performed slightly worse than our benchmark model - even on Recall...
+
+#### Hyperparameter Tuning
+
+Apart from perfecting the training dataset, hyperparameter tuning can be used to increase the models performance. Yolov5 offers 25 hyperparameters including those with regard to test time augmentation. The yolov5 implementation offers functionality that can support in finding good hyperparameters.
+With google colab as our training environnement computing resources - especially time - is very limited, hence we had to work to with assumptions. First we defined a base scenario from which we wanted to approve. The base scenario was a standard yolov5s model with pertained weights on the coco dataset which we trained for 10 epochs. With the "evolve" function the model tries to find better parameters using a genetic algorithm with the main operators crossover and mutation with a 90% probability and 0.04 variance. [Github Yolov5](https://github.com/ultralytics/yolov5/issues/607)
+We did that for 50 iterations. We assumed that after 10 epochs good parameters would be found and would be also beneficial in a full training.  
+
+
+
+
+| Training                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
+|------------------------------|-------|-------|------------|-------|-------|-------------|
+| without artificial data      |  0,75 | 0,546 |    0,574   | 0,544 |  0,43 |    0,449    |
+| with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
+| modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
+| tuned hyperparameter         | 0,788 | 0,562 |    0,611   | 0,831 | 0,686 |    0,747    |
+| second hyp. tuning           |       |       |            |       |       |    x        |
+
 
 ## Deployment
 (Christin Scheib)
