@@ -114,15 +114,53 @@ In the first trials, we did not succeed in achieving good results for various re
 Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives you simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
 
 
+## YOLO
 
+YOLO has been first introduced in 2016 and set a milestone in object detection research due its capability to detect object in real-time with better accuracy.
 
+It was first introduced by Joseph Redmon and developed further by him up to Yolov3. The versions were implemented in the Darknet framework. Later the v3 Version was also implemented in PyTorch by Glenn Jocher of Ultralytics LLC who as we will later see is also responsible for the controversially discussed yolov5. [https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109](https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109)
 
+Joseph Redmon, the initiator of Yolo, announced in the spring of 2020 that he has stopped his research in computer vision due to several concerns regarding military applications and privacy concerns. 
 
-### Yolov5
-(David Blumenthal)
+[https://twitter.com/pjreddie/status/1230524770350817280](https://twitter.com/pjreddie/status/1230524770350817280)
 
-**ToDo** Mehr Theorie
+### YOLOv4
 
+However this was not the end YOLO. In April 2020 Alexey Bochkovsky et al. introduced Yolov4 in a paper titled: [YOLOv4: Optimal Speed and Accuracy of Object Detection](https://arxiv.org/abs/2004.10934). 
+
+**Bag of freebies**
+
+Are methods that increase object detectors performance without increasing the inference cost. These methods only change the training strategy or in other words only increase the training costs. An example would be data augmentation techniques. 
+
+vgl. s3
+
+**Bag of specials**
+
+In contrast to the Bof, bag of specials are methods that increase inference costs in order to achieve better accuracy in object detection. The trade off is however vastly in favour accuracy as the inference cost is rather small in comparison to the achieved accuracy boost. These modules try to enhace certain attributes in a modules receptive field or strengthening feature integration capability, etc.
+
+vgl. s4
+
+**YOLOv4** consists of:
+
+🦴  | Backbone: CSP Darknet53
+
+⚱️  | Neck: SPP, PAN
+
+🗣️  | Head: YOLOv3
+
+To sum up YOLOv4 gets his improvements through a selection and implementations of BoFs like CutMix and Mosaic data augmentation, CIoU-loss, Optimal hyperameters (evolution) etc. and for BoS Mish activation and with using multiple anchors for a single ground truth. Just to name a few - a full list and explanation can be found in the released paper. [paper verlinken]
+
+### YOLOv5
+
+Like already mentioned only two months after the initial of YOLOv4, YOLOv5 was published by Glenn Jocher. 
+
+YOLOv5 differs most from all other releases because this is a PyTorch implementation rather than a fork from the original Darknet. Same as the v4 version it implements the **CSP backbone**, the **PANet** as neck and the same head as **v3 and v4**. YOLOv5 has a total of 4 versions which mainly differ in number of parameters and layers. 
+
+![History%20of%20Yolo%206291c25ad2634f108d452d468fb2856e/yolov5_architecture.jpg](History%20of%20Yolo%206291c25ad2634f108d452d468fb2856e/yolov5_architecture.jpg)
+
+The exact architecture of v5s model can be found [here](https://www.notion.so/2e5113265515450c8da934e15d97fc6b).
+
+One huge advantage is model size in mb. The smallest versions weights (yolov5s) only take up 13.7mb of space. In addition, it benefited from a very large community of users, which meant that it was under active development with improvements being made on a weekly basis.
 Yolov5 was introduced shortly after Yolov4 which was published by WongKinYiu. In the computer vision community it is disputed whether the name Yolov5 is justified, as it is not really a direct successor to Yolov4 (https://blog.roboflow.com/yolov4-versus-yolov5/). Like Yolov4, Yolov5 implements a CSP Backbone as well as the PA-Net Neck for feature aggregation.
 
 
