@@ -76,20 +76,51 @@ After labeling bees in the downloaded datasets following the procedure presented
 #### Synthetic dataset generation
 
 
+
 ## Model
+
+In the first trials, we did not succeed in achieving good results for various reasons. One of the reasons was that the variance in the backgrounds (flowers) was very low, but in the validation set flowers, of which there were few or none in the training data set managed to make up the majority. In further attempts to build the dataset, the images were better distributed across the splits, which meant that the results were suddenly very good. The reason for this was that the majority of the images consisted of videos. From these, consecutive frames - which did not differ much - ended up in the training and validation dataset. This in turn led to the model having very good metrics, but not performing well on a test video. The same problem occurred both with rather large bees in test and small ones in val or vice versa. It took several iterations before a balanced data set emerged from the above problems. 
+
+### 
 
 ### Yolov5
 (David Blumenthal)
 Yolov5 was introduced shortly after Yolov4 which was published by WongKinYiu. In the computer vision community it is disputed whether the name Yolov5 is justified, as it is not really a direct successor to Yolov4 (https://blog.roboflow.com/yolov4-versus-yolov5/). Like Yolov4, Yolov5 implements a CSP Backbone as well as the PA-Net Neck for feature aggregation.
 
-To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings. The the model was trained with the following setup:
-``` 
-!python train.py --img 640 --batch 40 --epochs 600 --data bee.yaml --weights yolov5s.pt --cache
-``` 
 
-After that we tried multiple runs with adding increasing portions of the artificial dataset to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set. 
+To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
 
-The best model is selected based on its Fitness. The Fitness function is a weighted combination of the metrics [Recall, Precision, mAP@0.5, mAP@0.5:0.95] with standard allocations of [0, 0, 0.1, 0.9]. As we are struggling with low recall, we have put more emphasis on it, and redistributed mainly from mAP@0.5:0.95. However in the evaluation the model performed slightly worse than our benchmark model - even on Recall...
+
+After that we tried multiple runs with adding increasing portions of the artificial dataset to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
+![labels_with_artificial](doku_resources/dataset_with_artificial.jpg)
+
+The best model is selected based on its fitness. The fitness function is a weighted combination of the metrics [Recall, Precision, mAP@0.5, mAP@0.5:0.95] with standard allocations of [0, 0, 0.1, 0.9]. As we are struggling with low recall, we have put more emphasis on it, and redistributed mainly from mAP@0.5:0.95. However in the evaluation the model performed slightly worse than our benchmark model - even on Recall...
+
+| Training                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
+|------------------------------|-------|-------|------------|-------|-------|-------------|
+| without artificial data      |  0,75 | 0,546 |    0,574   | 0,544 |  0,43 |    0,449    |
+| with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
+| modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
+
+*Data Augmentation* Multiple augmentation functions are built in as hyperparameters and applied during training. A typical training batch looked like:
+![training-batch](doku_resources/train_batch_exam.jpg)
+In the image above standard configurations were used and include the following:
+'''yaml
+hsv_h: 0.015  # image HSV-Hue augmentation (fraction)
+hsv_s: 0.7  # image HSV-Saturation augmentation (fraction)
+hsv_v: 0.4  # image HSV-Value augmentation (fraction)
+degrees: 0.0  # image rotation (+/- deg)
+translate: 0.1  # image translation (+/- fraction)
+scale: 0.5  # image scale (+/- gain)
+shear: 0.0  # image shear (+/- deg)
+perspective: 0.0  # image perspective (+/- fraction), range 0-0.001
+flipud: 0.0  # image flip up-down (probability)
+fliplr: 0.5  # image flip left-right (probability)
+mosaic: 1.0  # image mosaic (probability)
+mixup: 0.0  # image mixup (probability)
+'''
+
+
 
 #### Hyperparameter Tuning
 
@@ -98,13 +129,8 @@ With google colab as our training environnement computing resources - especially
 We did that for 50 iterations. We assumed that after 10 epochs good parameters would be found and would be also beneficial in a full training.  
 
 
-
-
 | Training                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
 |------------------------------|-------|-------|------------|-------|-------|-------------|
-| without artificial data      |  0,75 | 0,546 |    0,574   | 0,544 |  0,43 |    0,449    |
-| with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
-| modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 | tuned hyperparameter         | 0,788 | 0,562 |    0,611   | 0,831 | 0,686 |    0,747    |
 | second hyp. tuning           |       |       |            |       |       |    x        |
 
