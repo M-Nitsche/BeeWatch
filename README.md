@@ -92,7 +92,11 @@ To establish a baseline performance we trained the yolov5s - which is the smalle
 
 
 After that we tried multiple runs with adding increasing portions of the artificial dataset to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
-![labels_with_artificial](doku_resources/dataset_with_artificial.jpg)
+
+<p float="left">
+  <img src="doku_resources/dataset_with_artificial.jpg" width="350" />
+  <img src="/doku_resources/image_2.jpg" width="350" /> 
+</p>
 
 The best model is selected based on its fitness. The fitness function is a weighted combination of the metrics [Recall, Precision, mAP@0.5, mAP@0.5:0.95] with standard allocations of [0, 0, 0.1, 0.9]. As we are struggling with low recall, we have put more emphasis on it, and redistributed mainly from mAP@0.5:0.95. However in the evaluation the model performed slightly worse than our benchmark model - even on Recall...
 
@@ -103,9 +107,9 @@ The best model is selected based on its fitness. The fitness function is a weigh
 | modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 
 *Data Augmentation* Multiple augmentation functions are built in as hyperparameters and applied during training. A typical training batch looked like:
-![training-batch](doku_resources/train_batch_exam.jpg)
+![training-batch](doku_resources/train_batch.jpg)
 In the image above standard configurations were used and include the following:
-'''yaml
+``` yaml
 hsv_h: 0.015  # image HSV-Hue augmentation (fraction)
 hsv_s: 0.7  # image HSV-Saturation augmentation (fraction)
 hsv_v: 0.4  # image HSV-Value augmentation (fraction)
@@ -118,7 +122,7 @@ flipud: 0.0  # image flip up-down (probability)
 fliplr: 0.5  # image flip left-right (probability)
 mosaic: 1.0  # image mosaic (probability)
 mixup: 0.0  # image mixup (probability)
-'''
+``` 
 
 
 
