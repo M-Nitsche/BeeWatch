@@ -20,8 +20,7 @@ Since wild bees are powerful bioindicators, a bee tracking system could be of in
 -	beekeepers and beekeeping associations for gaining insights into the state of their own bee colonies,
 -	regulatory and research institutions for monitoring biodiversity in regions, supporting research projects and passing regulations in case of violations.
 
-## Dataset
-### Data Collection
+## Data Gathering
 (Aleksandar Ilievski)  
 For the data collection process, pictures and videos were taken by wild bees using different devices. A summary of the devices that were used can be found in the table below. The data collection process proved to be difficult for a multitude of reasons. First, bee activity is highly dependent on the weather. Since the project started in the end of April, the weather in Karlsruhe was very rainy. In May, Karlsruhe had 22 rainy days and in June there were 17 [17]. This meant that there was quite a short time frame for data collection. During the first data collection round there was also a lot of wind which caused movement of plants in the videos. This is particularly problematic for the usage of background subtraction, since it creates a lot of noise in the footage. In general, collecting data outside can be difficult because the quality of data is also impacted by sunlight exposure which is something the model needs to be robust again and thus, proving this use case to be quite complex. Second, it is challenging to take pictures of living insects as they are very small and move fast. When there was wind, the bees tended to move even more rapidly. Therefore, taking a clear picture from an acceptable distance took some practice in the beginning. The third problem is when bees are covered by plants. When a big part of the bee body is hidden, it is difficult to spot the bee and thus, not very helpful in training the model.  
 
@@ -74,11 +73,32 @@ After labeling bees in the downloaded datasets following the procedure presented
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
 #### Synthetic dataset generation
+(Andrea Bartos)
+
+#### Data Augmentation
+(Andrea Bartos)
+
+#### Data Preprocessing / Final Dataset
+
+In the first trials, we did not succeed in achieving good results for various reasons. One of the reasons was that the variance in the backgrounds (flowers) was very low, but in the validation set flowers, of which there were few or none in the training data set managed to make up the majority. In further attempts to build the dataset, the images were better distributed across the splits, which meant that the results were suddenly very good. The reason for this was that the majority of the images consisted of videos. From these, consecutive frames - which did not differ much - ended up in the training and validation dataset. This in turn led to the model having very good metrics, but not performing well on a test video. The same problem occurred both with rather large bees in test and small ones in val or vice versa. It took several iterations before a balanced data set emerged from the above problems. 
 
 
 
 ## Model
 
+<<<<<<< HEAD
+### Establish Baseline with background subtraction and blob detection
+
+### Model selection
+- Performance auf Jetson Nano
+- Warum Yolo und nicht two stage detection
+
+### Metrics used
+
+### SSD
+
+### EfficientDet
+=======
 ## Training Enviornment
 Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives you simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
 
@@ -87,14 +107,19 @@ Google Colaboratory was used as the training environment. Colab is a Google envi
 
 ### xxx
 In the first trials, we did not succeed in achieving good results for various reasons. One of the reasons was that the variance in the backgrounds (flowers) was very low, but in the validation set flowers, of which there were few or none in the training data set managed to make up the majority. In further attempts to build the dataset, the images were better distributed across the splits, which meant that the results were suddenly very good. The reason for this was that the majority of the images consisted of videos. From these, consecutive frames - which did not differ much - ended up in the training and validation dataset. This in turn led to the model having very good metrics, but not performing well on a test video. The same problem occurred both with rather large bees in test and small ones in val or vice versa. It took several iterations before a balanced data set emerged from the above problems. 
+>>>>>>> 45bfcb3eee40626efd6a61d2d9b0eeac103a9b71
 
 ### Yolov5
 (David Blumenthal)
+
+**ToDo** Mehr Theorie
+
 Yolov5 was introduced shortly after Yolov4 which was published by WongKinYiu. In the computer vision community it is disputed whether the name Yolov5 is justified, as it is not really a direct successor to Yolov4 (https://blog.roboflow.com/yolov4-versus-yolov5/). Like Yolov4, Yolov5 implements a CSP Backbone as well as the PA-Net Neck for feature aggregation.
 
 
 To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
 
+**Freezing Layers**
 
 After that we tried multiple runs with adding increasing portions of the artificial dataset to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
 
@@ -107,7 +132,7 @@ The best model is selected based on its fitness. The fitness function is a weigh
 
 | Training                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
 |------------------------------|-------|-------|------------|-------|-------|-------------|
-| without artificial data      |  0,75 | 0,546 |    0,574   | 0,544 |  0,43 |    0,449    |
+| without artificial data (baseline)      |  0,75 | 0,546 |    0,574   | 0,544 |  0,43 |    0,449    |
 | with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
 | modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 
@@ -144,6 +169,17 @@ We did that for 50 iterations. We assumed that after 10 epochs good parameters w
 |------------------------------|-------|-------|------------|-------|-------|-------------|
 | tuned hyperparameter         | 0,788 | 0,562 |    0,611   | 0,831 | 0,686 |    0,747    |
 | second hyp. tuning           |       |       |            |       |       |    x        |
+
+### YoloR
+
+## Final Results
+
+einfügen Übersichtstabelle
+
+Ergebnisse im Detail des besten Models (plots)
+
+Beispiel Inferenzen
+Video
 
 
 ## Deployment
@@ -237,6 +273,8 @@ After completing the installation process we ran our model. Here we ran into som
   $ python3 detect.py --source /home/beewatch/Downloads/bees_demo1.mp4 --weights best.pt --conf 0.3
 ```
 Please note that this is the performance without tracking. As previously mentioned it is considered good practice to use a virtual environment for every project you work on. However, we could not find the error that led to the torchvision version error.
+
+## Lessons Learned
 
 
 # References
