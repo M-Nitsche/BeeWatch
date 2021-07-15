@@ -106,8 +106,8 @@ The best model is selected based on its fitness. The fitness function is a weigh
 | with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
 | modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 
-*Data Augmentation* Multiple augmentation functions are built in as hyperparameters and applied during training. A typical training batch looked like:
-![training-batch](doku_resources/train_batch_example.jpg)
+**Data Augmentation** Multiple augmentation functions are built in as hyperparameters and applied during training. A typical training batch looked like:
+<img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="600"/>
 In the image above standard configurations were used and include the following:
 ``` yaml
 hsv_h: 0.015  # image HSV-Hue augmentation (fraction)
