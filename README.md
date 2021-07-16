@@ -216,6 +216,7 @@ We did that for 50 iterations. We assumed that after 10 epochs good parameters w
 |-------------------------------|-------|-------|------------|-------|-------|-------------|
 | tuned hyperparameter          | 0,788 | 0,562 |    0,611   | 0,831 | 0,686 |    0,747    |
 | second hyp. tuning (inc. aug.)| 0,809 | 0,621 |    0,66    | 0,72  | 0,721 |    0,693    |
+| third hyp. tuning (inc. aug.) | 0,803 | 0,576 |    0,639   | 0,765 | 0,568 |    0,57     |
 
 
 ## Final Results 
