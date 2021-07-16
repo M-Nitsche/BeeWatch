@@ -20,7 +20,7 @@ There are existing papers that have already implemented computer vision powered 
 1. Wir können nicht unterscheiden zw. wild und honey bees--> deshalb sollte der fokus nicht ausschließlich darauf ligeen. Idee: Begründen dass wildbienen extram wichtig zu beobachten sind weil sie aussagen über ihre unmittelbare umgebung machen. Probekm in vggl. zur Honigbiene ist, dass sie nicht in Bee hives wohenen in grßen Kolonien sondern verzeinzelt in Totholz, Mauer usw. --> deshalb schauen wir uns nicht Bee hives an sondern setzten direkt am Ort der Bestäubung an
 2. Mehr ber Traditionalle Methoden des Bee monitoring recherchieren und das unseren Use case passend einordnen. Sagen auch was die Nachteile davon sind. Was mir spontan einfällt: invasion in ihr natürliches Habitar, In netz gefangen zu werden ist enormer stress und ich glaube bei manchen fallen sterben sie auch -->  Dafür brucht man aber überall quellen
 3. Perobelem mit der Unterscheidung: Wie oben beschrieben gibt es extrem viele Wildbienen die sehr schwer zu unterscheiden sind. Dafür sindspezialisten nötig, die das teilweise auch nur unter dem Mikroskop machen können. Aus diesem Grund werden diese Bienen potenziell bei diesen Bienensammlungen mit ins Labor genommen. Dieses Probelm können wir mit unserem Ansatz auch nicht lösen 
-4. Weitere Literaturrechereche betreiben. Es gibt auf jeden fall mehr paper die sich damit beschäftigen
+4. Weitere Literaturrechereche betreiben. Es gibt auf jeden fall mehr paper die sich damit beschäftigen (Bienenerkennung mit Computervision)
 5. Userbereich ausformulieren  
 6. Problem statement mit Zielsetzung formulieren , bisschen von der Art wie eine Forshungsfrage 
 7. Was machen andere STartups in dem Bereich : Apic, dann das in Zürich usw. gerne noch weiter schauen
