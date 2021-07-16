@@ -159,8 +159,8 @@ Einleitung ins thema
 After that we tried multiple runs with adding increasing portions of the artificial dataset to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
 
 <p float="left">
-  <img src="doku_resources/dataset_with_artificial.jpg" width="350" />
-  <img src="/doku_resources/labels_without_artificial.jpg.jpg" width="350" /> 
+  <img src="doku_resources/dataset_with_artificial.jpg" width="400" />
+  <img src="/doku_resources/labels_without_artificial.jpg." width="400" /> 
 </p>
 
 The best model is selected based on its fitness. The fitness function is a weighted combination of the metrics [Recall, Precision, mAP@0.5, mAP@0.5:0.95] with standard allocations of [0, 0, 0.1, 0.9]. As we are struggling with low recall, we have put more emphasis on it, and redistributed mainly from mAP@0.5:0.95. However in the evaluation the model performed slightly worse than our benchmark model - even on Recall...
