@@ -200,10 +200,10 @@ With google colab as our training environnement computing resources - especially
 We did that for 50 iterations. We assumed that after 10 epochs good parameters would be found and would be also beneficial in a full training.  
 
 
-| Training                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
-|------------------------------|-------|-------|------------|-------|-------|-------------|
-| tuned hyperparameter         | 0,788 | 0,562 |    0,611   | 0,831 | 0,686 |    0,747    |
-| second hyp. tuning           |       |       |            |       |       |    x        |
+| Training                      | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
+|-------------------------------|-------|-------|------------|-------|-------|-------------|
+| tuned hyperparameter          | 0,788 | 0,562 |    0,611   | 0,831 | 0,686 |    0,747    |
+| second hyp. tuning (inc. aug.)| 0,809 | 0,621 |    0,66    | 0,72  | 0,721 |    0,693    |
 
 
 ## Final Results 
