@@ -4,13 +4,14 @@ Place this script in the tracking folder together with run_dection.py
 import os, sys
 import argparse
 import sys
-# import time
 from pathlib import Path
 import numpy as np
-# import imutils
 import cv2
+from yolov5.run_detection import Detector
+from yolov5.utils.datasets import LoadWebcam_Jetson, LoadImages
 import torch
 import torch.backends.cudnn as cudnn
+
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
@@ -21,26 +22,19 @@ else:
 print("Parent dir", parentdir)
 parentdir_yolo = parentdir + '/yolov5/'
 sys.path.append(parentdir_yolo)
-# from models.experimental import attempt_load
-from utils.datasets import LoadWebcam_Jetson, LoadImages
 from utils.general import check_img_size, check_requirements, check_imshow, colorstr, non_max_suppression, \
     apply_classifier, scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path, save_one_box
-# from utils.plots import colors, plot_one_box
-# from utils.torch_utils import select_device, load_classifier, time_synchronized
-
-from run_detection import Detector
 
 
 def run_centroid_tracker(
         opt,
         # TRACKER
-        args_tr
+        args_tr,
+        dataset,
+        det
         ):
     print(colorstr('detect: ') + ', '.join(f'{k}={v}' for k, v in vars(opt).items()))
     check_requirements(exclude=('tensorboard', 'thop'))
-
-    # create Detecor object
-    det = Detector(**vars(opt))
 
     # Define colors
     col_list = np.random.default_rng(42).random((100, 3)) * 255
@@ -53,16 +47,6 @@ def run_centroid_tracker(
     # initialize our centroid tracker and frame dimensions
     ct = CentroidTracker(args_tr.maxDisappeared)
     (H, W) = (None, None)
-
-    # Dataloader
-    if opt.source == "Camera":
-        view_img = check_imshow()
-        cudnn.benchmark = True  # set True to speed up constant image size inference
-        dataset = LoadWebcam_Jetson(img_size=det.imgsz, stride=det.stride)
-        bs = len(dataset)  # batch_size
-    else:
-        dataset = LoadImages(opt.source, img_size=det.imgsz, stride=det.stride)
-        bs = 1  # batch_size
 
     # set mode
     # print(dataset.__dict__["mode"])
@@ -222,8 +206,19 @@ def arguments_parse():
 if __name__=="__main__":
     # Parse arg
     opt, args = arguments_parse()
+    # create detector object
+    det = Detector(**vars(opt))
+
+    # create dataloader
+    if opt.source == "Camera":
+        cudnn.benchmark = True  # set True to speed up constant image size inference
+        dataset = LoadWebcam_Jetson(img_size=det.imgsz, stride=det.stride)
+        bs = len(dataset)  # batch_size
+    else:
+        dataset = LoadImages(opt.source, img_size=det.imgsz, stride=det.stride)
+        bs = 1  # batch_size
     # run_centroid_tracker is no always a generator
-    for img in run_centroid_tracker(opt, args):
+    for img in run_centroid_tracker(opt, args, dataset, det):
         print("IMAGE")
 
 

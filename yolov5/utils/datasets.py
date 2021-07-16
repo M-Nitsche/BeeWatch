@@ -239,7 +239,7 @@ class LoadWebcam_Jetson:  # for inference
         #self.pipe = eval(pipe) if pipe.isnumeric() else pipe
         print(1280, 720, 1280, 720, 60, 0)
         print(len([1280, 720, 1280, 720, 60, 0]))
-        self.pipe = self.gstreamer_pipeline(img_size, img_size, img_size, img_size, 10, 0)
+        self.pipe = self.gstreamer_pipeline(1280, 720, 1280, 720, 60, 0)
         self.cap = cv2.VideoCapture(self.pipe, cv2.CAP_GSTREAMER)  # video capture object
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 3)  # set buffer size
     
@@ -294,7 +294,7 @@ class LoadWebcam_Jetson:  # for inference
             img = img.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
             img = np.ascontiguousarray(img)
 
-            self.cap.release()
+            #self.cap.release()
             return img_path, img, img0, None
         else:
             print("Unable to open camera")
