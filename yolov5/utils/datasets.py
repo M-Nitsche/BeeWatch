@@ -270,10 +270,10 @@ class LoadWebcam_Jetson:  # for inference
     def __next__(self):
         if self.cap.isOpened():
             self.count += 1
-            if cv2.waitKey(1) == ord('q'):  # q to quit
-                self.cap.release()
-                cv2.destroyAllWindows()
-                raise StopIteration
+            #if cv2.waitKey(1) == ord('q'):  # q to quit
+            #    self.cap.release()
+            #    cv2.destroyAllWindows()
+            #    raise StopIteration
 
             # Read frame
             ret_val, img0 = self.cap.read()
@@ -293,7 +293,8 @@ class LoadWebcam_Jetson:  # for inference
             # Convert
             img = img.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
             img = np.ascontiguousarray(img)
-            
+
+            self.cap.release()
             return img_path, img, img0, None
         else:
             print("Unable to open camera")
