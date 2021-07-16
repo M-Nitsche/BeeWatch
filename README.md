@@ -21,7 +21,10 @@ There are existing papers that have already implemented computer vision powered 
 2. Mehr ber Traditionalle Methoden des Bee monitoring recherchieren und das unseren Use case passend einordnen. Sagen auch was die Nachteile davon sind. Was mir spontan einfällt: invasion in ihr natürliches Habitar, In netz gefangen zu werden ist enormer stress und ich glaube bei manchen fallen sterben sie auch -->  Dafür brucht man aber überall quellen
 3. Perobelem mit der Unterscheidung: Wie oben beschrieben gibt es extrem viele Wildbienen die sehr schwer zu unterscheiden sind. Dafür sindspezialisten nötig, die das teilweise auch nur unter dem Mikroskop machen können. Aus diesem Grund werden diese Bienen potenziell bei diesen Bienensammlungen mit ins Labor genommen. Dieses Probelm können wir mit unserem Ansatz auch nicht lösen 
 4. Weitere Literaturrechereche betreiben. Es gibt auf jeden fall mehr paper die sich damit beschäftigen
-5. Userbereich ausformulieren  )
+5. Userbereich ausformulieren  
+6. Problem statement mit Zielsetzung formulieren , bisschen von der Art wie eine Forshungsfrage 
+7. Was machen andere STartups in dem Bereich : Apic, dann das in Zürich usw. gerne noch weiter schauen
+8. Was macht unsere methode so nice --> anscheined haben wir eins der "lieblingthemen" deshalb diesen Vorteil ausschlachten
 
 Since wild bees are powerful bioindicators, a bee tracking system could be of interest for a broad base of potential customers, such as
 -	the manufacturing industry for monitoring the effects of air and soil pollution,
