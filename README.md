@@ -159,7 +159,7 @@ Einleitung ins thema
 After that we tried multiple runs with adding increasing portions of the artificial dataset to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
 
 <p float="left">
-  <img src="doku_resources/dataset_with_artificial.jpg" width="400" />
+  <img src="doku_resources/labels_with_artificial.jpg" width="400" />
   <img src="/doku_resources/labels_without_artificial.jpg" width="400" /> 
 </p>
 
