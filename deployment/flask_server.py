@@ -15,10 +15,6 @@ from tracking.tracker_centriod import run_centroid_tracker
 from tracking.tracker_no import run_no_tracker
 from datetime import datetime
 import numpy as np
-from yolov5.run_detection import Detector
-from yolov5.utils.datasets import LoadWebcam_Jetson, LoadImages
-import torch
-import torch.backends.cudnn as cudnn
 
 def arguments_parse():
     parser = argparse.ArgumentParser()
@@ -62,13 +58,14 @@ def arguments_parse():
 
     return opt, args
 
-global args, opt
+global args
+global opt
 opt, args = arguments_parse()
 path_data = parentdir + "/yolov5/data/"
-global file_path, tracker_sel
+global file_path
+global tracker_sel
 tracker_sel = "NO tracker"
-global tracker_info, dataset, det
-
+global tracker_info
 track_info = {
     "time": [],
     "frame": [],
@@ -98,7 +95,8 @@ def source():
 
 @app.route('/source_selected', methods=['POST'])
 def source_selected():
-    global opt, file_path, dataset, det
+    global opt
+    global file_path
     if request.form.get('file_select') != "Camera":
         file_path = path_data + request.form.get('file_select')
     else:
@@ -122,26 +120,11 @@ def source_selected():
     print(opt.save_conf)
     opt.conf_thres = float(request.form.get('conf_thres'))/100
     print(opt.conf_thres)
-    create_detector_and_dataloader()
     return redirect(url_for('tracker'))
-
-def create_detector_and_dataloader():
-    global det, opt, dataset
-    # create detector object
-    det = Detector(**vars(opt))
-
-    # create dataloader
-    if opt.source == "Camera":
-        cudnn.benchmark = True  # set True to speed up constant image size inference
-        dataset = LoadWebcam_Jetson(img_size=det.imgsz, stride=det.stride)
-        bs = len(dataset)  # batch_size
-    else:
-        dataset = LoadImages(opt.source, img_size=det.imgsz, stride=det.stride)
-        bs = 1  # batch_size
 
 @app.route('/tracker', methods=['GET'])
 def tracker():
-    tracker_list = ["Centriod", "NO tracker"]
+    tracker_list = ["Centriod", "OTHER", "NO tracker"]
     return render_template('tracker.html', tracker_list=tracker_list)
 
 @app.route('/tracker_selected', methods=['POST'])
@@ -161,7 +144,9 @@ def centriod_tracker():
 
 @app.route('/inference', methods=['GET', 'POST'])
 def inference():
-    global tracker_sel, args, track_info
+    global tracker_sel
+    global args
+    global track_info
     track_info = {
         "time": [],
         "frame": [],
@@ -227,17 +212,19 @@ def save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr):
 
 
 def info_tracker():
-    global tracker_sel, args, opt
+    global tracker_sel
+    global args
+    global opt
 
     if tracker_sel == "Centriod":
-        for frame, no_det, no_tr, sum_tr, _, frame_no, ids in run_centroid_tracker(opt, args, dataset, det):
+        for frame, no_det, no_tr, sum_tr, _, frame_no, ids in run_centroid_tracker(opt, args):
             save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr)
             ret, buffer = cv2.imencode('.png', frame)
             img = buffer.tobytes()
             yield (b'--frame\r\n'
                     b'Content-Type: image/png\r\n\r\n' + img + b'\r\n')
     elif tracker_sel == "NO tracker":
-        for frame, no_det, _, frame_no in run_no_tracker(opt, args, dataset, det):
+        for frame, no_det, _, frame_no in run_no_tracker(opt, args):
             save_info_tracker(frame_no, no_det, None, None, None)
             ret, buffer = cv2.imencode('.png', frame)
             img = buffer.tobytes()
@@ -251,7 +238,9 @@ def video_feed():
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
-    global tracker_sel, track_info, args
+    global tracker_sel
+    global track_info
+    global args
 
     if tracker_sel == "Centriod":
         det_cur_g = np.array(track_info["no_det_cur"])
