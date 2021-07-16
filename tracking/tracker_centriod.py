@@ -30,12 +30,14 @@ from utils.general import check_img_size, check_requirements, check_imshow, colo
 
 from run_detection import Detector
 
+global dataset # helps to keep gst streamer alive
 
 def run_centroid_tracker(
         opt,
         # TRACKER
         args_tr
         ):
+    global dataset
     print(colorstr('detect: ') + ', '.join(f'{k}={v}' for k, v in vars(opt).items()))
     check_requirements(exclude=('tensorboard', 'thop'))
 

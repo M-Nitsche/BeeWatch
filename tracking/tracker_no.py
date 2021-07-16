@@ -27,6 +27,7 @@ from utils.general import check_img_size, check_requirements, check_imshow, colo
 
 from run_detection import Detector
 
+global dataset # helps to keep gst streamer alive
 
 def run_no_tracker(
         opt,

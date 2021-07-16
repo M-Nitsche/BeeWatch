@@ -58,14 +58,13 @@ def arguments_parse():
 
     return opt, args
 
-global args
-global opt
+global args, opt
 opt, args = arguments_parse()
 path_data = parentdir + "/yolov5/data/"
-global file_path
-global tracker_sel
+global file_path, tracker_sel
 tracker_sel = "NO tracker"
 global tracker_info
+
 track_info = {
     "time": [],
     "frame": [],
@@ -95,8 +94,7 @@ def source():
 
 @app.route('/source_selected', methods=['POST'])
 def source_selected():
-    global opt
-    global file_path
+    global opt, file_path
     if request.form.get('file_select') != "Camera":
         file_path = path_data + request.form.get('file_select')
     else:
@@ -144,9 +142,7 @@ def centriod_tracker():
 
 @app.route('/inference', methods=['GET', 'POST'])
 def inference():
-    global tracker_sel
-    global args
-    global track_info
+    global tracker_sel, args, track_info
     track_info = {
         "time": [],
         "frame": [],
@@ -212,9 +208,7 @@ def save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr):
 
 
 def info_tracker():
-    global tracker_sel
-    global args
-    global opt
+    global tracker_sel, args, opt
 
     if tracker_sel == "Centriod":
         for frame, no_det, no_tr, sum_tr, _, frame_no, ids in run_centroid_tracker(opt, args):
@@ -238,9 +232,7 @@ def video_feed():
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
-    global tracker_sel
-    global track_info
-    global args
+    global tracker_sel, track_info, args
 
     if tracker_sel == "Centriod":
         det_cur_g = np.array(track_info["no_det_cur"])
