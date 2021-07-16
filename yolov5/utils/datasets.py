@@ -239,7 +239,7 @@ class LoadWebcam_Jetson:  # for inference
         #self.pipe = eval(pipe) if pipe.isnumeric() else pipe
         print(1280, 720, 1280, 720, 60, 0)
         print(len([1280, 720, 1280, 720, 60, 0]))
-        self.pipe = self.gstreamer_pipeline(1280, 720, 1280, 720, 60, 0)
+        self.pipe = self.gstreamer_pipeline(1280, 720, 1280, 720, 20, 0)
         self.cap = cv2.VideoCapture(self.pipe, cv2.CAP_GSTREAMER)  # video capture object
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 3)  # set buffer size
     
