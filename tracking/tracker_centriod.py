@@ -34,8 +34,7 @@ from run_detection import Detector
 def run_centroid_tracker(
         opt,
         # TRACKER
-        args_tr,
-        dataloader
+        args_tr
         ):
     print(colorstr('detect: ') + ', '.join(f'{k}={v}' for k, v in vars(opt).items()))
     check_requirements(exclude=('tensorboard', 'thop'))
