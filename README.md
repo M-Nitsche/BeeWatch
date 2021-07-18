@@ -49,17 +49,6 @@ For the initial labeling the [VGG Image Annotator](http://www.robots.ox.ac.uk/~v
 
 The final Dataset consists of 1.814 images with 104 null examples. Each image has 1.1 annotations on average with results in 2.047 annotation overall with one class [bee]. Images are annotated with bounding boxes.
 
-
-### Additional data sources (Maxi)
-The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality ("Garbage in, garbage out") and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. Therefore we first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###Labeling) an additional batch of 1000 bee images and two videos, which were seperated into individual frames. Moreover, we downloaded 1000 images of flowers or bushes without any bees as these are especially usefull as null images and were used for the proceeding synthetic generation of another 1000 bee images (see [Synthetic dataset generation](####Synthetic-dataset-generation)).
-The resulting additional datasets are listed below.
-
-| Image source  | No. of images  |  No. of labels | No. of null images |
-| ------------- | ------------- | ------------- | ------------- |
-| Flickr - (Mosaic) images| 1000  |  1034 | 0
-| Flickr - Video frames | 741 (360 + 381) |  2398 | 167 
-| Synthetic images  | 1000     | 7801 | 0
-
 ### Dataset (David)
 
 | Image source  | count         |
@@ -77,7 +66,17 @@ Images with various different backgrounds (flowers) are included - and selection
   <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
 
-#### Mosaic dataset (Maxi)
+### Additional data sources (Maximilian Nitsche)
+The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality ("Garbage in, garbage out") and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. Therefore we first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###Labeling) an additional batch of 1000 bee images and two videos, which were seperated into individual frames. Moreover, we downloaded 1000 images of flowers or bushes without any bees as these are especially usefull as null images and were used for the proceeding synthetic generation of another 1000 bee images (see [Synthetic dataset generation](####Synthetic-dataset-generation)).
+The resulting additional datasets are listed below.
+
+| Image source  | No. of images  |  No. of labels | No. of null images |
+| ------------- | ------------- | ------------- | ------------- |
+| Flickr - (Mosaic) images| 1000  |  1034 | 0
+| Flickr - Video frames | 741 (360 + 381) |  2398 | 167 
+| Synthetic images  | 1000     | 7801 | 0
+
+#### Mosaic dataset (Maximilian Nitsche)
 In order to collect another 1000 bee images we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. 
 As the quality of the queried images heavily depend on the search string, we evaluated various keywords in advance. The search strings were iteratively evluated by a brief review of the responses and resulted in the following final search string: "bee flowers", "flowers" and "flower bushes". The latter were used for the [synthetic dataset generation](####Synthetic-dataset-generation) as background images.
 
@@ -109,6 +108,17 @@ In the first trials, we did not succeed in achieving good results for various re
 ### Establish Baseline with background subtraction and blob detection
 (Aleks)
 
+
+### Background subtraction + Tiny YOLO (Maximilian Nitsche)
+During the labeling process we noticed ourselves that bees are much easier to localize by the human eye if you face a series of frames and see the differences between frames instead of each frame individually. As CNNs themselves are somewhat motivated by the biological eye, we tried to transfer this finding to an initial model. Blob detection is only performing on background subtraction in very calm situations without much movement of the background i.e. the flower or bush itself. Therefore the motivation of feeding a CNN with background subtraction frames is also that the model learns to ignore flower borders or noise and is able to detect bees based on their outline (see the exemplary image below).
+
+![Example-background-subtraction](doku_resources/bees_demo1_frame96.jpg)
+
+We first [split](tracking/video_splitter.py) the videos and labeled the resulting frames. Afterwards we used the orginal video footage and the splitter again to split the videos into the same frames but this time we applied background subtraction in advance.
+
+Since background subtraction can become very slow in cases of a lot of movement and as it is already a data reduction technique we decided that a more shallow but faster model version of YOLO would be sufficient. Hence, we trained a YOLOv4-Tiny on the given dataset. 
+
+
 ### Model selection
 - one stage vs. two stage detection (Andrea)
 - Performance auf Jetson Nano (Andrea)
@@ -119,8 +129,10 @@ In the first trials, we did not succeed in achieving good results for various re
 
 ### SSD (OLI)
 
-### EfficientDet (Maxi)
+### EfficientDet (Maximilian Nitsche)
 
+
+### 
 
 ## Training Enviornment (David)
 Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives you simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
