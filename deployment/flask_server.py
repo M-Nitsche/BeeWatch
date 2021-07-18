@@ -12,13 +12,16 @@ import cv2
 from flask import Flask, render_template, Response, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from tracking.tracker_centriod import run_centroid_tracker
-from tracking.tracker_no import run_no_tracker
+from tracking.blob_det_correct_tracker_centroid import run_blob_det_correct_centroid_tracker
+from tracking.tracker_no_blob import run_no_blob_tracker
+from tracking.tracker_no_objdet import run_no_tracker
+from tracking.blob_det_add_tracker_centroid import run_blob_det_add_centroid_tracker
 from datetime import datetime
 import numpy as np
 
 def arguments_parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default=parentdir+'/yolov5/best.pt', help='model.pt path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default=parentdir+'/yolov5/best_maxi.pt', help='model.pt path(s)')
     parser.add_argument('--source', type=str, default=parentdir+'/yolov5/data/bees_demo1.mp4', help='file, camera for webcam')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
@@ -43,7 +46,7 @@ def arguments_parse():
     parser.add_argument('--half', action='store_true', help='use FP16 half-precision inference')
     opt = parser.parse_args()
 
-    ### TRACKER CENTRIOD
+    ### TRACKER AND TYPE OF DETECTION
     parser.add_argument('--maxDisappeared', default=5,
                         help='maximum consecutive frames a given object is allowed to be marked as "disappeared"')
     parser.add_argument('--save_tracking_img', default=False,
@@ -54,17 +57,25 @@ def arguments_parse():
     parser.add_argument('--show_trajectories', default=True, help='view tracking trajectories')
     parser.add_argument('--show_info', default=True, help='yield back img and info for flask')
     parser.add_argument('--yield_back', default=True, help='yield back img and info for flask')
+    parser.add_argument('--det_and_blob', default=True,
+                        help='when using blob detection add object det as a checker')
+    parser.add_argument('--matching_threshold', default=100,
+                        help='threshold between detections from blob detection and object detection')
+    parser.add_argument('--tracker_threshold', default=150,
+                        help='threshold between detections tracked and detected')
+    parser.add_argument('--show_blob_update', default=True,
+                        help='show when a blob is detected')
     args = parser.parse_args()
 
     return opt, args
 
-global args, opt
+global args
+global opt
 opt, args = arguments_parse()
 path_data = parentdir + "/yolov5/data/"
-global file_path, tracker_sel
+global file_path, tracker_sel, det_sel
 tracker_sel = "NO tracker"
 global tracker_info
-
 track_info = {
     "time": [],
     "frame": [],
@@ -90,17 +101,33 @@ def source():
     print(file_list)
     file_list.append("Camera")
     print(file_list)
-    return render_template('source.html', file_list=file_list)
+    detection_list = ["Object Detection", "Blob Detection", "Blob corrected by Object Det", "Blob and Object Det"]
+    return render_template('source.html', file_list=file_list, detection_list=detection_list)
 
 @app.route('/source_selected', methods=['POST'])
 def source_selected():
-    global opt, file_path
+    global opt, file_path, det_sel
     if request.form.get('file_select') != "Camera":
         file_path = path_data + request.form.get('file_select')
     else:
         file_path = request.form.get('file_select')
     opt.source = file_path
     print(file_path) # only file names
+
+    det_sel = file_path = request.form.get('detection_select')
+
+    if det_sel in ["Object Detection", "Blob corrected by Object Det", "Blob and Object Det"]:
+        return redirect(url_for('object_detection_settings'))
+    else:
+        return redirect(url_for('tracker'))
+
+@app.route('/object_detection_settings', methods=['GET'])
+def object_detection_settings():
+    return render_template('object_detection_settings.html')
+
+@app.route('/objdet_set', methods=['POST'])
+def objdet_set():
+    global opt, det_sel
     if request.form.get('save_img') == "on":
         opt.nosave = False
     else:
@@ -118,11 +145,17 @@ def source_selected():
     print(opt.save_conf)
     opt.conf_thres = float(request.form.get('conf_thres'))/100
     print(opt.conf_thres)
+
     return redirect(url_for('tracker'))
 
 @app.route('/tracker', methods=['GET'])
 def tracker():
-    tracker_list = ["Centriod", "OTHER", "NO tracker"]
+    global det_sel
+    if det_sel in ["Blob corrected by Object Det", "Blob and Object Det"]:
+        # tracker needed
+        tracker_list = ["Centriod"]
+    else:
+        tracker_list = ["Centriod", "NO tracker"]
     return render_template('tracker.html', tracker_list=tracker_list)
 
 @app.route('/tracker_selected', methods=['POST'])
@@ -142,7 +175,9 @@ def centriod_tracker():
 
 @app.route('/inference', methods=['GET', 'POST'])
 def inference():
-    global tracker_sel, args, track_info
+    global tracker_sel
+    global args
+    global track_info
     track_info = {
         "time": [],
         "frame": [],
@@ -155,6 +190,12 @@ def inference():
         maxDis = request.form["maxDisappeared"]
         args.maxDisappeared = int(maxDis)
         print(args.maxDisappeared)
+        tracker_threshold = request.form["tracker_threshold"]
+        args.tracker_threshold = int(tracker_threshold)
+        print(args.tracker_threshold)
+        matching_threshold = request.form["matching_threshold"]
+        args.matching_threshold = int(matching_threshold)
+        print(args.matching_threshold)
 
         if request.form.get('show_trajectories') == "on":
             args.show_trajectories = True
@@ -208,22 +249,53 @@ def save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr):
 
 
 def info_tracker():
-    global tracker_sel, args, opt
+    global tracker_sel, args, opt, det_sel
 
-    if tracker_sel == "Centriod":
+    if tracker_sel == "Centriod" and det_sel == "Object Detection":
         for frame, no_det, no_tr, sum_tr, _, frame_no, ids in run_centroid_tracker(opt, args):
             save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr)
             ret, buffer = cv2.imencode('.png', frame)
             img = buffer.tobytes()
             yield (b'--frame\r\n'
                     b'Content-Type: image/png\r\n\r\n' + img + b'\r\n')
-    elif tracker_sel == "NO tracker":
+    elif tracker_sel == "NO tracker" and det_sel == "Object Detection":
         for frame, no_det, _, frame_no in run_no_tracker(opt, args):
             save_info_tracker(frame_no, no_det, None, None, None)
             ret, buffer = cv2.imencode('.png', frame)
             img = buffer.tobytes()
             yield (b'--frame\r\n'
                     b'Content-Type: image/png\r\n\r\n' + img + b'\r\n')
+    elif tracker_sel == "NO tracker" and det_sel == "Blob Detection":
+        for frame, no_det, _, frame_no in run_no_blob_tracker(opt, args):
+            save_info_tracker(frame_no, no_det, None, None, None)
+            ret, buffer = cv2.imencode('.png', frame)
+            img = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/png\r\n\r\n' + img + b'\r\n')
+    elif tracker_sel == "Centriod" and det_sel == "Blob Detection":
+        args.det_and_blob = False
+        for frame, no_det, no_tr, sum_tr, _, frame_no, ids in run_blob_det_correct_centroid_tracker(opt, args):
+            save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr)
+            ret, buffer = cv2.imencode('.png', frame)
+            img = buffer.tobytes()
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/png\r\n\r\n' + img + b'\r\n')
+    elif tracker_sel == "Centriod" and det_sel == "Blob corrected by Object Det":
+        args.det_and_blob = True
+        for frame, no_det, no_tr, sum_tr, _, frame_no, ids in run_blob_det_correct_centroid_tracker(opt, args):
+            save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr)
+            ret, buffer = cv2.imencode('.png', frame)
+            img = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/png\r\n\r\n' + img + b'\r\n')
+    elif tracker_sel == "Centriod" and det_sel == "Blob and Object Det":
+        args.det_and_blob = True
+        for frame, no_det, no_tr, sum_tr, _, frame_no, ids in run_blob_det_add_centroid_tracker(opt, args):
+            save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr)
+            ret, buffer = cv2.imencode('.png', frame)
+            img = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/png\r\n\r\n' + img + b'\r\n')
 
 @app.route('/video_feed')
 def video_feed():
@@ -232,7 +304,9 @@ def video_feed():
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
-    global tracker_sel, track_info, args
+    global tracker_sel
+    global track_info
+    global args
 
     if tracker_sel == "Centriod":
         det_cur_g = np.array(track_info["no_det_cur"])

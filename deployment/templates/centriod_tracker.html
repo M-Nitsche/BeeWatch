@@ -18,8 +18,9 @@ Centroid Tracker
         <p class="lead">Set values for the tracker</p>
       </div>
         <div class="text-center">
-            <p class="lead">Maximum frames till disapperarence: <span id="maxdis"></span> </p>
+
             <form method="POST" action="{{ url_for('inference') }}">
+                <p class="lead">Maximum frames till disapperarence: <span id="maxdis"></span> </p>
                 <input class="slider" type="range" min="0" max="50" value="5" name="maxDisappeared" id="myRange" />
                 <div class="form-check form-switch">
                     <input type="checkbox" data-toggle="toggle" id="show_trajectories_checkbox" name="show_trajectories">
@@ -37,6 +38,12 @@ Centroid Tracker
                     <input type="checkbox" data-toggle="toggle" id="save_tracking_text_checkbox" name="save_tracking_text">
                     <label class="form-check-label" for="save_tracking_text_checkbox">Save txt-files from tracking</label>
                 </div>
+                <p class="lead">Threshold for maximum distance to match: <span id="trth"></span> </p>
+                <input class="slider" type="range" min="0" max="500" value="150" name="tracker_threshold" id="myRange2" />
+
+                <hr/>
+                <p class="lead">Only with Blob detection - Threshold for matching blob to object detection: <span id="mtth"></span> </p>
+                <input class="slider" type="range" min="0" max="500" value="150" name="matching_threshold" id="myRange3" />
                 <hr/>
                 <button type="submit" class="btn btn-primary btn-lg">Submit and go to object detection</button>
             </form>
@@ -72,6 +79,15 @@ Centroid Tracker
               <th scope="row">Save txt-files</th>
               <td>Save text-files with tracking information.</td>
             </tr>
+            <tr>
+              <th scope="row">Tracker threshold</th>
+              <td>Threshold of the maximum distance of pixel between detections tracked and detected.</td>
+            </tr>
+            <tr>
+              <th scope="row">Matching Threshold</th>
+              <td>Only needed when working with Blob detection. Threshold of pixel distance between object detections and blob detections</td>
+            </tr>
+
           </tbody>
         </table>
         </div>
@@ -89,6 +105,22 @@ Centroid Tracker
 
     slider.oninput = function() {
         output.innerHTML = this.value;
+    }
+
+    var slider1 = document.getElementById("myRange2");
+    var output1 = document.getElementById("trth");
+    output1.innerHTML = slider1.value;
+
+    slider1.oninput = function() {
+        output1.innerHTML = this.value;
+    }
+
+    var slider2 = document.getElementById("myRange3");
+    var output2 = document.getElementById("mtth");
+    output2.innerHTML = slider2.value;
+
+    slider2.oninput = function() {
+        output2.innerHTML = this.value;
     }
 </script>
 {% endblock %}

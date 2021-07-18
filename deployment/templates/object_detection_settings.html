@@ -1,7 +1,7 @@
 {% extends "./nav.html" %}
 
 {% block title %}
-Source
+Object Detection Settings
 {% endblock %}
 
 {% block styles %}
@@ -14,35 +14,39 @@ Source
     <div class="container">
 
       <div class="starter-template">
-        <h1>Select file and choose method of detection</h1>
-        <p class="lead">Select a file to infer on</p>
+        <h1>Options for object detection</h1>
       </div>
-            <form class="form-inline" method='POST' action="{{ url_for('source_selected') }}">
+            <form class="form-inline" method='POST' action="{{ url_for('objdet_set') }}">
+                <p class="lead">Options for object detection</p>
                 <div class="text-center">
-                    <select name="file_select" class="selectpicker form-control">
-                        {% for each in file_list %}
-                            <option value="{{each}}">{{each}}</option>
-                        {% endfor %}
-                    </select>
+                        <div>
+                            <input type="checkbox" data-toggle="toggle" id="save_img_checkbox" name="save_img">
+                            <label class="form-check-label" for="save_img_checkbox">Save image or video with detections</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" data-toggle="toggle" id="save_txt_checkbox" name="save_txt">
+                            <label class="form-check-label" for="save_txt_checkbox">Save txt-files</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" data-toggle="toggle" id="save_conf_checkbox" name="save_conf">
+                            <label class="form-check-label" for="save_conf_checkbox">Save confidence</label>
+                        </div>
+                        <p class="lead">Confidence threshold: <span id="maxconf"></span> </p>
+                        <input class="slider" type="range" min="0" max="100" value="25" name="conf_thres" id="confThres" />
+
+                        <hr/>
+                        <button type="submit" class="btn btn-primary btn-lg">Submit and go to tracker</button>
+                        <hr/>
+
                 </div>
-                <hr/>
-                <p class="lead">Detection method</p>
-                <div class="text-center">
-                        <select name="detection_select" class="selectpicker form-control">
-                        {% for each in detection_list %}
-                            <option value="{{each}}">{{each}}</option>
-                        {% endfor %}
-                        </select>
-                <hr/>
-                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-                </div>
+
             </form>
         <div>
-            <p class="lead">Options</p>
+            <p class="lead">Arguments</p>
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Option</th>
+              <th scope="col">Argument</th>
               <th scope="col">Description</th>
             </tr>
           </thead>
@@ -52,21 +56,17 @@ Source
               <td>the file needs to be in the data folder. It can only be a .mp4, .avi, .jpg or .png.</td>
             </tr>
             <tr>
-              <th scope="row">Object detection</th>
+              <th scope="row">Save image or video</th>
               <td>Save the image or video of the Yolo detection in runs. Detection needs to run through.</td>
             </tr>
             <tr>
-              <th scope="row">Blob detection</th>
+              <th scope="row">Save txt</th>
               <td>Save a txt-file for every image if there is a detection.</td>
             </tr>
             <tr>
-              <th scope="row">Blob corrected by Objection Detection</th>
+              <th scope="row">Confidence threshold</th>
               <td>Choose the threshold for the bounding boxes in Yolo.</td>
             </tr>
-            <tr>
-              <th scope="row">Blob and Objection Detection</th>
-              <td>Choose the threshold for the bounding boxes in Yolo.</td>
-             </tr>
           </tbody>
         </table>
         </div>
