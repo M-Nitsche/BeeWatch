@@ -18,6 +18,7 @@ from tracking.tracker_no_objdet import run_no_tracker
 from tracking.blob_det_add_tracker_centroid import run_blob_det_add_centroid_tracker
 from datetime import datetime
 import numpy as np
+import json
 
 def arguments_parse():
     parser = argparse.ArgumentParser()
@@ -73,6 +74,7 @@ global args
 global opt
 opt, args = arguments_parse()
 path_data = parentdir + "/yolov5/data/"
+path_eval = parentdir + "/tracking/eval_data/"
 global file_path, tracker_sel, det_sel
 tracker_sel = "NO tracker"
 global tracker_info
@@ -220,7 +222,7 @@ def inference():
 
     return render_template('inference.html')
 
-@app.route('/documentation')
+@app.route('/documentation', methods=['GET', 'POST'])
 def documentation():
     return render_template('documentation.html')
 
@@ -304,15 +306,17 @@ def video_feed():
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
-    global tracker_sel
-    global track_info
-    global args
+    global tracker_sel, track_info, args, ids_frame_list, time_cur_g, eval_data_list
 
     if tracker_sel == "Centriod":
+        # get evaluation files
+        eval_data_list = [f for f in listdir(path_eval) if
+                     isfile(join(path_eval, f)) and (f[-4:] in ["json"])]
         det_cur_g = np.array(track_info["no_det_cur"])
         frame_g = np.array(track_info["frame"]) # time if webcam
         tr_cur_g = np.array(track_info["no_tr_cur"])
         tr_sum_g = np.array(track_info["sum_tr"])
+        # no frame, no det, no tracked, sum tracked
         time_cur_g = np.stack((frame_g, det_cur_g, tr_cur_g, tr_sum_g), axis=1)
 
         # For Candlestick graph
@@ -335,8 +339,9 @@ def results():
             else:
                 ids_frame_list[id] = [ids_frame_list[id][0], ids_frame_list[id][1], ids_frame_list[id][1],
                                       ids_frame_list[id][-1], ids_frame_list[id][-1]]
-        #print(ids_frame_list)
-        return render_template('results_track.html', time_det_cur=time_cur_g.tolist(), id_line=ids_frame_list)
+        print(ids_frame_list)
+        print(time_cur_g.tolist())
+        return render_template('results_track.html', time_det_cur=time_cur_g.tolist(), id_line=ids_frame_list, eval_data_list=eval_data_list)
     elif tracker_sel == "NO tracker":
         det_cur_g = np.array(track_info["no_det_cur"])
         frame_g = np.array(track_info["frame"])  # time if webcam
@@ -344,6 +349,68 @@ def results():
         return render_template('results_notrack.html', time_det_cur=time_cur_g.tolist())
 
     return render_template('results_notrack.html')
+
+@app.route('/eval_selected', methods=['POST'])
+def eval_selected():
+    global path_eval, track_info, args, ids_frame_list, time_cur_g, eval_data_list
+    eval_sel = path_eval + request.form.get('eval_select')
+
+    with open(eval_sel) as json_file:
+        data_eval = json.load(json_file)
+
+    # get a list of ids per frame and a list of all unique ids
+    bee_id_list, ids, no_tracked = [], [], []
+    for no_frame, frame in enumerate(data_eval['tracking-annotations']):
+        bee_id_list_frame = []
+        if no_frame == 0:
+            # first frame
+            no_tracked.append(0)
+        else:
+            # take last no of tracked
+            no_tracked.append(no_tracked[-1])
+
+        for bee in frame["annotations"]:
+            id = int((bee["object-name"])[4:])
+            bee_id_list_frame.append(id)
+            if id not in ids:
+                # unseen id
+                ids.append(id)
+                # add
+                no_tracked[-1] = no_tracked[-1] + 1
+        bee_id_list.append(bee_id_list_frame)
+    print(bee_id_list)
+    print(ids)
+    print(no_tracked)  # add to graph per frame
+    # create list with len of ids
+    no_bees, bees_frames = [], []
+    for id in ids:
+        bees_frames.append([])
+
+    # retrieve how many ids in the frame and the length a id is continuous
+    for no_f, bees_frame in enumerate(bee_id_list):
+        no_bees.append(len(bees_frame))
+        for id in bees_frame:
+            bees_frames[id - 1].append(no_f)
+    print(no_bees)  # add to graph per frame
+    print(bees_frames)
+
+    ids_frame_list_eval = []
+    # for candle stick
+    for i, id in enumerate(bees_frames):
+        ids_frame_list_eval.append([ids[i], id[0], id[0], id[-1], id[-1]])
+    print(ids_frame_list_eval)
+    print(ids_frame_list)
+
+    # add to graph data
+    time_cur_g = time_cur_g.tolist()
+    # assert len(time_cur_g) == len(no_bees) == len(no_tracked)
+    for no_frame, frame_data in enumerate(time_cur_g):
+        frame_data.append(no_bees[no_frame])
+        frame_data.append(no_tracked[no_frame])
+    print(time_cur_g)
+
+    return render_template('results_track_eval.html', time_det_cur=time_cur_g, id_line=ids_frame_list,
+                           eval_data_list=eval_data_list, id_line_eval=ids_frame_list_eval)
 
 if __name__ == '__main__':
     #app.run(debug=True, ssl_context='adhoc') # ssl_context='adhoc' for https https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https

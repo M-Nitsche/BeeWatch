@@ -14,17 +14,24 @@ Results
 
         <div class="starter-template">
             <h1>Tracker results &#x1f41d;</h1>
-            <p class="lead">Number of bees per frame</p>
+            <p class="lead">Detection and Evaluation: Number of bees per frame</p>
         </div>
         <div class="text-center">
             <div id="chart_div"></div>
         </div>
         <hr/>
         <div class="starter-template">
-            <p class="lead">Bees over frames</p>
+            <p class="lead">Detection: Bees over frames</p>
         </div>
         <div class="text-center">
             <div id="timeline" style="height: 180px;"></div>
+        </div>
+        <hr/>
+        <div class="starter-template">
+            <p class="lead">Evaluation: bees over frames</p>
+        </div>
+        <div class="text-center">
+            <div id="timeline_eval" style="height: 180px;"></div>
         </div>
         <hr/>
         <div class="text-center">
@@ -37,6 +44,7 @@ Results
                 <button type="submit" class="btn btn-primary">Choose evaluation</button>
         </form>
         </div>
+
     </div><!-- /.container -->
 {% endblock %}
 
@@ -54,6 +62,8 @@ function beesframes() {
       data.addColumn('number', 'Obj Det');
       data.addColumn('number', 'Tracking');
       data.addColumn('number', 'Sum tracking');
+      data.addColumn('number', 'Eval tracking');
+      data.addColumn('number', 'Eval sum tracking');
 
       data.addRows(
          {{ time_det_cur }}
@@ -70,7 +80,7 @@ function beesframes() {
           vAxis: {
               title: '# 🐝 Bees'
           },
-          colors: ['#a52714', '#097138', '#1433a5']
+          colors: ['#a52714', '#097138', '#1433a5', '#6aef7e', '#090401']
       };
 
       var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
@@ -98,6 +108,29 @@ function beesframes() {
     };
 
     var chart = new google.visualization.CandlestickChart(document.getElementById('timeline'));
+
+    chart.draw(data, options);
+  }
+</script>
+<script>
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable({{ id_line_eval }}, true);
+
+    var options = {
+        colors: ['#dbc914'],
+        legend:'none',
+        hAxis: {
+              title: 'Bee Ids'
+          },
+        vAxis: {
+              title: 'Frames'
+        }
+    };
+
+    var chart = new google.visualization.CandlestickChart(document.getElementById('timeline_eval'));
 
     chart.draw(data, options);
   }
