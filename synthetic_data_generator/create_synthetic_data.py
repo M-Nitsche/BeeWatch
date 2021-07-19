@@ -1,10 +1,10 @@
-from src.config_dataset import BeeConfig
+from config_dataset import BeeConfig
 import os
 import shutil
 import numpy as np
 from PIL import Image, ImageEnhance, ImageFilter
-from src.pascalVOC import *
-from src.create_label_map import *
+from pascalVOC import *
+from create_label_map import *
 import random
 import itertools
 
@@ -39,7 +39,7 @@ def get_obj_positions(obj, bkg, size, count=1, margin=0):
     obj_w, obj_h = [], []
     x_positions, y_positions = [], []
     bkg_w, bkg_h = bkg.size
-    # Rescale our obj to have a couple different sizes
+    # Rescale obj to have a couple different sizes
     obj_size = [tuple([int(size * x) for x in obj.size])]
     for w, h in obj_size:
         obj_w.extend([w] * count)
@@ -66,20 +66,18 @@ def intersects(box, new_box):
 
 def resize_image(img, mutate_size, rotate=True):
     # resize image
-    # resize_rate = random.choice(sizes)
     img = img.resize([int(img.width * mutate_size), int(img.height * mutate_size)], Image.BILINEAR)
-
 
     random_num=random.randint(0, 10)
     if rotate:
-        if random_num < 8 :                    #isinstance(rotate, list)
-            rotate_angle = random.choice(rotate)
-        else:
+        if random_num < 8 :
             rotate_angle = random.randint(0, 360)
+        else:
+            rotate_angle = 0
     else:
         rotate_angle = 0
 
-    # rotate image for random andle and generate exclusion mask
+    # rotate image for random angle and generate exclusion mask
     img = img.rotate(rotate_angle, expand=True)
     mask = Image.new('L', img.size, 255)
     mask = mask.rotate(rotate_angle, expand=True)
@@ -143,7 +141,7 @@ def run_create_synthetic_images(config=None):
 
     # Prepare data creation pipeline
     ann_path = config.PATH + config.ANNOT_DIR
-    icon_sizes = config.OBJECT_SIZE
+    bee_sizes = config.OBJECT_SIZE
     output_images = config.PATH + config.IMAGE_DIR
     annotations_list = []
 
@@ -155,7 +153,7 @@ def run_create_synthetic_images(config=None):
 
 
 
-    print('Create images (known classes):')
+    print('Create synthetic images:')
 
     if config.CREATE_LABEL_MAP:
         create_label_map(objs_path=config.CLASSES_PATH, label_map_path=config.LABEL_MAP_PATH)
@@ -170,7 +168,7 @@ def run_create_synthetic_images(config=None):
 
         number_bees_per_image = random.randint(config.MIN_NUM_OBJECT_PER_IMAGE, config.MAX_NUM_OBJECT_PER_IMAGE)
         bees = draw_random_subset_of_bees(bees, number_bees_per_image)
-        # Duplicate each icon
+        # multiply each bee
         for i in range(len(bees)):
             for x in range(random.randint(*config.RANGE_NUM_EQUAL_OBJECTS)):
                 bees.append(bees[i])
@@ -202,13 +200,13 @@ def run_create_synthetic_images(config=None):
             #print(obj_img.size)
             obj_img = obj_img.convert('RGBA')
             label_class = idx.split(".png")[0]
-            #print(label_class)
 
-            # Generate images with different sizes of symbols
-            # Get an array of random obj positions (from top-left corner)
-            icon_size = random.choice(icon_sizes)
-            bee_size_list.append(icon_size)
-            obj_h, obj_w, x_pos, y_pos = get_obj_positions(obj=obj_img, bkg=bkg_img, size=icon_size, count=1)
+
+            # Generate images with different sizes of bees
+            # Get an array of random bee positions (from top-left corner)
+            bee_size = random.choice(bee_sizes)
+            bee_size_list.append(bee_size)
+            obj_h, obj_w, x_pos, y_pos = get_obj_positions(obj=obj_img, bkg=bkg_img, size=bee_size, count=1)
             obj_h = obj_h[0]
             obj_w = obj_w[0]
             x_pos = x_pos[0]
@@ -221,20 +219,17 @@ def run_create_synthetic_images(config=None):
 
 
 
-        # print('Length of object coordinates : ', len(obj_coordinates))
 
-        #Check if icons position overlap
+        #Check if bees position overlap, if so remove the overlapping bee
         counter=0
         for row1, row2 in itertools.combinations(obj_coordinates, 2):
             if intersects(row1, row2):
                 if row1 in obj_coordinates:
                     counter+=1
                     index = obj_coordinates.index(row1)
-                    del bees[index]            #remove/comment out for icons to overlap
-                    del obj_coordinates[index]  #remove(comment out for icons to overlap
+                    del bees[index]
+                    del obj_coordinates[index]
 
-        # print('Länge der icons removed: ', len(icons))
-        # print('Länge der object coordinates removed: ', len(obj_coordinates))
 
 
         for i, idx in enumerate(bees):
@@ -245,16 +240,13 @@ def run_create_synthetic_images(config=None):
 
             obj_img  = obj_img.resize((width, height))
             obj_img = obj_img.convert('RGBA')
-            label_class ='bee'       #idx.split(".png")[0]
-            #print(label_class)
-            #print(obj_img.size)
-
+            label_class ='bee'
 
             # Create synthetic images based on positions
-            obj_img, mask = resize_image(obj_img, mutate_size=bee_size_list[i], rotate=[0, 90, 180, 270])
+            obj_img, mask = resize_image(obj_img, mutate_size=bee_size_list[i], rotate=True)
             obj_img = blur_image(obj_img)
             obj_img= filter_image(obj_img)
-            bkg_w_obj.alpha_composite(obj_img, dest=(obj_coordinates[i][0], obj_coordinates[i][1])) #(x_pos, y_pos)
+            bkg_w_obj.alpha_composite(obj_img, dest=(obj_coordinates[i][0], obj_coordinates[i][1]))
             obj_w, obj_h = obj_img.size
 
             # for b in boxes:
