@@ -72,7 +72,7 @@ After labeling bees in the downloaded datasets following the procedure presented
 
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
-#### Synthetic dataset generation (Andrea BArtos)
+#### Synthetic dataset generation (Andrea Bartos)
 As mentioned previously, the collection of our real-word bee data was hindered by rainy weather. Therefore, we encountered a commonly occurring problem in AI, namely the lack of sufficient data. One way to compensate for this obstacle is to generate synthetic data. The idea behind synthetic data is to mimic real-world scenarios. The advantage of this method is its ability to create rapidly labeled data in large quantities at minimal cost and effort. However, a key challenge in creating synthetic data is how well a model can generalize what it learns from them to real-world scenarios. [30]
 
 For our case, the usage of this approach has two main purposes. The first is to be able to gather training data without being dependent on unswayable factors like the weather. The other is to be able to generalize on a wide range of different flowers. The pollination times of different flowers differ. Therefore, with the given time frame, the ability to generate real world training data consisting of a wide range of flowers was limited. 
