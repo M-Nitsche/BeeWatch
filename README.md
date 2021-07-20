@@ -85,9 +85,9 @@ Although the synthetic data are not a perfect representation of the real world, 
 Exemplary representations of the synthetically generated data can be found below.
 
 <p float="left">
-  <img src="dataset/synthetic_data/images/963.jpg" width="350" />
-  <img src="dataset/synthetic_data/images/998.jpg" width="350" /> 
   <img src="dataset/synthetic_data/images/915.jpg" width="350" />
+  <img src="dataset/synthetic_data/images/998.jpg" width="350" /> 
+  <img src="dataset/synthetic_data/images/963.jpg" width="350" />
   <img src="dataset/synthetic_data/images/890.jpg" width="350" />
 </p>
 
