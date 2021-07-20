@@ -71,7 +71,7 @@ As mentioned previously, the collection of our real-word bee data was hindered b
 
 For our case, the usage of this approach has two main purposes. The first is to be able to gather training data without being dependent on unswayable factors like the weather. The other is to be able to generalize on a wide range of different flowers. The pollination times of different flowers differ. Therefore, with the given time frame, the ability to generate real world training data consisting of a wide range of flowers was limited. 
 
-The source data for the generation consists of the flower bed dataset obtained from Flickr comprising 1000 images and 14 images of bees from different perspectives with a transparent background. 
+The source data for the generation consists of the flower bush set obtained from [flickr](https://www.flickr.com)  comprising 1000 images and 14 images of bees from different perspectives with a transparent background. 
 
 A synthetic image is created by drawing a random background from the flower bed data set and pasting a random number of bees on the background. The pasted bees vary in size, position and rotation. Moreover, additional enhancements are performed on bee images with a certain probability before being pasted on the background (blurring and filtering from PIL library). The corresponding bounding boxes are saved as XML annotation files in Pascal VOC format.
 
