@@ -96,6 +96,31 @@ The resulting additional datasets are listed below.
 
 #### Data Augmentation
 (Andrea Bartos)
+Data augmentation is a method that allows to significantly increase the variety of data for the training of models without having to acquire additional new data. New training instances are created by performing transformation on already existing instances thus providing new situations and perspectives for model training. That way it can alleviate the problem of overfitting. Essential when performing augmentation in object detection tasks is, that the transformation is not only performed on the image itself but also on the bounding box defining an object’s position. There are several available libraries which provide a wide range of augmentation techniques. Such a library is [imgaug](https://imgaug.readthedocs.io/en/latest/index.html). 
+However, the wide range of augmentation techniques should not be applied thoughtlessly to the data. The choice of suitable techniques depends on the used case. 
+
+There are two options on how to perform augmentation, depending on the algorithm used. On the one hand, data augmentation can be applied as part of preprocessing. With new algorithms like Yolov4, Yolov5 and YoloR an integrated augmentation at runtime is possible. The advantage of integrated (at run time) augmentation is the avoidance of intensive I/O workloads. On the other hand, certain functionalities that libraries like imgauge offer are not available as run-time augmentation techniques.
+
+Looking at our use case, we customized the applied data augmentation in the yolov5 framework as followed. These parameters are determined in the file  yolov5/data/hyps/hyp.scratch.yaml
+
+
+``` yaml
+	hsv_h: 0.1  # image HSV-Hue augmentation (fraction) -> increased
+  hsv_s: 0.7  # image HSV-Saturation augmentation (fraction)
+	hsv_v: 0.4  # image HSV-Value augmentation (fraction)
+	degrees: 0.3  # image rotation (+/- deg) -> increase because the orientation from camera to bees can be quit varied
+	translate: 0.3  # image translation (+/- fraction) -> increase since bees can be located anywhere in the picture
+	scale: 0.5  # image scale (+/- gain)
+	shear: 0.0  # image shear (+/- deg)
+	perspective: 0.0  # image perspective (+/- fraction), range 0-0.001 ->increase because the orientation from camera to bees can be quit varied
+	flipud: 0.25  # image flip up-down (probability) -> depending on perspective, the bee can be upside down
+	fliplr: 0.5  # image flip left-right (probability)
+	mosaic: 1.0  # image mosaic (probability)
+	mixup: 0.0  # image mixup (probability)
+	Copy_paste: 0.0  # segment copy-paste (probability) --> only available for segment labels not bounding boxes; therefore not changed
+``` 
+
+
 
 #### Data Preprocessing / Final Dataset (David)
 
