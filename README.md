@@ -63,14 +63,14 @@ The collected image footage is quite limited regarding the diversitiy of differe
 We first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###Labeling) an additional batch of 1000 bee images and two videos, which were seperated into individual frames. Moreover, we downloaded 1000 images of flowers or bushes without any bees as these are especially usefull as null images and were used for the proceeding synthetic data generation as background images (see [Synthetic dataset generation](####Synthetic-dataset-generation)).
 
 
-#### Mosaic dataset 
+### Mosaic dataset 
 (Maximilian Nitsche)
 
 After labeling bees in the downloaded datasets following the procedure presented in the [labeling section](###labeling) we used them to generate mosaic data. The mosaic augmentation is originally motivated in the YOLOv4 release and contributes significantly to its performance boost ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf)). As the downloaded images often show only individual bees on one flower the mosaic augmentation also makes sure the data meets our use case requirements to detect bees from further distance. In order to scale down the queried bees and benefit from the stated performance increase in model implementations beside YOLOv4/5 we generated 3x4 mosaic images and the corresponding new annotation files (see [mosaic_data_augmentation.ipynb](dataset/mosaic_data_augmentation.ipynb)). The probability of a bee image to be chosen for a individual mosaic tile was set to 0.3. The following shows an example mosaic image:
 
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
-#### Synthetic dataset generation 
+### Synthetic dataset generation 
 (Andrea Bartos)
 
 As mentioned previously, the collection of our real-word bee data was hindered by rainy weather. Therefore, we encountered a commonly occurring problem in AI, namely the lack of sufficient data. One way to compensate for this obstacle is to generate synthetic data. The idea behind synthetic data is to mimic real-world scenarios. The advantage of this method is its ability to create rapidly labeled data in large quantities at minimal cost and effort. However, a key challenge in creating synthetic data is how well a model can generalize what it learns from them to real-world scenarios. [30]
@@ -91,7 +91,7 @@ Exemplary representations of the synthetically generated data can be found below
   <img src="dataset/synthetic_data/images/890.jpg" width="350" />
 </p>
 
-#### Resulting additional datasets 
+### Resulting additional datasets 
 The resulting additional datasets are listed below.
 
 | Image source  | No. of images  |  No. of labels | No. of null images |
@@ -100,36 +100,8 @@ The resulting additional datasets are listed below.
 | Flickr - Video frames | 741 (360 + 381) |  2398 | 167 
 | Synthetic images  | 1000     | 7801 | 0
 
-#### Data Augmentation
-(Andrea Bartos)
 
-Data augmentation is a method that allows to significantly increase the variety of data for the training of models without having to acquire additional new data. New training instances are created by performing transformation on already existing instances thus providing new situations and perspectives for model training. That way it can alleviate the problem of overfitting. Essential when performing augmentation in object detection tasks is, that the transformation is not only performed on the image itself but also on the bounding box defining an object’s position. There are several available libraries which provide a wide range of augmentation techniques. Such a library is [imgaug](https://imgaug.readthedocs.io/en/latest/index.html). 
-However, the wide range of augmentation techniques should not be applied thoughtlessly to the data. The choice of suitable techniques depends on the use case. 
-
-There are two options on how to perform augmentation, depending on the algorithm used. On the one hand, data augmentation can be applied as part of preprocessing. With new algorithms like Yolov4, Yolov5 and YoloR an integrated augmentation at runtime is possible. The advantage of integrated (at run time) augmentation is the avoidance of intensive I/O workloads. On the other hand, certain functionalities that libraries like imgauge offer are not available as run-time augmentation techniques.Before we started experimenting with data augmentation, we have already decided on using yolov5 as our training model. Furthermore, at that point we were already struggling with storage capacities in google drive where we stored all data sets in order to make it easily accessible for everyone.  For this reason, we decided to perform augmentation at run time.
-
-With our use case in mind, we adapted the applied data extension in the yolov5 framework as follows. These parameters are determined in the file  yolov5/data/hyps/hyp.scratch.yaml
-
-
-``` yaml
-hsv_h: 0.1  # image HSV-Hue augmentation (fraction) -> increased
-hsv_s: 0.7  # image HSV-Saturation augmentation (fraction)
-hsv_v: 0.4  # image HSV-Value augmentation (fraction)
-degrees: 0.3  # image rotation (+/- deg) -> increase because the orientation from camera to bees can be quite varied
-translate: 0.3  # image translation (+/- fraction) -> increase since bees can be located anywhere in the picture
-scale: 0.5  # image scale (+/- gain)
-shear: 0.0  # image shear (+/- deg)
-perspective: 0.0  # image perspective (+/- fraction), range 0-0.001 ->increase because the orientation from camera to bees can be quite varied
-flipud: 0.25  # image flip up-down (probability) -> depending on perspective, the bee can be upside down
-fliplr: 0.5  # image flip left-right (probability)
-mosaic: 1.0  # image mosaic (probability)
-mixup: 0.0  # image mixup (probability)
-Copy_paste: 0.0  # segment copy-paste (probability) --> only available for segment labels not bounding boxes; therefore not changed
-``` 
-
-
-
-#### Data Preprocessing / Final Dataset 
+## Data Preprocessing
 (David Blumenthal)
 
 Größe der Train/Val/Test split 
@@ -140,9 +112,58 @@ In the first trials, we did not succeed in achieving good results for various re
 ### xxx
 In the first trials, we did not succeed in achieving good results for various reasons. One of the reasons was that the variance in the backgrounds (flowers) was very low, but in the validation set flowers, of which there were few or none in the training data set managed to make up the majority. In further attempts to build the dataset, the images were better distributed across the splits, which meant that the results were suddenly very good. The reason for this was that the majority of the images consisted of videos. From these, consecutive frames - which did not differ much - ended up in the training and validation dataset. This in turn led to the model having very good metrics, but not performing well on a test video. The same problem occurred both with rather large bees in test and small ones in val or vice versa. It took several iterations before a balanced data set emerged from the above problems. 
 
+### Final Dataset 
+
+### Data Augmentation
+(Andrea Bartos)
+
+Data augmentation is a method that allows to significantly increase the variety of data for the training of models without having to acquire additional new data. New training instances are created by performing transformation on already existing instances thus providing new situations and perspectives for model training. That way it can alleviate the problem of overfitting. Essential when performing augmentation in object detection tasks is, that the transformation is not only performed on the image itself but also on the bounding box defining an object’s position. There are several available libraries which provide a wide range of augmentation techniques. Such a library is [imgaug](https://imgaug.readthedocs.io/en/latest/index.html). 
+However, the wide range of augmentation techniques should not be applied thoughtlessly to the data. The choice of suitable techniques depends on the use case. 
+
+There are two options on how to perform augmentation, depending on the algorithm used. On the one hand, data augmentation can be applied as part of preprocessing. With new algorithms like Yolov4, Yolov5 and YoloR an integrated augmentation at runtime is possible. The advantage of integrated (at run time) augmentation is the avoidance of intensive I/O workloads. On the other hand, certain functionalities that libraries like imgauge offer are not available as run-time augmentation techniques.Before we started experimenting with data augmentation, we have already decided on using yolov5 as our training model. Furthermore, at that point we were already struggling with storage capacities in google drive where we stored all data sets in order to make it easily accessible for everyone.  For this reason, we decided to perform augmentation at run time.
+
+The yolov5 [implementation](https://github.com/ultralytics/yolov5/blob/master/data/hyps/hyp.scratch.yaml) by  Glenn Jocher offers the following data augmentation techniques with the following default parameters.
+
+``` yaml
+hsv_h: 0.015  # image HSV-Hue augmentation (fraction)
+hsv_s: 0.7  # image HSV-Saturation augmentation (fraction)
+hsv_v: 0.4  # image HSV-Value augmentation (fraction)
+degrees: 0.0  # image rotation (+/- deg)
+translate: 0.1  # image translation (+/- fraction)
+scale: 0.5  # image scale (+/- gain)
+shear: 0.0  # image shear (+/- deg)
+perspective: 0.0  # image perspective (+/- fraction), range 0-0.001
+flipud: 0.0  # image flip up-down (probability)
+fliplr: 0.5  # image flip left-right (probability)
+mosaic: 1.0  # image mosaic (probability)
+mixup: 0.0  # image mixup (probability)
+``` 
 
 
-## Model
+With our use case in mind, we adapted the applied data augmentation in the yolov5 framework as follows. These parameters are determined in the file  yolov5/data/hyps/hyp.scratch.yaml
+
+
+``` yaml
+hsv_h: 0.1  -> increased
+hsv_s: 0.7  -> relevant, kept default value
+hsv_v: 0.4  -> relevant, kept default value
+degrees: 0.3  -> increase, because the orientation from camera to bees can be quite varied
+translate: 0.3  -> increase, since bees can be located anywhere in the picture
+scale: 0.5  -> relevant therefore kept default value
+shear: 0.0  
+perspective: 0.3  ->increase, because the orientation from camera to bees can be quite varied
+flipud: 0.25  -> increase, depending on perspective, the bee can be upside down
+fliplr: 0.5  -> relevant, kept default value
+mosaic: 1.0  -> relevant, kept default value
+mixup: 0.0  
+Copy_paste: 0.0  -> only available for segment labels not bounding boxes; therefore not changed
+``` 
+
+
+
+
+
+## Model building
 
 
 ### Establish Baseline with background subtraction and blob detection
@@ -155,7 +176,7 @@ In the first trials, we did not succeed in achieving good results for various re
 
 ### Metrics used (Andrea)
 
-## Training Enviornment
+### Training Enviornment
 (David Blumenthal)
 
 Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives you simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
@@ -178,7 +199,7 @@ Since background subtraction can become very slow in cases of a lot of movement 
 (Maximilian Nitsche)
 
 
-## YOLO
+### YOLO
 YOLO has been first introduced in 2016 and set a milestone in object detection research due its capability to detect object in real-time with better accuracy.
 It was first introduced by Joseph Redmon and developed further by him up to Yolov3. The versions were implemented in the Darknet framework. Later the v3 Version was also implemented in PyTorch by Glenn Jocher of Ultralytics LLC who as we will later see is also responsible for the controversially discussed yolov5. [https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109](https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109)
 Joseph Redmon, the initiator of Yolo, announced in the spring of 2020 that he has stopped his research in computer vision due to several concerns regarding military applications and privacy concerns. [His tweet](https://twitter.com/pjreddie/status/1230524770350817280) 
@@ -206,18 +227,18 @@ One huge advantage is model size in mb. The smallest versions weights (yolov5s) 
 **ToDo**
 
 
-### Training
+## Model Training
 To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
 
 
-**Freezing Layers** 
+### Freezing Layers** 
 (Andrea Bartos)
 
-Theorie dazu 
-runs mit ergebnissen 
-Entschieden nihct weiter zu verfolgen 
+Throughout the process of model training, we quickly learned that it is a lot of trial and error. One main hurdle is the long training time before one can actually tell whether the given modification improves performance or not. Hence, we decided to leverage transfer learning to speed up the training time and thus have more time to train different configurations. Looking at Glenn Jocher's [implementation and results](https://github.com/ultralytics/yolov5/issues/1314), this approach seems promising. By freezing the backbone of yolov5 (layers 0-9), the performance was slightly lower, but the training time was significantly reduced. 
 
-**Adding Data 
+Unfortunately, we experienced a different result. The training time was reduced significantly, yet the performance also decreased substantially, which is why we discarded this approach.
+
+### Adding Data 
 (David Blumenthal)
 
 Einleitung ins thema
@@ -237,10 +258,10 @@ The best model is selected based on its fitness. The fitness function is a weigh
 | with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
 | modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 
-**Data Augmentation** 
+### Data Augmentation
 (Andrea Bartos)
 
-So far, all training has been done with the default augmentation values. As described in Data Augmentation, the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our bee use case. The changed parameters can also be found in chapter xy.
+So far, all training has been done with the default augmentation values. As described in [Data Augmentation](#### Data Augmentation), the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our use case. The changed parameters can also be found in chapter [Data Augmentation](#### Data Augmentation).
 
 The performance after 300 epochs is as follows:  
 
@@ -250,29 +271,14 @@ The performance after 300 epochs is as follows:
 ---------------------------------------------------------------------------------------------------------------------------
 
 
-Exemplary training images will look as follows: 
-
-<img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" class="center"/>
-
-In the image above standard configurations were used and include the following:
-``` yaml
-hsv_h: 0.015  # image HSV-Hue augmentation (fraction)
-hsv_s: 0.7  # image HSV-Saturation augmentation (fraction)
-hsv_v: 0.4  # image HSV-Value augmentation (fraction)
-degrees: 0.0  # image rotation (+/- deg)
-translate: 0.1  # image translation (+/- fraction)
-scale: 0.5  # image scale (+/- gain)
-shear: 0.0  # image shear (+/- deg)
-perspective: 0.0  # image perspective (+/- fraction), range 0-0.001
-flipud: 0.0  # image flip up-down (probability)
-fliplr: 0.5  # image flip left-right (probability)
-mosaic: 1.0  # image mosaic (probability)
-mixup: 0.0  # image mixup (probability)
-``` 
+Exemplary training images will look as follows:
+<img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" align="center"/>
 
 
 
-#### Hyperparameter Tuning
+
+
+### Hyperparameter Tuning
 
 Apart from perfecting the training dataset, hyperparameter tuning can be used to increase the models performance. Yolov5 offers 25 hyperparameters including those with regard to test time augmentation. The yolov5 implementation offers functionality that can support in finding good hyperparameters.
 With google colab as our training environnement computing resources - especially time - is very limited, hence we had to work to with assumptions. First we defined a base scenario from which we wanted to approve. The base scenario was a standard yolov5s model with pertained weights on the coco dataset which we trained for 10 epochs. With the "evolve" function the model tries to find better parameters using a genetic algorithm with the main operators crossover and mutation with a 90% probability and 0.04 variance. [Github Yolov5](https://github.com/ultralytics/yolov5/issues/607)
@@ -286,7 +292,7 @@ We did that for 50 iterations. We assumed that after 10 epochs good parameters w
 | third hyp. tuning (inc. aug.) | 0,803 | 0,576 |    0,639   | 0,765 | 0,568 |    0,57     |
 
 
-## Final Results 
+### Final Results 
 
 einfügen Übersichtstabelle
 
@@ -296,11 +302,11 @@ Beispiel Inferenzen
 Video
 
 
-## Deployment
+# Deployment
 (Christin Scheib)
 The Jetson Nano is a small powerful device optimized for IoT applications. It comes  with a Quad-core ARM Cortex-A57 MPCore processor, NVIDIA Maxwell architecture with 128 NVIDIA CUDA cores and 4GB RAM. The Jetson Nano does not come with the Linux architecture already setup, instead it is the first step to write the Image file to the SD Card to boot and setup the system. After a successful setup we also added an ssh connection in order to control the device from a laptop. 
 
-### Deployment process
+## Deployment process
 Having setup the Jetson Nano it was not yet ready for directly detecting bees as we have not deployed the model. For our case three possible deployment options were:(1) docker containers, (2) virtual environments, (3) traditional deployment.  
   
 (1) Docker  
@@ -388,14 +394,14 @@ After completing the installation process we ran our model. Here we faced some p
 ```
 Please note that this is the performance without tracking. As previously mentioned it is considered good practice to use a virtual environment for every project you work on. However, we could not find the error that led to the torchvision version error. To reduce inference time we converted our model weights to TensorFlow Lite Format. This is a lightweight version of TensorFlow specially developed to run on small devices. Surprisingly this did not lead to any reduction in performance when testing it on a Macbook Pro. Instead the inference time per frame was around 24 seconds per frame. Due to that we did not further explore this direction ad did not deploy it on the Jetson Nano. 
 
-### Flask (Oliver)
+## Flask (Oliver)
 to do 
 
 (Christin Scheib)
 Running the prerecorded video on the flask server led to a performance of 0,23 seconds per frame. An even more significant decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.32 seconds per frame. 
 
 
-## Lessons Learned
+# Lessons Learned
 
 
 
