@@ -49,6 +49,8 @@ Images with various different backgrounds (flowers) are included - and selection
 
 <p float="left">
   <img src="/doku_resources/image_1.jpg" width="350" />
+  <img src="/doku_resources/image_2.jpg" width="350" />
+  <img src="/doku_resources/image_3.jpg" width="350" />
   <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
 
@@ -85,7 +87,7 @@ Exemplary representations of the synthetically generated data can be found below
 <p float="left">
   <img src="dataset/synthetic_data/images/963.jpg" width="350" />
   <img src="dataset/synthetic_data/images/998.jpg" width="350" /> 
-  <img src="dataset/synthetic_data/images/915.jpg.jpg" width="350" />
+  <img src="dataset/synthetic_data/images/915.jpg" width="350" />
   <img src="dataset/synthetic_data/images/890.jpg" width="350" />
 </p>
 
