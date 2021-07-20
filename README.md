@@ -47,7 +47,7 @@ The final Dataset consists of 1.814 images with 104 null examples. Each image ha
 Images where either taken as a single photo, or a video was taken and then deconstructed into single frames. To turn videos into single frames [FFmpeg](https://www.ffmpeg.org) was used. 
 Images with various different backgrounds (flowers) are included - and selection of sample images can be seen below.
 
-<p float="left">
+<p align="center">
   <img src="/doku_resources/image_1.jpg" width="350" />
   <img src="/doku_resources/image_2.jpg" width="350" />
   <img src="/doku_resources/image_3.jpg" width="350" />
@@ -56,15 +56,9 @@ Images with various different backgrounds (flowers) are included - and selection
 
 ### Additional data sources (Maximilian Nitsche)
 The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality ("Garbage in, garbage out") and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. Therefore we first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###Labeling) an additional batch of 1000 bee images and two videos, which were seperated into individual frames. Moreover, we downloaded 1000 images of flowers or bushes without any bees as these are especially usefull as null images and were used for the proceeding synthetic generation of another 1000 bee images (see [Synthetic dataset generation](####Synthetic-dataset-generation)).
-The resulting additional datasets are listed below.
 
-| Image source  | No. of images  |  No. of labels | No. of null images |
-| ------------- | ------------- | ------------- | ------------- |
-| Flickr - (Mosaic) images| 1000  |  1034 | 0
-| Flickr - Video frames | 741 (360 + 381) |  2398 | 167 
-| Synthetic images  | 1000     | 7801 | 0
 
-#### Mosaic dataset (Maximilian Nitsche)
+##### Mosaic dataset (Maximilian Nitsche)
 In order to collect another 1000 bee images we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. 
 As the quality of the queried images heavily depend on the search string, we evaluated various keywords in advance. The search strings were iteratively evluated by a brief review of the responses and resulted in the following final search string: "bee flowers", "flowers" and "flower bushes". The latter were used for the [synthetic dataset generation](####Synthetic-dataset-generation) as background images.
 
@@ -72,7 +66,7 @@ After labeling bees in the downloaded datasets following the procedure presented
 
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
-#### Synthetic dataset generation (Andrea Bartos)
+##### Synthetic dataset generation (Andrea Bartos)
 As mentioned previously, the collection of our real-word bee data was hindered by rainy weather. Therefore, we encountered a commonly occurring problem in AI, namely the lack of sufficient data. One way to compensate for this obstacle is to generate synthetic data. The idea behind synthetic data is to mimic real-world scenarios. The advantage of this method is its ability to create rapidly labeled data in large quantities at minimal cost and effort. However, a key challenge in creating synthetic data is how well a model can generalize what it learns from them to real-world scenarios. [30]
 
 For our case, the usage of this approach has two main purposes. The first is to be able to gather training data without being dependent on unswayable factors like the weather. The other is to be able to generalize on a wide range of different flowers. The pollination times of different flowers differ. Therefore, with the given time frame, the ability to generate real world training data consisting of a wide range of flowers was limited. 
@@ -91,6 +85,14 @@ Exemplary representations of the synthetically generated data can be found below
   <img src="dataset/synthetic_data/images/890.jpg" width="350" />
 </p>
 
+##### Resulting additional datasets 
+The resulting additional datasets are listed below.
+
+| Image source  | No. of images  |  No. of labels | No. of null images |
+| ------------- | ------------- | ------------- | ------------- |
+| Flickr - (Mosaic) images| 1000  |  1034 | 0
+| Flickr - Video frames | 741 (360 + 381) |  2398 | 167 
+| Synthetic images  | 1000     | 7801 | 0
 
 #### Data Augmentation
 (Andrea Bartos)
@@ -113,6 +115,15 @@ In the first trials, we did not succeed in achieving good results for various re
 ### Establish Baseline with background subtraction and blob detection
 (Aleks)
 
+### Model selection
+- one stage vs. two stage detection (Andrea)
+- Performance auf Jetson Nano (Andrea)
+( Warum Yolo und nicht two stage detection)
+
+### Metrics used (Andrea)
+
+## Training Enviornment (David)
+Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives you simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
 
 ### Background subtraction + Tiny YOLO (Maximilian Nitsche)
 During the labeling process we noticed ourselves that bees are much easier to localize by the human eye if you face a series of frames and see the differences between frames instead of each frame individually. As CNNs themselves are somewhat motivated by the biological eye, we tried to transfer this finding to an initial model. Blob detection is only performing on background subtraction in very calm situations without much movement of the background i.e. the flower or bush itself. Therefore the motivation of feeding a CNN with background subtraction frames is also that the model learns to ignore flower borders or noise and is able to detect bees based on their outline (see the exemplary image below).
@@ -124,23 +135,10 @@ We first [split](tracking/video_splitter.py) the videos and labeled the resultin
 Since background subtraction can become very slow in cases of a lot of movement and as it is already a data reduction technique we decided that a more shallow but faster model version of YOLO would be sufficient. Hence, we trained a YOLOv4-Tiny on the given dataset. 
 
 
-### Model selection
-- one stage vs. two stage detection (Andrea)
-- Performance auf Jetson Nano (Andrea)
-( Warum Yolo und nicht two stage detection)
-
-### Metrics used (Andrea)
-
 
 ### SSD (OLI)
 
 ### EfficientDet (Maximilian Nitsche)
-
-
-### 
-
-## Training Enviornment (David)
-Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives you simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
 
 
 ## YOLO
