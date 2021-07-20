@@ -237,7 +237,20 @@ The best model is selected based on its fitness. The fitness function is a weigh
 | with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
 | modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 
-**Data Augmentation** Multiple augmentation functions are built in as hyperparameters and applied during training. A typical training batch looked like:
+**Data Augmentation** 
+(Andrea Bartos)
+
+So far, all training has been done with the default augmentation values. As described in Data Augmentation, the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our bee use case. The changed parameters can also be found in chapter xy.
+
+The performance after 300 epochs is as follows:  
+
+| Training                                                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
+|--------------------------------------------------------------|-------|-------|------------|-------|-------|-------------|
+| with artificial data (19.5%) & adjusted run-time augmentation| xxxxx | xxxxx |    xxxxx   | xxxxx | xxxxx |    xxxxx    |
+---------------------------------------------------------------------------------------------------------------------------
+
+
+Exemplary training images will look as follows: 
 
 <img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" class="center"/>
 
