@@ -49,8 +49,6 @@ Images with various different backgrounds (flowers) are included - and selection
 
 <p float="left">
   <img src="/doku_resources/image_1.jpg" width="350" />
-  <img src="/doku_resources/image_2.jpg" width="350" /> 
-  <img src="/doku_resources/image_3.jpg" width="350" />
   <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
 
