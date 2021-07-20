@@ -58,7 +58,7 @@ Images with various different backgrounds (flowers) are included - and selection
 The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality ("Garbage in, garbage out") and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. Therefore we first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###Labeling) an additional batch of 1000 bee images and two videos, which were seperated into individual frames. Moreover, we downloaded 1000 images of flowers or bushes without any bees as these are especially usefull as null images and were used for the proceeding synthetic generation of another 1000 bee images (see [Synthetic dataset generation](####Synthetic-dataset-generation)).
 
 
-##### Mosaic dataset (Maximilian Nitsche)
+#### Mosaic dataset (Maximilian Nitsche)
 In order to collect another 1000 bee images we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. 
 As the quality of the queried images heavily depend on the search string, we evaluated various keywords in advance. The search strings were iteratively evluated by a brief review of the responses and resulted in the following final search string: "bee flowers", "flowers" and "flower bushes". The latter were used for the [synthetic dataset generation](####Synthetic-dataset-generation) as background images.
 
@@ -66,7 +66,7 @@ After labeling bees in the downloaded datasets following the procedure presented
 
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
-##### Synthetic dataset generation (Andrea Bartos)
+#### Synthetic dataset generation (Andrea Bartos)
 As mentioned previously, the collection of our real-word bee data was hindered by rainy weather. Therefore, we encountered a commonly occurring problem in AI, namely the lack of sufficient data. One way to compensate for this obstacle is to generate synthetic data. The idea behind synthetic data is to mimic real-world scenarios. The advantage of this method is its ability to create rapidly labeled data in large quantities at minimal cost and effort. However, a key challenge in creating synthetic data is how well a model can generalize what it learns from them to real-world scenarios. [30]
 
 For our case, the usage of this approach has two main purposes. The first is to be able to gather training data without being dependent on unswayable factors like the weather. The other is to be able to generalize on a wide range of different flowers. The pollination times of different flowers differ. Therefore, with the given time frame, the ability to generate real world training data consisting of a wide range of flowers was limited. 
@@ -85,7 +85,7 @@ Exemplary representations of the synthetically generated data can be found below
   <img src="dataset/synthetic_data/images/890.jpg" width="350" />
 </p>
 
-##### Resulting additional datasets 
+#### Resulting additional datasets 
 The resulting additional datasets are listed below.
 
 | Image source  | No. of images  |  No. of labels | No. of null images |
