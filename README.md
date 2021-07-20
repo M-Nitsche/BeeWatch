@@ -84,7 +84,7 @@ A synthetic image is created by drawing a random background from the flower bed 
 Although the synthetic data are not a perfect representation of the real world, they improve the generalization ability of our model, as will be shown in the later training, compared to models that were only trained on real data. 
 Exemplary representations of the synthetically generated data can be found below.
 
-<p float="left">
+<p float="center">
   <img src="dataset/synthetic_data/images/915.jpg" width="350" />
   <img src="dataset/synthetic_data/images/998.jpg" width="350" /> 
   <img src="dataset/synthetic_data/images/963.jpg" width="350" />
