@@ -37,7 +37,8 @@ For the initial labeling the [VGG Image Annotator](http://www.robots.ox.ac.uk/~v
 
 The final Dataset consists of 1.814 images with 104 null examples. Each image has 1.1 annotations on average with results in 2.047 annotation overall with one class [bee]. Images are annotated with bounding boxes.
 
-### Dataset (David)
+### Dataset 
+(David Blumenthal)
 
 | Image source  | count         |
 | ------------- |:-------------:|
@@ -54,19 +55,24 @@ Images with various different backgrounds (flowers) are included - and selection
   <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
 
-### Additional data sources (Maximilian Nitsche)
+### Additional data sources 
+(Maximilian Nitsche)
+
 The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality ("Garbage in, garbage out") and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. In order to collect another 1000 bee images we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. As the quality of the queried images heavily depend on the search string, we evaluated various keywords in advance. The search strings were iteratively evluated by a brief review of the responses and resulted in the following final search string: "bee flowers", "flowers" and "flower bushes".
 
 We first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###Labeling) an additional batch of 1000 bee images and two videos, which were seperated into individual frames. Moreover, we downloaded 1000 images of flowers or bushes without any bees as these are especially usefull as null images and were used for the proceeding synthetic data generation as background images (see [Synthetic dataset generation](####Synthetic-dataset-generation)).
 
 
-#### Mosaic dataset (Maximilian Nitsche)
+#### Mosaic dataset 
+(Maximilian Nitsche)
 
 After labeling bees in the downloaded datasets following the procedure presented in the [labeling section](###labeling) we used them to generate mosaic data. The mosaic augmentation is originally motivated in the YOLOv4 release and contributes significantly to its performance boost ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf)). As the downloaded images often show only individual bees on one flower the mosaic augmentation also makes sure the data meets our use case requirements to detect bees from further distance. In order to scale down the queried bees and benefit from the stated performance increase in model implementations beside YOLOv4/5 we generated 3x4 mosaic images and the corresponding new annotation files (see [mosaic_data_augmentation.ipynb](dataset/mosaic_data_augmentation.ipynb)). The probability of a bee image to be chosen for a individual mosaic tile was set to 0.3. The following shows an example mosaic image:
 
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
-#### Synthetic dataset generation (Andrea Bartos)
+#### Synthetic dataset generation 
+(Andrea Bartos)
+
 As mentioned previously, the collection of our real-word bee data was hindered by rainy weather. Therefore, we encountered a commonly occurring problem in AI, namely the lack of sufficient data. One way to compensate for this obstacle is to generate synthetic data. The idea behind synthetic data is to mimic real-world scenarios. The advantage of this method is its ability to create rapidly labeled data in large quantities at minimal cost and effort. However, a key challenge in creating synthetic data is how well a model can generalize what it learns from them to real-world scenarios. [30]
 
 For our case, the usage of this approach has two main purposes. The first is to be able to gather training data without being dependent on unswayable factors like the weather. The other is to be able to generalize on a wide range of different flowers. The pollination times of different flowers differ. Therefore, with the given time frame, the ability to generate real world training data consisting of a wide range of flowers was limited. 
@@ -96,6 +102,7 @@ The resulting additional datasets are listed below.
 
 #### Data Augmentation
 (Andrea Bartos)
+
 Data augmentation is a method that allows to significantly increase the variety of data for the training of models without having to acquire additional new data. New training instances are created by performing transformation on already existing instances thus providing new situations and perspectives for model training. That way it can alleviate the problem of overfitting. Essential when performing augmentation in object detection tasks is, that the transformation is not only performed on the image itself but also on the bounding box defining an object’s position. There are several available libraries which provide a wide range of augmentation techniques. Such a library is [imgaug](https://imgaug.readthedocs.io/en/latest/index.html). 
 However, the wide range of augmentation techniques should not be applied thoughtlessly to the data. The choice of suitable techniques depends on the used case. 
 
@@ -105,24 +112,25 @@ Looking at our use case, we customized the applied data augmentation in the yolo
 
 
 ``` yaml
-	hsv_h: 0.1  # image HSV-Hue augmentation (fraction) -> increased
-  hsv_s: 0.7  # image HSV-Saturation augmentation (fraction)
-	hsv_v: 0.4  # image HSV-Value augmentation (fraction)
-	degrees: 0.3  # image rotation (+/- deg) -> increase because the orientation from camera to bees can be quit varied
-	translate: 0.3  # image translation (+/- fraction) -> increase since bees can be located anywhere in the picture
-	scale: 0.5  # image scale (+/- gain)
-	shear: 0.0  # image shear (+/- deg)
-	perspective: 0.0  # image perspective (+/- fraction), range 0-0.001 ->increase because the orientation from camera to bees can be quit varied
-	flipud: 0.25  # image flip up-down (probability) -> depending on perspective, the bee can be upside down
-	fliplr: 0.5  # image flip left-right (probability)
-	mosaic: 1.0  # image mosaic (probability)
-	mixup: 0.0  # image mixup (probability)
-	Copy_paste: 0.0  # segment copy-paste (probability) --> only available for segment labels not bounding boxes; therefore not changed
+hsv_h: 0.1  # image HSV-Hue augmentation (fraction) -> increased
+hsv_s: 0.7  # image HSV-Saturation augmentation (fraction)
+hsv_v: 0.4  # image HSV-Value augmentation (fraction)
+degrees: 0.3  # image rotation (+/- deg) -> increase because the orientation from camera to bees can be quit varied
+translate: 0.3  # image translation (+/- fraction) -> increase since bees can be located anywhere in the picture
+scale: 0.5  # image scale (+/- gain)
+shear: 0.0  # image shear (+/- deg)
+perspective: 0.0  # image perspective (+/- fraction), range 0-0.001 ->increase because the orientation from camera to bees can be quit varied
+flipud: 0.25  # image flip up-down (probability) -> depending on perspective, the bee can be upside down
+fliplr: 0.5  # image flip left-right (probability)
+mosaic: 1.0  # image mosaic (probability)
+mixup: 0.0  # image mixup (probability)
+Copy_paste: 0.0  # segment copy-paste (probability) --> only available for segment labels not bounding boxes; therefore not changed
 ``` 
 
 
 
-#### Data Preprocessing / Final Dataset (David)
+#### Data Preprocessing / Final Dataset 
+(David Blumenthal)
 
 Größe der Train/Val/Test split 
 
@@ -147,10 +155,13 @@ In the first trials, we did not succeed in achieving good results for various re
 
 ### Metrics used (Andrea)
 
-## Training Enviornment (David)
+## Training Enviornment
+(David Blumenthal)
+
 Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives you simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
 
-### Background subtraction + Tiny YOLO (Maximilian Nitsche)
+### Background subtraction + Tiny YOLO 
+(Maximilian Nitsche)
 During the labeling process we noticed ourselves that bees are much easier to localize by the human eye if you face a series of frames and see the differences between frames instead of each frame individually. As CNNs themselves are somewhat motivated by the biological eye, we tried to transfer this finding to an initial model. Blob detection is only performing on background subtraction in very calm situations without much movement of the background i.e. the flower or bush itself. Therefore the motivation of feeding a CNN with background subtraction frames is also that the model learns to ignore flower borders or noise and is able to detect bees based on their outline (see the exemplary image below).
 
 ![Example-background-subtraction](doku_resources/bees_demo1_frame96.jpg)
@@ -163,7 +174,8 @@ Since background subtraction can become very slow in cases of a lot of movement 
 
 ### SSD (OLI)
 
-### EfficientDet (Maximilian Nitsche)
+### EfficientDet 
+(Maximilian Nitsche)
 
 
 ## YOLO
@@ -198,13 +210,15 @@ One huge advantage is model size in mb. The smallest versions weights (yolov5s) 
 To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
 
 
-**Freezing Layers** (Andrea)
+**Freezing Layers** 
+(Andrea Bartos)
 
 Theorie dazu 
 runs mit ergebnissen 
 Entschieden nihct weiter zu verfolgen 
 
-**Adding Data (David)
+**Adding Data 
+(David Blumenthal)
 
 Einleitung ins thema
 
