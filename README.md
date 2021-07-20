@@ -72,8 +72,18 @@ After labeling bees in the downloaded datasets following the procedure presented
 
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
-#### Synthetic dataset generation
-(Andrea Bartos)
+#### Synthetic dataset generation (Andrea BArtos)
+As mentioned previously, the collection of our real-word bee data was hindered by rainy weather. Therefore, we encountered a commonly occurring problem in AI, namely the lack of sufficient data. One way to compensate for this obstacle is to generate synthetic data. The idea behind synthetic data is to mimic real-world scenarios. The advantage of this method is its ability to create rapidly labeled data in large quantities at minimal cost and effort. However, a key challenge in creating synthetic data is how well a model can generalize what it learns from them to real-world scenarios. [30]
+
+For our case, the usage of this approach has two main purposes. The first is to be able to gather training data without being dependent on unswayable factors like the weather. The other is to be able to generalize on a wide range of different flowers. The pollination times of different flowers differ. Therefore, with the given time frame, the ability to generate real world training data consisting of a wide range of flowers was limited. 
+
+The source data for the generation consists of the flower bed dataset obtained from Flickr comprising 1000 images and 14 images of bees from different perspectives with a transparent background. 
+
+A synthetic image is created by drawing a random background from the flower bed data set and pasting a random number of bees on the background. The pasted bees vary in size, position and rotation. Moreover, additional enhancements are performed on bee images with a certain probability before being pasted on the background (blurring and filtering from PIL library). The corresponding bounding boxes are saved as XML annotation files in Pascal VOC format.
+
+Although the synthetic data are not a perfect representation of the real world, they improve the generalization ability of our model, as will be shown in the later training, compared to models that were only trained on real data. 
+Exemplary representations of the synthetically generated data can be found below.
+
 
 #### Data Augmentation
 (Andrea Bartos)
@@ -364,4 +374,5 @@ Even though the Jetson Nano is optimized for IoT applications it has its limitat
 [27] Ivan F Rodriguez, Remi Megret, Edgar Acuna, Jose L Agosto-Rivera, and Tugrul Giray. Recognition of pollen- bearing bees from video using convolutional neural network. In 2018 IEEE Winter Conference on Applications of Com- puter Vision (WACV), pages 314–322. IEEE, 2018. 
 [28] Ratnayake, M. N., Dyer, A. G., & Dorin, A. (2021): Tracking individual honeybees among wildflower clusters with computer vision-facilitated pollinator monitoring. Plos one, 16(2), e0239504.
 [29] https://www.karlsruhe.de/b3/wetter/meteorologische_werte/extremwerte.de Date of retrieval: 11.07.2021
+[30] Sergey I. Nikolenko (2021):Synthetic Data for Deep Learning. Springer Optimization and Its Applications, 174. Springer International Publishing
 
