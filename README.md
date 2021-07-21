@@ -33,20 +33,24 @@ For the data collection process, pictures and videos were taken of bees using di
 
 ### Labeling 
 (David Blumenthal)
-For the initial labeling the [VGG Image Annotator](http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html) was used. In order to distribute the effort and to work efficiently, we decided that everyone should label the images they had taken themselves and then later merge them into a single data set. This quickly led to problems when merging, as e.g. label names were assigned differently or not at all. The limited export functionality (its own format, which is not common and Coco json format where we had problems exporting) made us witch to another editor, because we experimented with different models and frameworks and therefore required different formats. This lead us to the holistic object detection platform [Roboflow](https://roboflow.com) which offers several export formats. 
-
-The final Dataset consists of 1.814 images with 104 null examples. Each image has 1.1 annotations on average with results in 2.047 annotation overall with one class [bee]. Images are annotated with bounding boxes.
+Images where either taken as a single photo, or a video was taken and then deconstructed into single frames. To turn videos into single frames [FFmpeg](https://www.ffmpeg.org) was used. Images with various different backgrounds (flowers) are included - and selection of sample images can be seen below.
+For the initial labeling the [VGG Image Annotator](http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html) was used. 
+In order to distribute the effort and to work efficiently, we decided that everyone should label the images they had taken themselves and then later merge them into a single data set. This quickly led to problems when merging, as e.g. label names were assigned differently or not at all. The limited export functionality (its own format, which is not common and Coco json format where we had problems exporting) required us to develop and search for functions, which allowed us convert from one dataformat into others. This was necessary because at the beginning we compared different models from different frameworks, each of which required different data formats.
+made us witch to another editor, because we experimented with different models and frameworks and therefore required different formats. 
+This lead us to the holistic object detection platform [Roboflow](https://roboflow.com) which offers several export formats. 
+Overall we manually labeled around 2.400 images of with 104 were null examples.
+On average each image has 1.1 annotations which results in 2.640 annotations overall distributed among one class [bee]. The images were annoteded with bounding boxes.
 
 ### Dataset 
 (David Blumenthal)
+To further extend the dataset we made use of various other openly accessible sources. Searching online, we found a labeld bee dataset from researchers of the Monash University. However as this training set only offers images with two different background flowers, we were only able to use a limited number of images so that the model would not specialise on these specific backgrounds. The distribution of images sources can be seen in the table below. 
 
 | Image source  | count         |
 | ------------- |:-------------:|
 | [Malika Nisal Ratnayake et. al.](https://bridges.monash.edu/articles/dataset/Honeybee_video_tracking_data/12895433)| 436       |  
-| own images    | 1398           
+| own images    | 2.400           
 
-Images where either taken as a single photo, or a video was taken and then deconstructed into single frames. To turn videos into single frames [FFmpeg](https://www.ffmpeg.org) was used. 
-Images with various different backgrounds (flowers) are included - and selection of sample images can be seen below.
+The images below show different images that are in the training dataset. 
 
 <p align="center">
   <img src="/doku_resources/image_1.jpg" width="350" />
@@ -55,7 +59,7 @@ Images with various different backgrounds (flowers) are included - and selection
   <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
 
-### Additional data sources 
+#### Additional data sources 
 (Maximilian Nitsche)
 
 The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality ("Garbage in, garbage out") and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. In order to collect another 1000 bee images we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. As the quality of the queried images heavily depend on the search string, we evaluated various keywords in advance. The search strings were iteratively evluated by a brief review of the responses and resulted in the following final search string: "bee flowers", "flowers" and "flower bushes".
@@ -63,14 +67,14 @@ The collected image footage is quite limited regarding the diversitiy of differe
 We first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###Labeling) an additional batch of 1000 bee images and two videos, which were seperated into individual frames. Moreover, we downloaded 1000 images of flowers or bushes without any bees as these are especially usefull as null images and were used for the proceeding synthetic data generation as background images (see [Synthetic dataset generation](####Synthetic-dataset-generation)).
 
 
-### Mosaic dataset 
+#### Mosaic dataset 
 (Maximilian Nitsche)
 
 After labeling bees in the downloaded datasets following the procedure presented in the [labeling section](###labeling) we used them to generate mosaic data. The mosaic augmentation is originally motivated in the YOLOv4 release and contributes significantly to its performance boost ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf)). As the downloaded images often show only individual bees on one flower the mosaic augmentation also makes sure the data meets our use case requirements to detect bees from further distance. In order to scale down the queried bees and benefit from the stated performance increase in model implementations beside YOLOv4/5 we generated 3x4 mosaic images and the corresponding new annotation files (see [mosaic_data_augmentation.ipynb](dataset/mosaic_data_augmentation.ipynb)). The probability of a bee image to be chosen for a individual mosaic tile was set to 0.3. The following shows an example mosaic image:
 
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
-### Synthetic dataset generation 
+#### Synthetic dataset generation 
 (Andrea Bartos)
 
 As mentioned previously, the collection of our real-word bee data was hindered by rainy weather. Therefore, we encountered a commonly occurring problem in AI, namely the lack of sufficient data. One way to compensate for this obstacle is to generate synthetic data. The idea behind synthetic data is to mimic real-world scenarios. The advantage of this method is its ability to create rapidly labeled data in large quantities at minimal cost and effort. However, a key challenge in creating synthetic data is how well a model can generalize what it learns from them to real-world scenarios. [30]
@@ -103,14 +107,13 @@ The resulting additional datasets are listed below.
 
 ## Data Preprocessing
 (David Blumenthal)
-
-Größe der Train/Val/Test split 
-
-In the first trials, we did not succeed in achieving good results for various reasons. One of the reasons was that the variance in the backgrounds (flowers) was very low, but in the validation set flowers, of which there were few or none in the training data set managed to make up the majority. In further attempts to build the dataset, the images were better distributed across the splits, which meant that the results were suddenly very good. The reason for this was that the majority of the images consisted of videos. From these, consecutive frames - which did not differ much - ended up in the training and validation dataset. This in turn led to the model having very good metrics, but not performing well on a test video. The same problem occurred both with rather large bees in test and small ones in val or vice versa. It took several iterations before a balanced data set emerged from the above problems. 
-
-
-### xxx
-In the first trials, we did not succeed in achieving good results for various reasons. One of the reasons was that the variance in the backgrounds (flowers) was very low, but in the validation set flowers, of which there were few or none in the training data set managed to make up the majority. In further attempts to build the dataset, the images were better distributed across the splits, which meant that the results were suddenly very good. The reason for this was that the majority of the images consisted of videos. From these, consecutive frames - which did not differ much - ended up in the training and validation dataset. This in turn led to the model having very good metrics, but not performing well on a test video. The same problem occurred both with rather large bees in test and small ones in val or vice versa. It took several iterations before a balanced data set emerged from the above problems. 
+To guarantee a uniform data format, the different image formats (png, jpg, etc.) were converted to .jpg using OpenCV. The quality was set to 90 to reduce the file size and at the same time maintain sufficient quality.
+In the first trials, we did not succeed in achieving good results for various reasons. One of the reasons was that the variance in the backgrounds (flowers) was still to low, but in the validation set flowers, of which there were few or none in the training data set managed to make up the majority. In further attempts to build the dataset, the images were better distributed across the splits, which meant that the results were suddenly very good. The reason for this was that the majority of the images consisted of videos. From these, consecutive frames - which did not differ much - ended up in the training and validation dataset. This in turn led to the model having very good metrics, but not performing (generalising) well on a test video. The same problem occurred both with rather large bees in test and small ones in val or vice versa. It took several iterations before a balanced data set emerged from the above problems. It took several iterations before a balanced data set emerged from the above problems. 
+The resulting dataset only has frames that are associated with completed videos in train, val and test. This has led to a split that is not necessarily common, with the training data here appearing lower, as everything was created in a back and forth process with artificial data beeing added ontop of the training split. 
+Training - 0.65 Validation - 0.32 Test 0.03
+<p float="left">
+  <img src="/doku_resources/labels_without_artificial.jpg" width="400" /> 
+</p>
 
 ### Final Dataset 
 
@@ -151,7 +154,7 @@ degrees: 0.3  -> increase, because the orientation from camera to bees can be qu
 translate: 0.3  -> increase, since bees can be located anywhere in the picture
 scale: 0.5  -> relevant therefore kept default value
 shear: 0.0  
-perspective: 0.0  -> seemed to make sense because the orientation from camera to bees can be quite varied. After trying we came to realise that it doesnt produce useful images, therefore kept @ 0.0 
+perspective: 0.3  ->increase, because the orientation from camera to bees can be quite varied
 flipud: 0.25  -> increase, depending on perspective, the bee can be upside down
 fliplr: 0.5  -> relevant, kept default value
 mosaic: 1.0  -> relevant, kept default value
@@ -170,24 +173,15 @@ Copy_paste: 0.0  -> only available for segment labels not bounding boxes; theref
 (Aleks)
 
 ### Model selection
-(Andrea Bartos)
+- one stage vs. two stage detection (Andrea)
+- Performance auf Jetson Nano (Andrea)
+( Warum Yolo und nicht two stage detection)
 
-To solve the task of object detection there are generally two available approaches, namely one-stage and two stage detection algorithms. When performing object detection, there are two tasks that need to be solved. For one, object localization and for the other the task of object classification. In two stage algorithms, such as R-CNN, Fast R-CNN, Faster R-CNN, these tasks are performed separately. In one-stage detection algorithms, such as YOLO, object classification and localization are performed in a single pass. This has the advantage that these algorithms are usually faster than two-stage detectors, but under the trade off that they are less accurate. With respect to our goal of real-time object detection of bees with a deployed model on the Jetson nano, inference speed plays a major role. Among the two-stage detection algorithms, only the Faster R-CNN is suitable as an algorithm, which can be derived from the following diagram.[31] 
-
-However, since fast inference is key when it comes to real-time detection, thus to our use case, we decided to place our focus on one stage detection algorithms as they tend to fulfill this property. Therefore, we were searching for models with low inference time (ms) and therefore a high score of FPS and high mAP. Furthermore, since the storage capacity is limited on the jetson nano, the size of these models is also taken into consideration.
-
-### Evaluation Metric
-(Andrea Bartos)
-
-While researching possible evaluation metrics, we quickly came to realize that there are many variations to the two numerical metrics average precision (AP) and average recall (AR). AP can be defined as the area under the interpolated precision-recall curve.  AR is the recall averaged over all IoU ∈ [0.5,1.0].
-Mean average precision (mAP) is defined as the mean of AP across all K classes. Accordingly, Mean average recall (mAR) is defined as the mean of AR across all 
-K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [32] 
-With our use case in mind, we decided to adopt average precision at IOU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IOU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
+### Metrics used (Andrea)
 
 ### Training Enviornment
 (David Blumenthal)
-
-Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives you simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
+Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives one simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
 
 ### Background subtraction + Tiny YOLO 
 (Maximilian Nitsche)
@@ -208,6 +202,7 @@ Since background subtraction can become very slow in cases of a lot of movement 
 
 
 ### YOLO
+(David Blumenthal)
 YOLO has been first introduced in 2016 and set a milestone in object detection research due its capability to detect object in real-time with better accuracy.
 It was first introduced by Joseph Redmon and developed further by him up to Yolov3. The versions were implemented in the Darknet framework. Later the v3 Version was also implemented in PyTorch by Glenn Jocher of Ultralytics LLC who as we will later see is also responsible for the controversially discussed yolov5. [https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109](https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109)
 Joseph Redmon, the initiator of Yolo, announced in the spring of 2020 that he has stopped his research in computer vision due to several concerns regarding military applications and privacy concerns. [His tweet](https://twitter.com/pjreddie/status/1230524770350817280) 
@@ -226,6 +221,7 @@ To improve performance the authors introduced different methods to improve the m
 
 YOLOv4 gets its improvements through a selection and implementations of different BoF-methods like CutMix and Mosaic data augmentation, CIoU-loss, Optimal hyperameters (evolution) etc. and for BoS-methods mish activation and using multiple anchors for a single ground truth are used. Just to name a few - a full list and explanation can be found in the released paper. ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf))
 ### YOLOv5
+(David Blumenthal)
 Like already mentioned only two months after the initial of YOLOv4, YOLOv5 was published by Glenn Jocher. 
 YOLOv5 differs most from all other releases because this is a PyTorch implementation rather than a fork from the original Darknet. Same as the v4 version it implements the **CSP backbone**, the **PANet** as neck and the same head as **v3 and v4**. YOLOv5 has a total of 4 versions which mainly differ in number of parameters and layers. 
 ![yolov5_architecture](doku_resources/yolov5_architecture.jpg)
@@ -246,19 +242,21 @@ Throughout the process of model training, we quickly learned that it is a lot of
 
 Unfortunately, we experienced a different result. The training time was reduced significantly, yet the performance also decreased substantially, which is why we discarded this approach.
 
-### Adding Data 
+### Adding Artificial Data 
 (David Blumenthal)
 
-Einleitung ins thema
-
-After that we tried multiple runs with adding increasing portions of the artificial dataset to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
+In the process of furhter improving the models performance we tried multiple runs  with adding increasing portions of the artificial data as described in section **Dataset**. Synthetic data is a great way to expand the dataset in a cost-effective way. It allows to overcome restrictions when real data is costly or not available at all.  
+The generation of synthetic data may seem like a way to produce unlimited amounts of training data. While there might be some truth to this, we found that generating data that mimics real world conditions is rather challenging.
+However data's effectiveness is best measured when in use, so we tried multiple runs with adding increasing portions of 
+artificial data to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). 
+We found, that adding data the models performance increased noticeably up to about 500 images. After that, the performace tended to decrease again on the validation set. This may be because the model learns features that the synthetic data brings, but which are not typical for the real world.
+However, the limited number of artificial images in the training set led to a significant increase in the model as can be seen in table below. While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
 
 <p float="left">
   <img src="doku_resources/labels_with_artificial.jpg" width="400" />
   <img src="/doku_resources/labels_without_artificial.jpg" width="400" /> 
 </p>
 
-The best model is selected based on its fitness. The fitness function is a weighted combination of the metrics [Recall, Precision, mAP@0.5, mAP@0.5:0.95] with standard allocations of [0, 0, 0.1, 0.9]. As we are struggling with low recall, we have put more emphasis on it, and redistributed mainly from mAP@0.5:0.95. However in the evaluation the model performed slightly worse than our benchmark model - even on Recall...
 
 | Training                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
 |------------------------------|-------|-------|------------|-------|-------|-------------|
@@ -266,10 +264,10 @@ The best model is selected based on its fitness. The fitness function is a weigh
 | with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
 | modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 
-### Added Data Augmentation
+### Data Augmentation
 (Andrea Bartos)
 
-So far, all training has been done with the default augmentation values. As described in Data Augmentation, the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our use case. The changed parameters can also be found in Data Augmentation.
+So far, all training has been done with the default augmentation values. As described in [Data Augmentation](#### Data Augmentation), the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our use case. The changed parameters can also be found in chapter [Data Augmentation](#### Data Augmentation).
 
 The performance after 300 epochs is as follows:  
 
@@ -280,17 +278,14 @@ The performance after 300 epochs is as follows:
 
 
 Exemplary training images will look as follows:
+<img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" align="center"/>
 
-
-<p align="center">
-  <img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" />
-
-</p>
 
 
 
 
 ### Hyperparameter Tuning
+(David Blumenthal)
 
 Apart from perfecting the training dataset, hyperparameter tuning can be used to increase the models performance. Yolov5 offers 25 hyperparameters including those with regard to test time augmentation. The yolov5 implementation offers functionality that can support in finding good hyperparameters.
 With google colab as our training environnement computing resources - especially time - is very limited, hence we had to work to with assumptions. First we defined a base scenario from which we wanted to approve. The base scenario was a standard yolov5s model with pertained weights on the coco dataset which we trained for 10 epochs. With the "evolve" function the model tries to find better parameters using a genetic algorithm with the main operators crossover and mutation with a 90% probability and 0.04 variance. [Github Yolov5](https://github.com/ultralytics/yolov5/issues/607)
@@ -450,6 +445,4 @@ Even though the Jetson Nano is optimized for IoT applications it has its limitat
 [28] Ratnayake, M. N., Dyer, A. G., & Dorin, A. (2021): Tracking individual honeybees among wildflower clusters with computer vision-facilitated pollinator monitoring. Plos one, 16(2), e0239504.
 [29] https://www.karlsruhe.de/b3/wetter/meteorologische_werte/extremwerte.de Date of retrieval: 11.07.2021
 [30] Sergey I. Nikolenko (2021):Synthetic Data for Deep Learning. Springer Optimization and Its Applications, 174. Springer International Publishing
-[31] https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e, last accessed 20.07.2021
-[32] https://blog.zenggyu.com/en/post/2018-12-16/an-introduction-to-evaluation-metrics-for-object-detection/, last accessed 21.07.2021
 
