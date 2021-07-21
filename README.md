@@ -37,10 +37,12 @@
 * 10. [Flask (Oliver)](#FlaskOliver)
 
 <!-- vscode-markdown-toc-config
-	numbering=true
+	numbering=false
 	autoSave=true
 	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc --># BeeWatch
+<!-- /vscode-markdown-toc -->
+
+# BeeWatch
 
 ##  1. <a name='Motivation'></a>Motivation
 (Christin Scheib)  
