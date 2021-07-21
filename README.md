@@ -20,6 +20,9 @@ Since wild bees are powerful bioindicators, a bee tracking system could be of in
 
 ## Problem Statement
 
+(Andrea Bartos)
+
+Detection of individual bees to quantify activity TODO
 
 
 ## Data Gathering
