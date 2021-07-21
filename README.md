@@ -22,10 +22,12 @@ Since wild bees are powerful bioindicators, a bee tracking system could be of in
 
 ## Data Gathering
 (Aleksandar Ilievski)  
-For the data collection process, pictures and videos were taken of bees using different devices. A summary of the devices that were used can be found in the table below. The data collection process proved to be difficult for a multitude of reasons. First, bee activity is highly dependent on the weather. Since the project started in the end of April, the weather in Karlsruhe was very rainy. In May, Karlsruhe had 22 rainy days and in June there were 17.[29] This meant that there was quite a short time frame for data collection. During the first data collection round there was also a lot of wind which caused movement of plants in the videos. This is particularly problematic for the usage of background subtraction, since it creates a lot of noise in the footage. In general, collecting data outside can be difficult because the quality of data is also impacted by sunlight exposure which is something the model needs to be robust again and thus, proving this use case to be quite complex. Second, it is challenging to take pictures of living insects as they are very small and move fast. When there was wind, the bees tended to move even more rapidly. Therefore, taking a clear picture from an acceptable distance took some practice in the beginning. The third problem is when bees are covered by plants. When a big part of the bee body is hidden, it is difficult to spot the bee and thus, not very helpful in training the model.  
+For the data collection process, pictures and videos were taken of bees using different devices. A summary of the devices that were used can be found in the table below. The data collection process proved to be difficult for a multitude of reasons. First, bee activity is highly dependent on the weather. Since the project started in the end of April, the weather in Karlsruhe was very rainy. In May, Karlsruhe had 22 rainy days and in June there were 17.[29] This meant that there was quite a short time frame for data collection. Both pictures and videos were collected. During the first data collection round there was also a lot of wind which caused movement of plants in the videos. This is particularly problematic for the usage of background subtraction, since it creates a lot of noise in the footage (see Background subtraction + Tiny YOLO). In general, collecting data outside can be difficult because the quality of data is also impacted by sunlight exposure which is something the model needs to be robust again and thus, proving this use case to be quite complex. Second, it is challenging to take pictures of living insects as they are very small and move fast. When there was wind, the bees tended to move even more rapidly. Therefore, taking a clear picture from an acceptable distance took some practice in the beginning. 
 
 | Device        | Camera/Resolution  |
 | ------------- |:-------------:|
+| GoPro         | 720 with30 fps| 
+| iPhone 8      | 12 MP         |  
 | iPhone 7      | 12 MP         |  
 | iPhone 11 Pro | 12 MP         |
 | iPhone 12 Pro | 12 MP         |
@@ -95,7 +97,7 @@ Exemplary representations of the synthetically generated data can be found below
   <img src="dataset/synthetic_data/images/890.jpg" width="350" />
 </p>
 
-### Resulting additional datasets 
+### Resulting datasets 
 The resulting additional datasets are listed below.
 
 | Image source  | No. of images  |  No. of labels | No. of null images |
