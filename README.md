@@ -151,7 +151,7 @@ degrees: 0.3  -> increase, because the orientation from camera to bees can be qu
 translate: 0.3  -> increase, since bees can be located anywhere in the picture
 scale: 0.5  -> relevant therefore kept default value
 shear: 0.0  
-perspective: 0.3  ->increase, because the orientation from camera to bees can be quite varied
+perspective: 0.0  -> seemed to make sense because the orientation from camera to bees can be quite varied. After trying we came to realise that it doesnt produce useful images, therefore kept @ 0.0 
 flipud: 0.25  -> increase, depending on perspective, the bee can be upside down
 fliplr: 0.5  -> relevant, kept default value
 mosaic: 1.0  -> relevant, kept default value
@@ -174,7 +174,13 @@ Copy_paste: 0.0  -> only available for segment labels not bounding boxes; theref
 - Performance auf Jetson Nano (Andrea)
 ( Warum Yolo und nicht two stage detection)
 
-### Metrics used (Andrea)
+### Evaluation Metric
+(Andrea Bartos)
+
+While researching possible evaluation metrics, we quickly came to realize that there are many variations to the two numerical metrics average precision (AP) and average recall (AR). AP can be defined as the area under the interpolated precision-recall curve.  AR is the recall averaged over all IoU ∈ [0.5,1.0].
+Mean average precision (mAP) is defined as the mean of AP across all K classes. Accordingly, Mean average recall (mAR) is defined as the mean of AR across all 
+K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [31] 
+With our use case in mind, we decided to adopt average precision at IOU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IOU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
 
 ### Training Enviornment
 (David Blumenthal)
@@ -258,10 +264,10 @@ The best model is selected based on its fitness. The fitness function is a weigh
 | with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
 | modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 
-### Data Augmentation
+### Added Data Augmentation
 (Andrea Bartos)
 
-So far, all training has been done with the default augmentation values. As described in [Data Augmentation](#### Data Augmentation), the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our use case. The changed parameters can also be found in chapter [Data Augmentation](#### Data Augmentation).
+So far, all training has been done with the default augmentation values. As described in Data Augmentation, the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our use case. The changed parameters can also be found in Data Augmentation.
 
 The performance after 300 epochs is as follows:  
 
@@ -272,8 +278,12 @@ The performance after 300 epochs is as follows:
 
 
 Exemplary training images will look as follows:
-<img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" align="center"/>
 
+
+<p align="center">
+  <img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" />
+
+</p>
 
 
 
@@ -438,4 +448,5 @@ Even though the Jetson Nano is optimized for IoT applications it has its limitat
 [28] Ratnayake, M. N., Dyer, A. G., & Dorin, A. (2021): Tracking individual honeybees among wildflower clusters with computer vision-facilitated pollinator monitoring. Plos one, 16(2), e0239504.
 [29] https://www.karlsruhe.de/b3/wetter/meteorologische_werte/extremwerte.de Date of retrieval: 11.07.2021
 [30] Sergey I. Nikolenko (2021):Synthetic Data for Deep Learning. Springer Optimization and Its Applications, 174. Springer International Publishing
+[31]https://blog.zenggyu.com/en/post/2018-12-16/an-introduction-to-evaluation-metrics-for-object-detection/, last accessed 21.07.2021
 
