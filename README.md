@@ -170,16 +170,18 @@ Copy_paste: 0.0  -> only available for segment labels not bounding boxes; theref
 (Aleks)
 
 ### Model selection
-- one stage vs. two stage detection (Andrea)
-- Performance auf Jetson Nano (Andrea)
-( Warum Yolo und nicht two stage detection)
+(Andrea Bartos)
+
+To solve the task of object detection there are generally two available approaches, namely one-stage and two stage detection algorithms. When performing object detection, there are two tasks that need to be solved. For one, object localization and for the other the task of object classification. In two stage algorithms, such as R-CNN, Fast R-CNN, Faster R-CNN, these tasks are performed separately. In one-stage detection algorithms, such as YOLO, object classification and localization are performed in a single pass. This has the advantage that these algorithms are usually faster than two-stage detectors, but under the trade off that they are less accurate. With respect to our goal of real-time object detection of bees with a deployed model on the Jetson nano, inference speed plays a major role. Among the two-stage detection algorithms, only the Faster R-CNN is suitable as an algorithm, which can be derived from the following diagram.[31] 
+
+However, since fast inference is key when it comes to real-time detection, thus to our use case, we decided to place our focus on one stage detection algorithms as they tend to fulfill this property. Therefore, we were searching for models with low inference time (ms) and therefore a high score of FPS and high mAP. Furthermore, since the storage capacity is limited on the jetson nano, the size of these models is also taken into consideration.
 
 ### Evaluation Metric
 (Andrea Bartos)
 
 While researching possible evaluation metrics, we quickly came to realize that there are many variations to the two numerical metrics average precision (AP) and average recall (AR). AP can be defined as the area under the interpolated precision-recall curve.  AR is the recall averaged over all IoU ∈ [0.5,1.0].
 Mean average precision (mAP) is defined as the mean of AP across all K classes. Accordingly, Mean average recall (mAR) is defined as the mean of AR across all 
-K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [31] 
+K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [32] 
 With our use case in mind, we decided to adopt average precision at IOU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IOU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
 
 ### Training Enviornment
@@ -448,5 +450,6 @@ Even though the Jetson Nano is optimized for IoT applications it has its limitat
 [28] Ratnayake, M. N., Dyer, A. G., & Dorin, A. (2021): Tracking individual honeybees among wildflower clusters with computer vision-facilitated pollinator monitoring. Plos one, 16(2), e0239504.
 [29] https://www.karlsruhe.de/b3/wetter/meteorologische_werte/extremwerte.de Date of retrieval: 11.07.2021
 [30] Sergey I. Nikolenko (2021):Synthetic Data for Deep Learning. Springer Optimization and Its Applications, 174. Springer International Publishing
-[31]https://blog.zenggyu.com/en/post/2018-12-16/an-introduction-to-evaluation-metrics-for-object-detection/, last accessed 21.07.2021
+[31] https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e, last accessed 20.07.2021
+[32] https://blog.zenggyu.com/en/post/2018-12-16/an-introduction-to-evaluation-metrics-for-object-detection/, last accessed 21.07.2021
 
