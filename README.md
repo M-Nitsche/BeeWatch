@@ -452,7 +452,7 @@ After having checked if the installation process was successful, we downloaded t
   thop 
   pandas
 ```
-After completing the installation process we ran our model. Here we faced some problems with the installation of torchvision. The model threw the error that there is no version installed which satisfies the requirements. As we did not work on multiple projects on the Jetson Nano we installed the required packages including torch and torchvision in the global site-packages directory outside of the virtual environment in order to delimit the problem with the torchvision installation. Running the model again on a recorded video led to a performance of roughly five frames per second (fps) or 0,2 seconds per frame. 
+After completing the installation process we ran our model. Here we faced some problems with the installation of torchvision. The model threw the error that there is no version installed which satisfies the requirements. As we did not work on multiple projects on the Jetson Nano we installed the required packages including torch and torchvision in the global site-packages directory outside of the virtual environment in order to delimit the problem with the torchvision installation. Running the model again on a recorded video led to a performance of roughly five frames per second (fps) or 0,2 seconds per frame. Setting the option half in Yolo reduces the detection time per frame on a recorded video to 0.15 seconds, which results in 6.6 fps.
 ```
   $ python3 detect.py --source /home/beewatch/Downloads/bees_demo1.mp4 --weights best.pt --conf 0.3
 ```
