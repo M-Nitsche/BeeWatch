@@ -331,12 +331,31 @@ We did that for 50 iterations. We assumed that after 10 epochs good parameters w
 
 ### Final Results 
 
-einfügen Übersichtstabelle
+The the following plots of the two best models we trained are shown to support argumentation why we choose one model over the other.
+Model 1 = with artificial data (19.5%); Model 2 = second hyp. tuning
+As seen in the charts below Model 2 outperformed Model 1 overall except for precision. However as seen in the table above Model 1 did better on our (small) test set. In order to come to a final decision we did a descriptive analysis of the performance of both models  on a video which contained clips from various flowers and perspectives. 
+This lead to chose Model 2 over Model 1. 
 
-Ergebnisse im Detail des besten Models (plots)
+<p float="left">
+  <img src="doku_resources/preci.png" width="300" />
+  <img src="doku_resources/recall.png" width="300" />
+  <img src="doku_resources/map05.png" width="300" />
+</p>
 
-Beispiel Inferenzen
-Video
+The next step was to determine the correct confidence level for the model, because the level of confidence has a significant influence on its performance. The correct confidence is a tradeoff between recall and precision.  As is clearly visualised by the plots below. Recall drops steeply with a confidence > 0.7, whereas the modus operandi of precision is reversed relative to recall. We further evaluated on the test video already mentioned in the previous part and the results of 0.7 and 0.5 confidence are uploaded.
+
+<p float="left">
+  <img src="doku_resources/prec_conf.png" width="300" />
+  <img src="doku_resources/recall_conf.png" width="300" />
+  <img src="doku_resources/f1_conf.png" width="300" />
+</p>
+
+We further evaluated on the test video already mentioned in the previous part and the results of 0.7 and 0.5 confidence are uploaded.
+
+![conf_0.5](doku_resources/test_video_conf05)
+![conf_0.7](doku_resources/test_video_conf07)
+
+Judging from the plots and the videos we decided to with a 0.7 confidence.
 
 
 # Deployment
