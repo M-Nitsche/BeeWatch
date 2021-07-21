@@ -352,8 +352,8 @@ The next step was to determine the correct confidence level for the model, becau
 
 We further evaluated on the test video already mentioned in the previous part and the results of 0.7 and 0.5 confidence are uploaded.
 
-![conf_0.5](doku_resources/test_video_conf05)
-![conf_0.7](doku_resources/test_video_conf07)
+![conf_0.5](doku_resources/test_video_conf05.mp4)
+![conf_0.7](doku_resources/test_video_conf07.mp4)
 
 Judging from the plots and the videos we decided to with a 0.7 confidence.
 
