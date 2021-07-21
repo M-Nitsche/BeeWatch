@@ -111,7 +111,7 @@ To guarantee a uniform data format, the different image formats (png, jpg, etc.)
 In the first trials, we did not succeed in achieving good results for various reasons. One of the reasons was that the variance in the backgrounds (flowers) was still to low, but in the validation set flowers, of which there were few or none in the training data set managed to make up the majority. In further attempts to build the dataset, the images were better distributed across the splits, which meant that the results were suddenly very good. The reason for this was that the majority of the images consisted of videos. From these, consecutive frames - which did not differ much - ended up in the training and validation dataset. This in turn led to the model having very good metrics, but not performing (generalising) well on a test video. The same problem occurred both with rather large bees in test and small ones in val or vice versa. It took several iterations before a balanced data set emerged from the above problems. It took several iterations before a balanced data set emerged from the above problems. 
 The resulting dataset only has frames that are associated with completed videos in train, val and test. This has led to a split that is not necessarily common, with the training data here appearing lower, as everything was created in a back and forth process with artificial data beeing added ontop of the training split. 
 Training - 0.65 Validation - 0.32 Test 0.03
-<p float="left">
+<p float="center">
   <img src="/doku_resources/labels_without_artificial.jpg" width="400" /> 
 </p>
 
@@ -282,7 +282,7 @@ artificial data to the training set. Starting at 100 images (which adds up to 5%
 We found, that adding data the models performance increased noticeably up to about 500 images. After that, the performace tended to decrease again on the validation set. This may be because the model learns features that the synthetic data brings, but which are not typical for the real world.
 However, the limited number of artificial images in the training set led to a significant increase in the model as can be seen in table below. While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
 
-<p float="left">
+<p float="center">
   <img src="doku_resources/labels_with_artificial.jpg" width="400" />
   <img src="/doku_resources/labels_without_artificial.jpg" width="400" /> 
 </p>
@@ -336,7 +336,7 @@ Model 1 = with artificial data (19.5%); Model 2 = second hyp. tuning
 As seen in the charts below Model 2 outperformed Model 1 overall except for precision. However as seen in the table above Model 1 did better on our (small) test set. In order to come to a final decision we did a descriptive analysis of the performance of both models  on a video which contained clips from various flowers and perspectives. 
 This lead to chose Model 2 over Model 1. 
 
-<p float="left">
+<p float="center">
   <img src="doku_resources/preci.png" width="300" />
   <img src="doku_resources/recall.png" width="300" />
   <img src="doku_resources/map05.png" width="300" />
@@ -344,7 +344,7 @@ This lead to chose Model 2 over Model 1.
 
 The next step was to determine the correct confidence level for the model, because the level of confidence has a significant influence on its performance. The correct confidence is a tradeoff between recall and precision.  As is clearly visualised by the plots below. Recall drops steeply with a confidence > 0.7, whereas the modus operandi of precision is reversed relative to recall. We further evaluated on the test video already mentioned in the previous part and the results of 0.7 and 0.5 confidence are uploaded.
 
-<p float="left">
+<p float="center">
   <img src="doku_resources/prec_conf.png" width="300" />
   <img src="doku_resources/recall_conf.png" width="300" />
   <img src="doku_resources/f1_conf.png" width="300" />
@@ -352,8 +352,8 @@ The next step was to determine the correct confidence level for the model, becau
 
 We further evaluated on the test video already mentioned in the previous part and the results of 0.7 and 0.5 confidence are uploaded.
 
-![conf_0.5](doku_resources/test_video_conf05.mp4)
-![conf_0.7](doku_resources/test_video_conf07.mp4)
+(![conf_0.5](doku_resources/test_video_conf05.mp4))
+(![conf_0.7](doku_resources/test_video_conf07.mp4))
 
 Judging from the plots and the videos we decided to with a 0.7 confidence.
 
