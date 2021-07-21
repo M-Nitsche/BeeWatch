@@ -154,7 +154,7 @@ degrees: 0.3  -> increase, because the orientation from camera to bees can be qu
 translate: 0.3  -> increase, since bees can be located anywhere in the picture
 scale: 0.5  -> relevant therefore kept default value
 shear: 0.0  
-perspective: 0.3  ->increase, because the orientation from camera to bees can be quite varied
+perspective: 0.0 -> seemed to make sense because the orientation from camera to bees can be quite varied. After trying we came to realise that it doesnt produce useful images, therefore kept @ 0.0
 flipud: 0.25  -> increase, depending on perspective, the bee can be upside down
 fliplr: 0.5  -> relevant, kept default value
 mosaic: 1.0  -> relevant, kept default value
@@ -173,11 +173,41 @@ Copy_paste: 0.0  -> only available for segment labels not bounding boxes; theref
 (Aleks)
 
 ### Model selection
-- one stage vs. two stage detection (Andrea)
-- Performance auf Jetson Nano (Andrea)
-( Warum Yolo und nicht two stage detection)
+(Andrea Bartos)
 
-### Metrics used (Andrea)
+To solve the task of object detection there are generally two available approaches, namely one-stage and two stage detection algorithms. When performing object detection, there are two tasks that need to be solved. For one, object localization and for the other the task of object classification. In two stage algorithms, such as R-CNN, Fast R-CNN, Faster R-CNN, these tasks are performed separately. In one-stage detection algorithms, such as YOLO, object classification and localization are performed in a single pass. This has the advantage that these algorithms are usually faster than two-stage detectors, but under the trade off that they are less accurate. With respect to our goal of real-time object detection of bees with a deployed model on the Jetson nano, inference speed plays a major role. Among the two-stage detection algorithms, only the Faster R-CNN is suitable as an algorithm, which can be derived from the following diagram.[31] 
+
+<p align="center">
+  <img src="doku_resources/Comparison of test-time speed of object detection algorithms.png" width="500" />
+</p>
+
+
+
+However, since fast inference is key when it comes to real-time detection, thus to our use case, we decided to place our focus on one stage detection algorithms as they tend to fulfill this property. Therefore, we were searching for models with low inference time (ms) and therefore a high score of FPS and high mAP. Furthermore, since the storage capacity is limited on the jetson nano, the size of these models is also taken into consideration.
+
+Looking at the following diagrams and [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) while considering our decision criteria, we decided to look into the following models: EfficientDet, SSD and YOLO
+
+<p align="center">
+   <img src="doku_resources/Inference Benchmarks jetson.png" width="700" />
+</p>
+sourced from https://developer.nvidia.com/embedded/jetson-nano-dl-inference-benchmarks
+
+<p align="center">
+   <img src="doku_resources/MS_COCO.png" width="500" />
+  <img src="doku_resources/YOLOv5_performance.png"  width="500" />
+</p>
+sourced from https://arxiv.org/pdf/2004.10934.pdf and https://blog.roboflow.com/yolov5-is-here/
+
+
+
+
+### Evaluation Metric
+ (Andrea Bartos)
+
+While researching possible evaluation metrics, we quickly came to realize that there are many variations to the two numerical metrics average precision (AP) and average recall (AR). AP can be defined as the area under the interpolated precision-recall curve.  AR is the recall averaged over all IoU ∈ [0.5,1.0].
+Mean average precision (mAP) is defined as the mean of AP across all K classes. Accordingly, Mean average recall (mAR) is defined as the mean of AR across all 
+K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [32] 
+With our use case in mind, we decided to adopt average precision at IOU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IOU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
 
 ### Training Enviornment
 (David Blumenthal)
@@ -235,7 +265,7 @@ One huge advantage is model size in mb. The smallest versions weights (yolov5s) 
 To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
 
 
-### Freezing Layers** 
+### Freezing Layers 
 (Andrea Bartos)
 
 Throughout the process of model training, we quickly learned that it is a lot of trial and error. One main hurdle is the long training time before one can actually tell whether the given modification improves performance or not. Hence, we decided to leverage transfer learning to speed up the training time and thus have more time to train different configurations. Looking at Glenn Jocher's [implementation and results](https://github.com/ultralytics/yolov5/issues/1314), this approach seems promising. By freezing the backbone of yolov5 (layers 0-9), the performance was slightly lower, but the training time was significantly reduced. 
@@ -264,10 +294,10 @@ However, the limited number of artificial images in the training set led to a si
 | with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
 | modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 
-### Data Augmentation
+### Added Data Augmentation
 (Andrea Bartos)
 
-So far, all training has been done with the default augmentation values. As described in [Data Augmentation](#### Data Augmentation), the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our use case. The changed parameters can also be found in chapter [Data Augmentation](#### Data Augmentation).
+So far, all training has been done with the default augmentation values. As described in Data Augmentation, the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our use case. The changed parameters can also be found in Data Augmentation.
 
 The performance after 300 epochs is as follows:  
 
@@ -276,11 +306,11 @@ The performance after 300 epochs is as follows:
 | with artificial data (19.5%) & adjusted run-time augmentation| xxxxx | xxxxx |    xxxxx   | xxxxx | xxxxx |    xxxxx    |
 ---------------------------------------------------------------------------------------------------------------------------
 
-
 Exemplary training images will look as follows:
-<img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" align="center"/>
 
-
+<p align="center">
+   <img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" />
+</p>
 
 
 
@@ -445,4 +475,6 @@ Even though the Jetson Nano is optimized for IoT applications it has its limitat
 [28] Ratnayake, M. N., Dyer, A. G., & Dorin, A. (2021): Tracking individual honeybees among wildflower clusters with computer vision-facilitated pollinator monitoring. Plos one, 16(2), e0239504.
 [29] https://www.karlsruhe.de/b3/wetter/meteorologische_werte/extremwerte.de Date of retrieval: 11.07.2021
 [30] Sergey I. Nikolenko (2021):Synthetic Data for Deep Learning. Springer Optimization and Its Applications, 174. Springer International Publishing
+[31] https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e, last accessed 20.07.2021
+[32] https://blog.zenggyu.com/en/post/2018-12-16/an-introduction-to-evaluation-metrics-for-object-detection/, last accessed 21.07.2021
 
