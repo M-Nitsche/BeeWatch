@@ -1,3 +1,4 @@
+# BeeWatch
 <!-- vscode-markdown-toc -->
 * [Use Case](#UseCase)
 	* [Motivation](#Motivation)
