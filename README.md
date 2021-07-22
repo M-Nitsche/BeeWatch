@@ -25,7 +25,7 @@
 		* [Why did we go with YOLOv5?](#WhydidwegowithYOLOv5)
 * [Model Training](#ModelTraining)
 	* [Evaluation Metric](#EvaluationMetric)
-	* [Training Enviornment](#TrainingEnviornment)
+	* [Training Environment](#TrainingEnvironment)
 	* [ Training Baseline](#TrainingBaseline)
 	* [Freezing Layers](#FreezingLayers)
 	* [Adding Artificial Data](#AddingArtificialData)
@@ -188,9 +188,9 @@ Training - 0.65 Validation - 0.32 Test 0.03
 Data augmentation is a method that allows to significantly increase the variety of data for the training of models without having to acquire additional new data. New training instances are created by performing transformation on already existing instances thus providing new situations and perspectives for model training. That way it can alleviate the problem of overfitting. Essential when performing augmentation in object detection tasks is, that the transformation is not only performed on the image itself but also on the bounding box defining an object’s position. There are several available libraries which provide a wide range of augmentation techniques. Such a library is [imgaug](https://imgaug.readthedocs.io/en/latest/index.html). 
 However, the wide range of augmentation techniques should not be applied thoughtlessly to the data. The choice of suitable techniques depends on the use case. 
 
-There are two options on how to perform augmentation, depending on the algorithm used. On the one hand, data augmentation can be applied as part of preprocessing. With new algorithms like Yolov4, Yolov5 and YoloR an integrated augmentation at runtime is possible. The advantage of integrated (at run time) augmentation is the avoidance of intensive I/O workloads. On the other hand, certain functionalities that libraries like imgauge offer are not available as run-time augmentation techniques. Before we started experimenting with data augmentation, we have already decided on using Yolov5 as our training model. Furthermore, at that point we were already struggling with storage capacities in Google Drive where we stored all data sets in order to make it easily accessible for everyone.  For this reason, we decided to perform augmentation at run time.
+There are two options on how to perform augmentation, depending on the algorithm used. On the one hand, data augmentation can be applied as part of preprocessing. With new algorithms like YOLOv4, YOLOv5 and YOLOR an integrated augmentation at runtime is possible. The advantage of integrated (at run time) augmentation is the avoidance of intensive I/O workloads. On the other hand, certain functionalities that libraries like imgauge offer are not available as run-time augmentation techniques. Before we started experimenting with data augmentation, we have already decided on using YOLOv5 as our training model. Furthermore, at that point we were already struggling with storage capacities in Google Drive where we stored all data sets in order to make it easily accessible for everyone.  For this reason, we decided to perform augmentation at run time.
 
-The Yolov5 [implementation](https://github.com/ultralytics/yolov5/blob/master/data/hyps/hyp.scratch.yaml) by  Glenn Jocher offers the following data augmentation techniques with the following default parameters.
+The YOLOv5 [implementation](https://github.com/ultralytics/yolov5/blob/master/data/hyps/hyp.scratch.yaml) by  Glenn Jocher offers the following data augmentation techniques with the following default parameters.
 
 ``` yaml
 hsv_h: 0.015  # image HSV-Hue augmentation (fraction)
@@ -208,7 +208,7 @@ mixup: 0.0  # image mixup (probability)
 ``` 
 
 
-With our use case in mind, we adapted the applied data augmentation in the Yolov5 framework as follows. These parameters are determined in the file  yolov5/data/hyps/hyp.scratch.yaml
+With our use case in mind, we adapted the applied data augmentation in the YOLOv5 framework as follows. These parameters are determined in the file  yolov5/data/hyps/hyp.scratch.yaml
 
 
 ``` yaml
@@ -236,7 +236,7 @@ Copy_paste: 0.0  -> only available for segment labels not bounding boxes; theref
 ### <a name='Modelselection'></a>Model selection
 (Andrea Bartos)
 
-To solve the task of object detection there are generally two available approaches, namely one-stage and two stage detection algorithms. When performing object detection, there are two tasks that need to be solved. For one, object localization and for the other the task of object classification. In two stage algorithms, such as R-CNN, Fast R-CNN, Faster R-CNN, these tasks are performed separately. In one-stage detection algorithms, such as YOLO, object classification and localization are performed in a single pass. This has the advantage that these algorithms are usually faster than two-stage detectors, but under the trade off that they are less accurate. With respect to our goal of real-time object detection of bees with a deployed model on the Jetson nano, inference speed plays a major role. Among the two-stage detection algorithms, only the Faster R-CNN is suitable as an algorithm, which can be derived from the following diagram.[31] 
+To solve the task of object detection there are generally two available approaches, namely one-stage and two-stage detection algorithms. When performing object detection, there are two tasks that need to be solved. For one, object localization and for the other the task of object classification. In two-stage algorithms, such as R-CNN, Fast R-CNN, Faster R-CNN, these tasks are performed separately. In one-stage detection algorithms, such as YOLO, object classification and localization are performed in a single pass. This has the advantage that these algorithms are usually faster than two-stage detectors, but under the trade off that they are less accurate. With respect to our goal of real-time object detection of bees with a deployed model on the Jetson Nano, inference speed plays a major role. Among the two-stage detection algorithms, only the Faster R-CNN is suitable as an algorithm, which can be derived from the following diagram.[31] 
 
 <p align="center">
   <img src="doku_resources/Comparison of test-time speed of object detection algorithms.png" width="500" />
@@ -244,7 +244,7 @@ To solve the task of object detection there are generally two available approach
 
 However, since fast inference is key when it comes to real-time detection, thus to our use case, we decided to place our focus on one stage detection algorithms as they tend to fulfill this property. Therefore, we were searching for models with low inference time (ms) and therefore a high score of FPS and high mAP. Furthermore, since the storage capacity is limited on the jetson nano, the size of these models is also taken into consideration.
 
-Looking at the following diagrams and [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) while considering our decision criteria, we decided to look into the following models: YOLOtiny, Yolov5, SSD
+Looking at the following diagrams and [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) while considering our decision criteria, we decided to look into the following models: YOLOtiny, YOLOv5, SSD
 
 <p align="center">
    <img src="doku_resources/Inference Benchmarks jetson.png" width="700" />
@@ -260,7 +260,7 @@ sourced from https://arxiv.org/pdf/2004.10934.pdf and https://blog.roboflow.com/
 ### <a name='Backgroundsubtraction'></a>Background subtraction
 (Maximilian Nitsche)
 
-First of all we experiment with various background subtraction techniques as we are trying to detect moving and flying objects on relatively static backgrounds like flowers or bushes. 
+First of all we experimented with various background subtraction techniques as we are trying to detect moving and flying objects on relatively static backgrounds like flowers or bushes. 
 
 A common background subtraction technique is MOG which is a gaussian mixture-based background segmentation algorithm. The underlying assumption is that each pixel is derived from a mixture of K Gaussian distributions. The corresponding weight of the modeled mixture is the timespan that those colors were present in the video so far. Static background colors are therefore identified by higher weights. MOG2, which is an enhancement of MOG, is able to dynamically find the number of underlying gaussian distributuions by itself depending on the given scene. You can find a short implementation clip of the MOG2 on a recorded flower below.  
 
@@ -307,14 +307,14 @@ Therefore, the hybrid approach of background subtraction together with a more si
 ### <a name='YOLO'></a>YOLO
 (David Blumenthal)
 
-YOLO has been first introduced in 2016 and set a milestone in object detection research due its capability to detect object in real-time with better accuracy.
-It was first introduced by Joseph Redmon and developed further by him up to Yolov3. The versions were implemented in the Darknet framework. Later the v3 Version was also implemented in PyTorch by Glenn Jocher of Ultralytics LLC who as we will later see is also responsible for the controversially discussed yolov5. [https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109](https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109)
-Joseph Redmon, the initiator of Yolo, announced in the spring of 2020 that he has stopped his research in computer vision due to several concerns regarding military applications and privacy concerns. [His tweet](https://twitter.com/pjreddie/status/1230524770350817280) 
+Yolo has been first introduced in 2016 and set a milestone in object detection research due its capability to detect object in real-time with better accuracy.
+It was first introduced by Joseph Redmon and developed further by him up to YOLOv3. The versions were implemented in the Darknet framework. Later the v3 Version was also implemented in PyTorch by Glenn Jocher of Ultralytics LLC who as we will later see is also responsible for the controversially discussed YOLOv5. [https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109](https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109)
+Joseph Redmon, the initiator of YOLO, announced in the spring of 2020 that he has stopped his research in computer vision due to several concerns regarding military applications and privacy concerns. [His tweet](https://twitter.com/pjreddie/status/1230524770350817280) 
 ![tweet](doku_resources/redmon_tweet.png)
 ### <a name='YOLOv4'></a>YOLOv4
 However this was not the end YOLO. In April 2020 **Alexey Bochkovsky et al.** introduced YOLOv4 in a paper titled: [YOLOv4: Optimal Speed and Accuracy of Object Detection](https://arxiv.org/abs/2004.10934). 
 To improve performance the authors introduced different methods to improve the models performance. These methods can be devided into two categories:
-**Bag of freebies (BoF)** Are methods that increase object detectors performance without increasing the inference cost. These methods only change the training strategy or in other words only increase the training costs. An example would be data augmentation techniques. **Bag of specials (BoS)** In contrast to the Bof, bag of specials are methods that increase inference costs in order to achieve better accuracy in object detection. The trade off is however vastly in favour accuracy as the inference cost is rather small in comparison to the achieved accuracy boost. These modules try to enhace certain attributes in a modules receptive field or strengthening feature integration capability, etc.
+**Bag of freebies (BoF)** and **Bag of specials (BoS)**. BoF are methods that increase object detectors performance without increasing the inference cost. These methods only change the training strategy or in other words only increase the training costs. An example would be data augmentation techniques. In contrast to the Bof, bag of specials are methods that increase inference costs in order to achieve better accuracy in object detection. The trade off however is vastly in favour of accuracy as the inference cost is rather small in comparison to the achieved accuracy boost. These modules try to enhace certain attributes in a modules receptive field or strengthening feature integration capability, etc.
 **YOLOv4** consists of:
 
 🦴  | Backbone: CSP Darknet53
@@ -332,7 +332,7 @@ YOLOv5 differs most from all other releases because this is a PyTorch implementa
 ![yolov5_architecture](doku_resources/yolov5_architecture.jpg)
 The exact architecture of v5s model can be found [here](https://gist.github.com/mihir135/2e5113265515450c8da934e15d97fc6b).
 #### <a name='WhydidwegowithYOLOv5'></a>Why did we go with YOLOv5?
-One huge advantage is model size in mb. The smallest versions weights (yolov5s) only take up 13.7mb of space. In addition, it benefited from a very large community of users, which meant that it was under active development with improvements being made on a weekly basis.
+One huge advantage is model size in mb. The smallest versions weights (yolov5s) only take up 13.7 MB of space. In addition, it benefited from a very large community of users, which meant that it was under active development with improvements being made on a weekly basis.
 **ToDo**
 
 
@@ -344,21 +344,21 @@ One huge advantage is model size in mb. The smallest versions weights (yolov5s) 
 While researching possible evaluation metrics, we quickly came to realize that there are many variations to the two numerical metrics average precision (AP) and average recall (AR). AP can be defined as the area under the interpolated precision-recall curve.  AR is the recall averaged over all IoU ∈ [0.5,1.0].
 Mean average precision (mAP) is defined as the mean of AP across all K classes. Accordingly, Mean average recall (mAR) is defined as the mean of AR across all 
 K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [32] 
-With our use case in mind, we decided to adopt average precision at IOU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IOU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
+With our use case in mind, we decided to adopt average precision at IoU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IoU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
 
-### <a name='TrainingEnviornment'></a>Training Enviornment
+### <a name='TrainingEnvironment'></a>Training Environment
 (David Blumenthal)
 
 Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives one simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
 
 ### <a name='TrainingBaseline'></a> Training Baseline
-To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
+To establish a baseline performance we trained the YOLOv5s - which is the smallest model of the YOLOv5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
 
 
 ### <a name='FreezingLayers'></a>Freezing Layers 
 (Andrea Bartos)
 
-Throughout the process of model training, we quickly learned that it is a lot of trial and error. One main hurdle is the long training time before one can actually tell whether the given modification improves performance or not. Hence, we decided to leverage transfer learning to speed up the training time and thus have more time to train different configurations. Looking at Glenn Jocher's [implementation and results](https://github.com/ultralytics/yolov5/issues/1314), this approach seems promising. By freezing the backbone of yolov5 (layers 0-9), the performance was slightly lower, but the training time was significantly reduced. 
+Throughout the process of model training, we quickly learned that it is a lot of trial and error. One main hurdle is the long training time before one can actually tell whether the given modification improves performance or not. Hence, we decided to leverage transfer learning to speed up the training time and thus have more time to train different configurations. Looking at Glenn Jocher's [implementation and results](https://github.com/ultralytics/yolov5/issues/1314), this approach seems promising. By freezing the backbone of YOLOv5 (layers 0-9), the performance was slightly lower, but the training time was significantly reduced. 
 
 Unfortunately, we experienced a different result. The training time was reduced significantly, yet the performance also decreased substantially, which is why we discarded this approach.
 
@@ -370,11 +370,11 @@ Unfortunately, we experienced a different result. The training time was reduced 
 ### <a name='AddingArtificialData'></a>Adding Artificial Data 
 (David Blumenthal)
 
-In the process of furhter improving the models performance we tried multiple runs  with adding increasing portions of the artificial data as described in section **Dataset**. Synthetic data is a great way to expand the dataset in a cost-effective way. It allows to overcome restrictions when real data is costly or not available at all.  
+In the process of further improving the models performance we tried multiple runs  with adding increasing portions of the artificial data as described in section **Dataset**. Synthetic data is a great way to expand the dataset in a cost-effective way. It allows to overcome restrictions when real data is costly or not available at all.  
 The generation of synthetic data may seem like a way to produce unlimited amounts of training data. While there might be some truth to this, we found that generating data that mimics real world conditions is rather challenging.
 However data's effectiveness is best measured when in use, so we tried multiple runs with adding increasing portions of 
 artificial data to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). 
-We found, that adding data the models performance increased noticeably up to about 500 images. After that, the performace tended to decrease again on the validation set. This may be because the model learns features that the synthetic data brings, but which are not typical for the real world.
+We found, that adding data the models' performance increased noticeably up to about 500 images. After that, the performace tended to decrease again on the validation set. This may be because the model learns features that the synthetic data brings, but which are not typical for the real world.
 However, the limited number of artificial images in the training set led to a significant increase in the model as can be seen in table below. While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
 
 <p float="center">
@@ -412,8 +412,8 @@ Exemplary training images will look as follows:
 ### <a name='HyperparameterTuning'></a>Hyperparameter Tuning
 (David Blumenthal)
 
-Apart from perfecting the training dataset, hyperparameter tuning can be used to increase the models performance. Yolov5 offers 25 hyperparameters including those with regard to test time augmentation. The yolov5 implementation offers functionality that can support in finding good hyperparameters.
-With google colab as our training environnement computing resources - especially time - is very limited, hence we had to work to with assumptions. First we defined a base scenario from which we wanted to approve. The base scenario was a standard yolov5s model with pertained weights on the coco dataset which we trained for 10 epochs. With the "evolve" function the model tries to find better parameters using a genetic algorithm with the main operators crossover and mutation with a 90% probability and 0.04 variance. [Github Yolov5](https://github.com/ultralytics/yolov5/issues/607)
+Apart from perfecting the training dataset, hyperparameter tuning can be used to increase the models performance. YOLOv5 offers 25 hyperparameters including those with regard to test time augmentation. The YOLOv5 implementation offers functionality that can support in finding good hyperparameters.
+With Google Colab as our training environnement computing resources - especially time - is very limited, hence we had to work to with assumptions. First we defined a base scenario from which we wanted to approve. The base scenario was a standard YOLOv5s model with pretrained weights on the COCO dataset which we trained for 10 epochs. With the "evolve" function the model tries to find better parameters using a genetic algorithm with the main operators crossover and mutation with a 90% probability and 0.04 variance. [Github Yolov5](https://github.com/ultralytics/yolov5/issues/607)
 We did that for 50 iterations. We assumed that after 10 epochs good parameters would be found and would be also beneficial in a full training.  
 
 
@@ -454,20 +454,21 @@ Judging from the plots and the videos we decided to with a 0.7 confidence.
 
 
 # Deployment
-(Christin Scheib)
+(Christin Scheib)  
 The Jetson Nano is a small powerful device optimized for IoT applications. It comes  with a Quad-core ARM Cortex-A57 MPCore processor, NVIDIA Maxwell architecture with 128 NVIDIA CUDA cores and 4GB RAM. The Jetson Nano does not come with the Linux architecture already setup, instead it is the first step to write the Image file to the SD Card to boot and setup the system. After a successful setup we also added an ssh connection in order to control the device from a laptop. 
 
 ## <a name='Deploymentprocess'></a>Deployment process
+(Christin Scheib)  
 Having setup the Jetson Nano it was not yet ready for directly detecting bees as we have not deployed the model. For our case three possible deployment options were:(1) docker containers, (2) virtual environments, (3) traditional deployment.  
   
-(1) Docker  
+
 Docker has several advantages and has become quite popular in the last couple of years.  Maintaining multiple applications is a quite complex process. They are written in different languages and use different frameworks and architectures which makes them difficult to update or to move around. Docker simplifies that by using containers. A container bundles application code with related configuration files, libraries and dependencies. By doing that it can run uniformly and consistently on any infrastructure. Furthermore, it gives developers the freedom to innovate with their choice of tools, application stacks, and deployment environments for each project. Another big advantage of docker containers is that they are portable, so that software can be built locally and then deployed and ran everywhere. Having great benefits also Docker has its downsides. For example, they are consuming much of the host system resources. It will not make applications faster and in the worst case make them slower. Furthermore, the persistent data storage in Docker is more complicated and graphical applications do not work well. Since it is still a new technology the documentation is falling behind and backward compatibility is not guaranteed when updating Docker containers. Despite the benefits of Docker it should not be used to containerize every single application. Docker offers the most advantages to microservices, where an application constitutes of many loosely coupled components.  
 Based on the advantages and disadvantages of Docker containers we decided against using it in this course, since we are deploying a single model on which is not consisting of microservices. Furthermore, we are using an edge device with limited system resources and the inference time of our model is of the essence.
 (https://www.freecodecamp.org/news/7-cases-when-not-to-use-docker/)
 (https://www.infoworld.com/article/3310941/why-you-should-use-docker-and-containers.html) 
 
-(2) Virtual environment  
-Virtual environments are a well-known tool for developing code in Python. As previously mentioned every project requires different dependencies. When working with packages in Python, the respecting site packages (third-party libraries) are all stored and retrieved in the same directory. If now two packages need the different versions of the same site-package Python is not able to differentiate between versions in the site-package directory. In order to solve this problem virtual environments are used which creates an isolated environment for python projects. It is considered good practice to create a new virtual environment for every python project as there is no limit to the number of environments. As virtual environments are a lightweight tool to isolate the dependencies of different projects from each other we decided to deploy our model using venv. A module for creating multiple virtual environments where  each has its own Python binary and can have its own independent set of installed Python packages in its respecting site directories. 
+  
+Virtual environments are a well-known tool for developing code in Python. As previously mentioned every project requires different dependencies. When working with packages in Python, the respecting site packages (third-party libraries) are all stored and retrieved in the same directory. If now two packages need the different versions of the same site-package Python is not able to differentiate between versions in the site-package directory. In order to solve this problem virtual environments are used which create an isolated environment for python projects. It is considered good practice to create a new virtual environment for every Python project as there is no limit to the number of environments. As virtual environments are a lightweight tool to isolate the dependencies of different projects from each other we first decided to deploy our model using venv. A module for creating multiple virtual environments where each has its own Python binary and can have its own independent set of installed Python packages in its respecting site directories. 
 
 
 https://www.geeksforgeeks.org/python-virtual-environment/
@@ -495,19 +496,19 @@ After bringing everything up to date we downloaded the package installer pip and
   $ sudo apt install python3-pip
   $ sudo apt install -y python3 venv
 ```
-By doing the following command we createda new virtual environment called env and activated it:
+By doing the following command we created a new virtual environment called env and activated it:
 
  ``` 
   $ python3 -m venv ~/python-envs/env
   $ source ~/python-envs/env/bin/activate
  ``` 
 
-As many packages require the wheel package for installation we installed it using 
+As many packages require the wheel package for installation we installed it using: 
    
  ``` 
   $ pip3 install wheel
  ``` 
-Now everything was setup so that we are ready to install the required packages for Yolov5. As this is based on the PyTorch framework we needed to install torch and torchvision. Unfortunately, the Jetson Nano architecture does not support the pip install version, which is why we needed to build it from source by doing the following commands:
+Now everything was setup so that we were ready to install the required packages for YOLOv5. As this is based on the PyTorch framework we needed to install torch and torchvision. Unfortunately, the Jetson Nano architecture does not support the pip install version, which is why we needed to build it from source by doing the following commands:
 ``` 
 PyTorch v1.8.0
   $ wget https://nvidia.box.com/shared/static/p57jwntv436lfrd78inwl7iml6p13fzh.whl -O torch-1.8.0-cp36-cp36m-linux_aarch64.whl
@@ -539,7 +540,7 @@ After having checked if the installation process was successful, we downloaded t
   thop 
   pandas
 ```
-After completing the installation process we ran our model. Here we faced some problems with the installation of torchvision. The model threw the error that there is no version installed which satisfies the requirements. As we did not work on multiple projects on the Jetson Nano we installed the required packages including torch and torchvision in the global site-packages directory outside of the virtual environment in order to delimit the problem with the torchvision installation. Running the model again on a recorded video led to a performance of roughly five frames per second (fps) or 0,2 seconds per frame. Setting the option half in Yolo reduces the detection time per frame on a recorded video to 0.15 seconds, which results in 6.6 fps.
+After completing the installation process we ran our model. Here we faced some problems with the installation of torchvision. The model threw the error that there is no version installed which satisfies the requirements. As we did not work on multiple projects on the Jetson Nano we installed the required packages including torch and torchvision in the global site-packages directory outside of the virtual environment in order to delimit the problem with the torchvision installation. Running the model again on a recorded video led to a performance of roughly five frames per second (fps) or 0,2 seconds per frame. Setting the option half in YOLO reduced the detection time per frame on a recorded video to 0.15 seconds, which results in 6.6 fps.
 ```
   $ python3 detect.py --source /home/beewatch/Downloads/bees_demo1.mp4 --weights best.pt --conf 0.3
 ```
@@ -560,7 +561,7 @@ In the picture below you can see how the tracking on bees works. Within the thre
 
 Furthermore, the tracker was extended by the function new_id_registered. This provides information on whether new IDs would be assigned for given bounding boxes. This becomes important in the hybrid methods mentioned below.
 
-The trackers can be found in the tracking folder. All trackers can be used independently of the Flask environment, though the Flak environment uses them itself. The detect.py file from Yolov5 has been rewritten (run_detection) so that it is loaded as an object together with the Centroid tracker object in the individual trackers scripts. This does not affect the functionality of the detect file and all arguments and functions can still be used. 
+The trackers can be found in the tracking folder. All trackers can be used independently of the Flask environment, though the Flask environment uses them itself. The detect.py file from YOLOv5 has been rewritten (run_detection) so that it is loaded as an object together with the Centroid tracker object in the individual trackers scripts. This does not affect the functionality of the detect file and all arguments and functions can still be used. 
 
 For example, tracker_centroid.py is a script that applies object detection and centroid tracking to given images/videos/streams, the sequence of the script is shown in the figure below.
 
@@ -581,14 +582,14 @@ Furthermore, an attempt was made to implement the MultiTracker from OpenCV. Thes
 to do 
 
 (Christin Scheib)
-Running the prerecorded video on the flask server led to a performance of 0,23 seconds per frame. An even more significant decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.32 seconds per frame. 
+Running the prerecorded video on the flask server led to a performance of 0,16 seconds per frame. A slight decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.17 seconds per frame. 
 
 
 # Lessons Learned
 
 
 
-Even though the Jetson Nano is optimized for IoT applications it has its limitations. As Yolov5 is a quite large model it uses a lot of the system's resources. This leads to non-responsiveness and freezing during the loading of the model. Here it would be interesting to compare the performance of smaller models that are optimized to running on these devices. 
+Even though the Jetson Nano is optimized for IoT applications it has its limitations. As YOLOv5 is a quite large model it uses a lot of the system's resources. This leads to non-responsiveness and freezing during the loading of the model. Here it would be interesting to compare the performance of smaller models that are optimized to running on these devices. 
 
 # References
 [1] Klein, A. M., Vaissiere, B. E., Cane, J. H., Steffan-Dewenter, I., Cunningham, S. A., Kremen, C. & Tscharntke, T. (2007): Importance of pollinators in changing landscapes for world crops. Proceedings of the Royal Society B: Biological Sciences, 274, 303-313.  
