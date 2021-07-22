@@ -441,13 +441,13 @@ The Jetson Nano is a small powerful device optimized for IoT applications. It co
 (Christin Scheib)  
 Having setup the Jetson Nano it was not yet ready for directly detecting bees as we have not deployed the model. For our case three possible deployment options were:(1) docker containers, (2) virtual environments, (3) traditional deployment.  
   
-(1) Docker  
+
 Docker has several advantages and has become quite popular in the last couple of years.  Maintaining multiple applications is a quite complex process. They are written in different languages and use different frameworks and architectures which makes them difficult to update or to move around. Docker simplifies that by using containers. A container bundles application code with related configuration files, libraries and dependencies. By doing that it can run uniformly and consistently on any infrastructure. Furthermore, it gives developers the freedom to innovate with their choice of tools, application stacks, and deployment environments for each project. Another big advantage of docker containers is that they are portable, so that software can be built locally and then deployed and ran everywhere. Having great benefits also Docker has its downsides. For example, they are consuming much of the host system resources. It will not make applications faster and in the worst case make them slower. Furthermore, the persistent data storage in Docker is more complicated and graphical applications do not work well. Since it is still a new technology the documentation is falling behind and backward compatibility is not guaranteed when updating Docker containers. Despite the benefits of Docker it should not be used to containerize every single application. Docker offers the most advantages to microservices, where an application constitutes of many loosely coupled components.  
 Based on the advantages and disadvantages of Docker containers we decided against using it in this course, since we are deploying a single model on which is not consisting of microservices. Furthermore, we are using an edge device with limited system resources and the inference time of our model is of the essence.
 (https://www.freecodecamp.org/news/7-cases-when-not-to-use-docker/)
 (https://www.infoworld.com/article/3310941/why-you-should-use-docker-and-containers.html) 
 
-(2) Virtual environment  
+  
 Virtual environments are a well-known tool for developing code in Python. As previously mentioned every project requires different dependencies. When working with packages in Python, the respecting site packages (third-party libraries) are all stored and retrieved in the same directory. If now two packages need the different versions of the same site-package Python is not able to differentiate between versions in the site-package directory. In order to solve this problem virtual environments are used which create an isolated environment for python projects. It is considered good practice to create a new virtual environment for every Python project as there is no limit to the number of environments. As virtual environments are a lightweight tool to isolate the dependencies of different projects from each other we first decided to deploy our model using venv. A module for creating multiple virtual environments where each has its own Python binary and can have its own independent set of installed Python packages in its respecting site directories. 
 
 
@@ -476,19 +476,19 @@ After bringing everything up to date we downloaded the package installer pip and
   $ sudo apt install python3-pip
   $ sudo apt install -y python3 venv
 ```
-By doing the following command we createda new virtual environment called env and activated it:
+By doing the following command we created a new virtual environment called env and activated it:
 
  ``` 
   $ python3 -m venv ~/python-envs/env
   $ source ~/python-envs/env/bin/activate
  ``` 
 
-As many packages require the wheel package for installation we installed it using 
+As many packages require the wheel package for installation we installed it using: 
    
  ``` 
   $ pip3 install wheel
  ``` 
-Now everything was setup so that we are ready to install the required packages for YOLOv5. As this is based on the PyTorch framework we needed to install torch and torchvision. Unfortunately, the Jetson Nano architecture does not support the pip install version, which is why we needed to build it from source by doing the following commands:
+Now everything was setup so that we were ready to install the required packages for YOLOv5. As this is based on the PyTorch framework we needed to install torch and torchvision. Unfortunately, the Jetson Nano architecture does not support the pip install version, which is why we needed to build it from source by doing the following commands:
 ``` 
 PyTorch v1.8.0
   $ wget https://nvidia.box.com/shared/static/p57jwntv436lfrd78inwl7iml6p13fzh.whl -O torch-1.8.0-cp36-cp36m-linux_aarch64.whl
@@ -520,7 +520,7 @@ After having checked if the installation process was successful, we downloaded t
   thop 
   pandas
 ```
-After completing the installation process we ran our model. Here we faced some problems with the installation of torchvision. The model threw the error that there is no version installed which satisfies the requirements. As we did not work on multiple projects on the Jetson Nano we installed the required packages including torch and torchvision in the global site-packages directory outside of the virtual environment in order to delimit the problem with the torchvision installation. Running the model again on a recorded video led to a performance of roughly five frames per second (fps) or 0,2 seconds per frame. Setting the option half in YOLO reduces the detection time per frame on a recorded video to 0.15 seconds, which results in 6.6 fps.
+After completing the installation process we ran our model. Here we faced some problems with the installation of torchvision. The model threw the error that there is no version installed which satisfies the requirements. As we did not work on multiple projects on the Jetson Nano we installed the required packages including torch and torchvision in the global site-packages directory outside of the virtual environment in order to delimit the problem with the torchvision installation. Running the model again on a recorded video led to a performance of roughly five frames per second (fps) or 0,2 seconds per frame. Setting the option half in YOLO reduced the detection time per frame on a recorded video to 0.15 seconds, which results in 6.6 fps.
 ```
   $ python3 detect.py --source /home/beewatch/Downloads/bees_demo1.mp4 --weights best.pt --conf 0.3
 ```
