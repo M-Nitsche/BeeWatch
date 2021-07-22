@@ -560,7 +560,7 @@ Furthermore, an attempt was made to implement the MultiTracker from OpenCV. Thes
 to do 
 
 (Christin Scheib)
-Running the prerecorded video on the flask server led to a performance of 0,23 seconds per frame. An even more significant decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.32 seconds per frame. 
+Running the prerecorded video on the flask server led to a performance of 0,16 seconds per frame. A slight decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.17 seconds per frame. 
 
 
 # Lessons Learned
