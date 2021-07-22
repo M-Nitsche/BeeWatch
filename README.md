@@ -354,7 +354,7 @@ In the process of further improving the models performance we tried multiple run
 The generation of synthetic data may seem like a way to produce unlimited amounts of training data. While there might be some truth to this, we found that generating data that mimics real world conditions is rather challenging.
 However data's effectiveness is best measured when in use, so we tried multiple runs with adding increasing portions of 
 artificial data to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). 
-We found, that adding data the models performance increased noticeably up to about 500 images. After that, the performace tended to decrease again on the validation set. This may be because the model learns features that the synthetic data brings, but which are not typical for the real world.
+We found, that adding data the models' performance increased noticeably up to about 500 images. After that, the performace tended to decrease again on the validation set. This may be because the model learns features that the synthetic data brings, but which are not typical for the real world.
 However, the limited number of artificial images in the training set led to a significant increase in the model as can be seen in table below. While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
 
 <p float="center">
