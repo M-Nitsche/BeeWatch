@@ -539,7 +539,7 @@ In the picture below you can see how the tracking on bees works. Within the thre
 
 Furthermore, the tracker was extended by the function new_id_registered. This provides information on whether new IDs would be assigned for given bounding boxes. This becomes important in the hybrid methods mentioned below.
 
-The trackers can be found in the tracking folder. All trackers can be used independently of the Flask environment, though the Flak environment uses them itself. The detect.py file from YOLOv5 has been rewritten (run_detection) so that it is loaded as an object together with the Centroid tracker object in the individual trackers scripts. This does not affect the functionality of the detect file and all arguments and functions can still be used. 
+The trackers can be found in the tracking folder. All trackers can be used independently of the Flask environment, though the Flask environment uses them itself. The detect.py file from YOLOv5 has been rewritten (run_detection) so that it is loaded as an object together with the Centroid tracker object in the individual trackers scripts. This does not affect the functionality of the detect file and all arguments and functions can still be used. 
 
 For example, tracker_centroid.py is a script that applies object detection and centroid tracking to given images/videos/streams, the sequence of the script is shown in the figure below.
 
