@@ -1,5 +1,5 @@
 """
-Place this script in the tracking folder
+Hybrid model. Uses detections of the object detection and the blob detection with the centroid tracker.
 """
 import os, sys
 import argparse
