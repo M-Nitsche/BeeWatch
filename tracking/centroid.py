@@ -1,3 +1,6 @@
+"""
+Centroid tracker object, uses pixel distance to match bounding boxes with IDs.
+"""
 from scipy.spatial import distance as dist
 from scipy.optimize import linear_sum_assignment
 from collections import OrderedDict
