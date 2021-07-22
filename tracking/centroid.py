@@ -109,6 +109,9 @@ class CentroidTracker():
         return self.objects
 
     def new_id_registered(self, rects):
+        """
+        Check if with given bounding boxes a new ID would be created.
+        """
         if len(rects) == 0:
             return False
         # initialize an array of input centroids for the current frame
