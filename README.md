@@ -320,7 +320,7 @@ Both V1 and V2 did not result in promising detections. The resulting bounding bo
 (David Blumenthal)
 
 Yolo has been first introduced in 2016 and set a milestone in object detection research due its capability to detect object in real-time with better accuracy.
-It was first introduced by Joseph Redmon and developed further by him up to YOLOv3. The versions were implemented in the Darknet framework. Later the v3 Version was also implemented in PyTorch by Glenn Jocher of Ultralytics LLC who as we will later see is also responsible for the controversially discussed YOLOv5. [https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109](https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109)
+It was first introduced by Joseph Redmon and developed further by him up to YOLOv3. The versions were implemented in the Darknet framework. Later the v3 Version was also implemented in PyTorch by Glenn Jocher of Ultralytics LLC who as we will later see is also responsible for the controversially discussed YOLOv5. [34] [https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109](https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109)
 Joseph Redmon, the initiator of YOLO, announced in the spring of 2020 that he has stopped his research in computer vision due to several concerns regarding military applications and privacy concerns. [His tweet](https://twitter.com/pjreddie/status/1230524770350817280) 
 ![tweet](doku_resources/redmon_tweet.png)
 ### <a name='YOLOv4'></a>YOLOv4
@@ -736,4 +736,5 @@ A suitable case was modelled in honeycomb structure for the deployment (find it 
 [31] https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e, last accessed 20.07.2021
 [32] https://blog.zenggyu.com/en/post/2018-12-16/an-introduction-to-evaluation-metrics-for-object-detection/, last accessed 21.07.2021
 [33] Bochkovskiy, Alexey, Chien-Yao Wang and H. Liao. “YOLOv4: Optimal Speed and Accuracy of Object Detection.” ArXiv abs/2004.10934 (2020)
+[34] https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109 Date of retrieval: 05.07.2021
 
