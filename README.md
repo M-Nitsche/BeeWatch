@@ -188,9 +188,9 @@ Training - 0.65 Validation - 0.32 Test 0.03
 Data augmentation is a method that allows to significantly increase the variety of data for the training of models without having to acquire additional new data. New training instances are created by performing transformation on already existing instances thus providing new situations and perspectives for model training. That way it can alleviate the problem of overfitting. Essential when performing augmentation in object detection tasks is, that the transformation is not only performed on the image itself but also on the bounding box defining an object’s position. There are several available libraries which provide a wide range of augmentation techniques. Such a library is [imgaug](https://imgaug.readthedocs.io/en/latest/index.html). 
 However, the wide range of augmentation techniques should not be applied thoughtlessly to the data. The choice of suitable techniques depends on the use case. 
 
-There are two options on how to perform augmentation, depending on the algorithm used. On the one hand, data augmentation can be applied as part of preprocessing. With new algorithms like Yolov4, Yolov5 and YoloR an integrated augmentation at runtime is possible. The advantage of integrated (at run time) augmentation is the avoidance of intensive I/O workloads. On the other hand, certain functionalities that libraries like imgauge offer are not available as run-time augmentation techniques.Before we started experimenting with data augmentation, we have already decided on using yolov5 as our training model. Furthermore, at that point we were already struggling with storage capacities in google drive where we stored all data sets in order to make it easily accessible for everyone.  For this reason, we decided to perform augmentation at run time.
+There are two options on how to perform augmentation, depending on the algorithm used. On the one hand, data augmentation can be applied as part of preprocessing. With new algorithms like Yolov4, Yolov5 and YoloR an integrated augmentation at runtime is possible. The advantage of integrated (at run time) augmentation is the avoidance of intensive I/O workloads. On the other hand, certain functionalities that libraries like imgauge offer are not available as run-time augmentation techniques. Before we started experimenting with data augmentation, we have already decided on using Yolov5 as our training model. Furthermore, at that point we were already struggling with storage capacities in Google Drive where we stored all data sets in order to make it easily accessible for everyone.  For this reason, we decided to perform augmentation at run time.
 
-The yolov5 [implementation](https://github.com/ultralytics/yolov5/blob/master/data/hyps/hyp.scratch.yaml) by  Glenn Jocher offers the following data augmentation techniques with the following default parameters.
+The Yolov5 [implementation](https://github.com/ultralytics/yolov5/blob/master/data/hyps/hyp.scratch.yaml) by  Glenn Jocher offers the following data augmentation techniques with the following default parameters.
 
 ``` yaml
 hsv_h: 0.015  # image HSV-Hue augmentation (fraction)
@@ -208,7 +208,7 @@ mixup: 0.0  # image mixup (probability)
 ``` 
 
 
-With our use case in mind, we adapted the applied data augmentation in the yolov5 framework as follows. These parameters are determined in the file  yolov5/data/hyps/hyp.scratch.yaml
+With our use case in mind, we adapted the applied data augmentation in the Yolov5 framework as follows. These parameters are determined in the file  yolov5/data/hyps/hyp.scratch.yaml
 
 
 ``` yaml
