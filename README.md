@@ -438,6 +438,7 @@ Judging from the plots and the videos we decided to with a 0.7 confidence.
 The Jetson Nano is a small powerful device optimized for IoT applications. It comes  with a Quad-core ARM Cortex-A57 MPCore processor, NVIDIA Maxwell architecture with 128 NVIDIA CUDA cores and 4GB RAM. The Jetson Nano does not come with the Linux architecture already setup, instead it is the first step to write the Image file to the SD Card to boot and setup the system. After a successful setup we also added an ssh connection in order to control the device from a laptop. 
 
 ## <a name='Deploymentprocess'></a>Deployment process
+(Christin Scheib)  
 Having setup the Jetson Nano it was not yet ready for directly detecting bees as we have not deployed the model. For our case three possible deployment options were:(1) docker containers, (2) virtual environments, (3) traditional deployment.  
   
 (1) Docker  
