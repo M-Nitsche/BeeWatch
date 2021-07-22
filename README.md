@@ -36,7 +36,7 @@
 	* [Final Results](#FinalResults)
 * [Deployment process](#Deploymentprocess)
 * [Tracker](#Tracker)
-* [Flask (Oliver)](#FlaskOliver)
+* [Flask](#Flask)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -585,7 +585,7 @@ The output of all trackers are the IDs, tracking information and the image with 
 Furthermore, an attempt was made to implement the MultiTracker from OpenCV. These are no longer up to date and in legacy of OpenCV. They are very cumbersome to implement, lead to many errors and were therefore discarded.
 
 
-## <a name='FlaskOliver'></a>Flask (Oliver)
+## <a name='Flask'></a>Flask (Oliver)
 to do 
 
 (Christin Scheib)
