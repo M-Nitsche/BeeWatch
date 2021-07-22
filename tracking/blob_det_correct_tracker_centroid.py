@@ -1,5 +1,5 @@
 """
-Place this script in the tracking folder together with run_dection.py
+Hybrid model. Uses detections of the blob detection and corrects them with the object detection with the centroid tracker.
 """
 import os, sys
 import argparse
