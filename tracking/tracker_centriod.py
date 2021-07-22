@@ -1,5 +1,5 @@
 """
-Place this script in the tracking folder
+Simple centroid tracker. Runs tracking on object detection. 
 """
 import os, sys
 import argparse
