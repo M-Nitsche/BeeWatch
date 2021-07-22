@@ -605,6 +605,7 @@ If none of the above applies, the bounding boxes of the blob detection are passe
 If object detection is applied, new bounding boxes are obtained. These are matched with those of the blob detection. It is also done using the pixel distance (same procedure as with the Centroid tracker, with its own threshold: matching_threshold). This is where the correction takes place through the object detection. If there is no matching for a blob bounding box, it is discarded. If the object detection and blob detection bounding boxes are similar, the object detection bounding box is trusted more and the blob detection bounding box is ignored. If a bounding box of object detection is not matched, it is added to the bounding boxes which are passed to the Centroid tracker. Only these bounding boxes and their information are shown in the image. 
 
 ![Tracker_Description2](doku_resources/Tracker_Description2.png)
+
 ![ComparisonMethod1](doku_resources/ComparisonMethod1.png)
 
 Yellow bounding boxes are those from the object detection and green circles come from the blob detection. As you can see in the read rectangles the hybrid model detects non moving bees but also can track bees over a faster moving period. 
