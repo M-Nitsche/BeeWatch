@@ -315,7 +315,11 @@ The results of the hybrid approach first seemed to be very promising as the YOLO
 
 Therefore, the hybrid approach of background subtraction together with a more simplistic detection model like blob dection or shallow CNNs is utilized by the system in very calm situations. The full details of how we make use of the combination can be found in the [tracking section](#Tracker).
 
-### <a name='SSDOLI'></a>SSD (OLI)
+### <a name='SSDOLI'></a>SSD
+(Oliver Becker)
+Both SSD mobilenet V1 and V2 where trained in the tensorflow detection api. SSD has two components: a backbone model and SSD head. Backbone model usually is a pre-trained image classification network as a feature extractor (here we worked with ResNet and ImageNet). The SSD head is just one or more convolutional layers added to this backbone. SSD divides the image using a grid and have each grid cell be responsible for detecting objects in that region of the image. Each grid cell in SSD are assigned with multiple anchor boxes. These anchor boxes are pre-defined.
+
+Both V1 and V2 did not result in promising detections. The resulting bounding boxes were really big and no where near bees. Further research discovered that SSD V2 is known to perform poorly on small objects, and in this case, we have very small objects. Therefore, the anchors were tuned in the their aspect ratios, size and numbers. This resulted in not fixable errors inside the tensorflow detection api. One fix could be to retrain the feature extractor completely since the weights do depend on the shape of the anchor. This was not followed up. 
 
 ### <a name='YOLO'></a>YOLO
 (David Blumenthal)
