@@ -29,7 +29,7 @@ import json
 
 def arguments_parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default=parentdir+'/yolov5/best_maxi.pt', help='model.pt path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default=parentdir+'/yolov5_trainingArtefacts/adjusted_data_augmentation/weights_adjusted_data_augmentation/best.pt', help='model.pt path(s)')
     parser.add_argument('--source', type=str, default=parentdir+'/yolov5/data/bees_demo1.mp4', help='file, camera for webcam')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
