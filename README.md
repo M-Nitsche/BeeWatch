@@ -35,10 +35,10 @@
 	* [Hyperparameter Tuning](#HyperparameterTuning)
 	* [Final Results](#FinalResults)
 * [Deployment process](#Deploymentprocess)
-* [Tracker](#Tracker)
+* [Tracker - Centroid tracker](#Tracker)
 * [Hybrid and other methods for detection](#Hybrid)
-* [Flask](#Flask)
-	* [Integration camera](#Camera)
+* [Flask - Frontend](#Flask)
+	* [Integration of the camera and real life deployment](#Camera)
 * [Extra - Case](#Extra-Case)
 
 <!-- vscode-markdown-toc-config
@@ -595,7 +595,7 @@ Furthermore, an attempt was made to implement the MultiTracker from OpenCV. Thes
 (Christin Scheib)
 Running the prerecorded video on the flask server led to a performance of 0,16 seconds per frame. A slight decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.17 seconds per frame. 
 
-## <a name='Camera'></a> Integration of the CSI camera and deployment in real life
+## <a name='Camera'></a> Integration of the CSI camera and in real life deployment
 
 # <a name='Lessons-Learned'> Lessons Learned
 
