@@ -1,3 +1,10 @@
+"""
+Flask server
+This server makes it very easy to run, view results and configure our model. 
+Warning: this server starts in Debug mode and is visible in your local network
+Provide a data folder under yolov5/ with images or video. Also a evaluation folder eval_data under tracking.
+"""
+
 import os, sys
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
@@ -90,10 +97,12 @@ track_info = {
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
+# Start page
 @app.route('/')
 def index():
     return render_template('index.html')
 
+# Source: choose source (image, video, camera) and method of detection
 @app.route('/source', methods=['GET'])
 def source():
     # get files in ./data/ to select and infere on
@@ -106,6 +115,7 @@ def source():
     detection_list = ["Object Detection", "Blob Detection", "Blob corrected by Object Det", "Blob and Object Det"]
     return render_template('source.html', file_list=file_list, detection_list=detection_list)
 
+# Post choices from source
 @app.route('/source_selected', methods=['POST'])
 def source_selected():
     global opt, file_path, det_sel
@@ -123,10 +133,12 @@ def source_selected():
     else:
         return redirect(url_for('tracker'))
 
+# Configure the object detection
 @app.route('/object_detection_settings', methods=['GET'])
 def object_detection_settings():
     return render_template('object_detection_settings.html')
 
+# Post choices of object detection
 @app.route('/objdet_set', methods=['POST'])
 def objdet_set():
     global opt, det_sel
@@ -150,6 +162,7 @@ def objdet_set():
 
     return redirect(url_for('tracker'))
 
+# Choose tracker
 @app.route('/tracker', methods=['GET'])
 def tracker():
     global det_sel
@@ -160,6 +173,7 @@ def tracker():
         tracker_list = ["Centriod", "NO tracker"]
     return render_template('tracker.html', tracker_list=tracker_list)
 
+# Post choices of the tracker
 @app.route('/tracker_selected', methods=['POST'])
 def tracker_selected():
     global tracker_sel
@@ -171,10 +185,12 @@ def tracker_selected():
         return redirect(url_for('inference'))
     return redirect(url_for('tracker'))
 
+# Configure the object detection
 @app.route('/centriod_tracker', methods=['GET'])
 def centriod_tracker():
     return render_template('centriod_tracker.html')
 
+# Run inference, stream video
 @app.route('/inference', methods=['GET', 'POST'])
 def inference():
     global tracker_sel
@@ -222,11 +238,12 @@ def inference():
 
     return render_template('inference.html')
 
+# documentation page
 @app.route('/documentation', methods=['GET', 'POST'])
 def documentation():
     return render_template('documentation.html')
 
-
+# save information from tracker
 def save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr):
     """
     Save information
@@ -249,7 +266,7 @@ def save_info_tracker(frame_no, no_det, no_tr, ids, sum_tr):
         track_info["sum_tr"].append(sum_tr)
     #print(track_info)
 
-
+# Run generator tracker and yield itself the image to inference
 def info_tracker():
     global tracker_sel, args, opt, det_sel
 
@@ -299,11 +316,13 @@ def info_tracker():
             yield (b'--frame\r\n'
                    b'Content-Type: image/png\r\n\r\n' + img + b'\r\n')
 
+# Respone object - streams images to inference page
 @app.route('/video_feed')
 def video_feed():
     #Video streaming route. Put this in the src attribute of an img tag
     return Response(info_tracker(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+# Display results of the tracking / detection
 @app.route('/results', methods=['GET', 'POST'])
 def results():
     global tracker_sel, track_info, args, ids_frame_list, time_cur_g, eval_data_list
@@ -350,6 +369,7 @@ def results():
 
     return render_template('results_notrack.html')
 
+# show evaluation graphs
 @app.route('/eval_selected', methods=['POST'])
 def eval_selected():
     global path_eval, track_info, args, ids_frame_list, time_cur_g, eval_data_list
