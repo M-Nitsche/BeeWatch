@@ -632,15 +632,11 @@ This tracker can be found in blob_det_correct_tracker_centroid.py.
 (Oliver)
 As can be seen in the flow chart, this is very similar to the blob detection with object detection as a corrector method. The difference is that the blob bounding boxes that are not made are not discarded but continue to be used and also passed to the Centroid tracker, so they can also be given an ID without checking the object detection. 
 
-<p float="center">
-  <img src="doku_resources/Add_blob_obj.png" width="600" />
-</p>
+![addblobobj](doku_resources/Add_blob_obj.png)
 
 Compared to the other methods blob detection and object detection uses every detection from object and blob detection.
 
-<p float="center">
-  <img src="doku_resources/ComparisonMethod2.PNG" width="600" />
-</p>
+![comp4](doku_resources/ComparisonMethod2.PNG)
 
 This tracker can be found in blob_det_add_tracker_centroid.py.
 
