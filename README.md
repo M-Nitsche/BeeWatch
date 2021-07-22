@@ -350,7 +350,7 @@ Unfortunately, we experienced a different result. The training time was reduced 
 ### <a name='AddingArtificialData'></a>Adding Artificial Data 
 (David Blumenthal)
 
-In the process of furhter improving the models performance we tried multiple runs  with adding increasing portions of the artificial data as described in section **Dataset**. Synthetic data is a great way to expand the dataset in a cost-effective way. It allows to overcome restrictions when real data is costly or not available at all.  
+In the process of further improving the models performance we tried multiple runs  with adding increasing portions of the artificial data as described in section **Dataset**. Synthetic data is a great way to expand the dataset in a cost-effective way. It allows to overcome restrictions when real data is costly or not available at all.  
 The generation of synthetic data may seem like a way to produce unlimited amounts of training data. While there might be some truth to this, we found that generating data that mimics real world conditions is rather challenging.
 However data's effectiveness is best measured when in use, so we tried multiple runs with adding increasing portions of 
 artificial data to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). 
