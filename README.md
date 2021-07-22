@@ -681,7 +681,7 @@ Even though the Jetson Nano is optimized for IoT applications it has its limitat
 
 # <a name='Extra-Case'></a> Extra - Case
 (Oliver)
-A suitable case was modelled in honeycomb structure for the deployment. This was commissioned, but could not be printed to the required standard. 
+A suitable case was modelled in honeycomb structure for the deployment (find it under deployment/case). This was commissioned, but could not be printed to the required standard. 
 
 ![case1](doku_resources/Case1.jpg)
 ![case2](doku_resources/Case2.jpg)
