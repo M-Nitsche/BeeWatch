@@ -694,7 +694,7 @@ A frontend with a Flask server was implemented. The server hosts a website which
 ```
 The Flask package is a micro web framework for python, it allows to add extensions to it like Flask-Bootstrap, which renders the HTML with free and open-source CSS from Bootstrap 3 (Bootstrap 3 is rather old).
 
-The server makes it easy to control the Jetson within a network. The detection is almost completely configurable in the website. Exemplary process on the website is shown [here]( https://www.youtube.com/watch?v=pLGIwBwWGps) (real time object detection and tracking on the Jetson Nano, screen capture) and in the image below (for object detection, read: left to right, top to bottom). 
+The server makes it easy to control the Jetson within a network. The detection is almost completely configurable in the website and every step and argument is explained. Exemplary process on the website is shown [here]( https://www.youtube.com/watch?v=pLGIwBwWGps) (real time object detection and tracking on the Jetson Nano, screen capture) and in the image below (for object detection, read: left to right, top to bottom). 
 
 ![website](doku_resources/Website.png)
 
