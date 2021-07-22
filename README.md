@@ -312,7 +312,7 @@ YOLOv5 differs most from all other releases because this is a PyTorch implementa
 ![yolov5_architecture](doku_resources/yolov5_architecture.jpg)
 The exact architecture of v5s model can be found [here](https://gist.github.com/mihir135/2e5113265515450c8da934e15d97fc6b).
 #### <a name='WhydidwegowithYOLOv5'></a>Why did we go with YOLOv5?
-One huge advantage is model size in mb. The smallest versions weights (yolov5s) only take up 13.7mb of space. In addition, it benefited from a very large community of users, which meant that it was under active development with improvements being made on a weekly basis.
+One huge advantage is model size in mb. The smallest versions weights (yolov5s) only take up 13.7 MB of space. In addition, it benefited from a very large community of users, which meant that it was under active development with improvements being made on a weekly basis.
 **ToDo**
 
 
