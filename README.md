@@ -398,8 +398,9 @@ The performance after 300 epochs is as follows:
 
 | Training                                                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
 |--------------------------------------------------------------|-------|-------|------------|-------|-------|-------------|
-| with artificial data (19.5%) & adjusted run-time augmentation| xx?xx | xxx?x |    x?xxx   | x?xxx | x?xxx |    x?xxx    |
+| with artificial data (19.5%) & adjusted run-time augmentation| 0.789 | 0.524 |    0.608  |  0.769 | 0.697  |    0.739  |           
 ---------------------------------------------------------------------------------------------------------------------------
+            
 
 Exemplary training images will look as follows:
 
