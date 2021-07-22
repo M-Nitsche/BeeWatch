@@ -6,34 +6,34 @@
 * [Labeling](#Labeling)
 	* [Object detection labeling](#Objectdetectionlabeling)
 	* [Object tracking labeling](#Objecttrackinglabeling)
-* [Additional data sources](#Additionaldatasources)
-	* [Mosaic dataset](#Mosaicdataset)
-	* [Synthetic dataset generation](#Syntheticdatasetgeneration)
+	* [Additional data sources](#Additionaldatasources)
+		* [Mosaic dataset](#Mosaicdataset)
+		* [Synthetic dataset generation](#Syntheticdatasetgeneration)
 	* [Resulting datasets](#Resultingdatasets)
 * [Data Preprocessing](#DataPreprocessing)
 	* [Final Dataset](#FinalDataset)
 	* [Data Augmentation](#DataAugmentation)
 * [Model building](#Modelbuilding)
- 	* [Model selection](#Modelselection)
+	* [Model selection](#Modelselection)
 	* [Background subtraction](#Backgroundsubtraction)
 	* [Baseline with background subtraction and blob detection](#Baselinewithbackgroundsubtractionandblobdetection)
-	* [Background subtraction + Tiny YOLO](#BackgroundsubtractionTinyYOLO)
+	* [Background subtraction + YOLOv4 tiny](#BackgroundsubtractionYOLOv4tiny)
 	* [SSD (OLI)](#SSDOLI)
 	* [YOLO](#YOLO)
 	* [YOLOv4](#YOLOv4)
 	* [YOLOv5](#YOLOv5)
 		* [Why did we go with YOLOv5?](#WhydidwegowithYOLOv5)
 * [Model Training](#ModelTraining)
- 	* [Evaluation Metric](#EvaluationMetric)
+	* [Evaluation Metric](#EvaluationMetric)
 	* [Training Enviornment](#TrainingEnviornment)
-	* [Training Baseline](#BaselineModelTraining)
+	* [ Training Baseline](#TrainingBaseline)
 	* [Freezing Layers](#FreezingLayers)
 	* [Adding Artificial Data](#AddingArtificialData)
 	* [Added Data Augmentation](#AddedDataAugmentation)
 	* [Hyperparameter Tuning](#HyperparameterTuning)
 	* [Final Results](#FinalResults)
 * [Deployment process](#Deploymentprocess)
-* [Tracker (Oliver)](#TrackerOliver)
+* [Tracker](#Tracker)
 * [Flask (Oliver)](#FlaskOliver)
 
 <!-- vscode-markdown-toc-config
@@ -271,7 +271,7 @@ The most important parameter of MOG2 is the kernel size which controls the sensi
 ### <a name='Baselinewithbackgroundsubtractionandblobdetection'></a>Baseline with background subtraction and blob detection
 (Aleks)
 
-### <a name='BackgroundsubtractionTinyYOLO'></a>Background subtraction + Tiny YOLO 
+### <a name='BackgroundsubtractionYOLOv4tiny'></a>Background subtraction + YOLOv4 tiny 
 (Maximilian Nitsche)
 
 During the labeling process we noticed ourselves that bees are much easier to localize by the human eye if you face a series of frames and see the differences between frames instead of each frame individually. As CNNs themselves are somewhat motivated by the biological eye, we tried to transfer this finding to an initial model. Blob detection is only performing on background subtraction in very calm situations without much movement of the background i.e. the flower or bush itself. Therefore the motivation of feeding a CNN with background subtraction frames is also that the model learns to ignore flower borders or noise and is able to detect bees based on their outline (see the exemplary image below).
@@ -280,7 +280,27 @@ During the labeling process we noticed ourselves that bees are much easier to lo
 
 We first [split](tracking/video_splitter.py) the videos and labeled the resulting frames. Afterwards we used the orginal video footage and the splitter again to split the videos into the same frames but this time we applied background subtraction in advance.
 
-Since background subtraction can become very slow in cases of a lot of movement and as it is already a data reduction technique we decided that a more shallow but faster model version of YOLO would be sufficient. Hence, we trained a YOLOv4-Tiny on the given dataset. 
+Since background subtraction can become very slow in cases of a lot of movement and as it is already a data reduction technique we decided that a more shallow but faster model version of YOLO would be sufficient. Hence, we trained a YOLOv4 tiny on the given dataset. YOLOv4 tiny has a very similar architecture as the common YOLOv4 model but - as the name suggests - the network size is significantly compressed to ensure faster inference in acceptance of a lower prediction accuracy by reducing the number of convolutional layers in the CSP backbone (see [YOLOv4](###YOLOv4) for more details)
+
+
+In order for us to train a robust CNN-model we run the frames through a pipeline of augmentations to double the dataset size. In addition to the usual background subtraction, the following augmentation techniques were incorporated into the dataset to increase the model robustness and the diversity of the frames. 
+
+``` yaml
+Outputs per training example: 2 -> double the training size
+Flip: Horizontal, Vertical 
+Crop: 0% Minimum Zoom, 25% Maximum Zoom
+Shear: ±15° Horizontal, ±15° Vertical
+Noise: Up to 15% of pixels <- relevant to simulate additional noise
+``` 
+
+The results of the hybrid approach first seemed to be very promising as the YOLOv4 tiny model were able to detect even partly occluded bees and also ignore noise generated by a moving background. However, the performance again only applied to a certain degree of noise caused by background movement and heavily depend on the scene setting (as can be seen below). 
+
+<p float="center">
+  <img src="doku_resources/bs_tiny_same_distance.png" width="400" />
+  <img src="doku_resources/bs_tiny_different_scene.png" width="400" /> 
+</p>
+
+Therefore, the hybrid approach of background subtraction together with a more simplistic detection model like blob dection or shallow CNNs is utilized by the system in very calm situations. The full details of how we make use of the combination can be found in the [tracking section](#Tracker).
 
 ### <a name='SSDOLI'></a>SSD (OLI)
 
@@ -331,7 +351,7 @@ With our use case in mind, we decided to adopt average precision at IOU=0.5 as t
 
 Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives one simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
 
-### <a name='BaselineModelTraining'></a> Training Baseline
+### <a name='TrainingBaseline'></a> Training Baseline
 To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
 
 
@@ -525,7 +545,9 @@ After completing the installation process we ran our model. Here we faced some p
 ```
 Please note that this is the performance without tracking. As previously mentioned it is considered good practice to use a virtual environment for every project you work on. However, we could not find the error that led to the torchvision version error. To reduce inference time we converted our model weights to TensorFlow Lite Format. This is a lightweight version of TensorFlow specially developed to run on small devices. Surprisingly this did not lead to any reduction in performance when testing it on a Macbook Pro. Instead the inference time per frame was around 24 seconds per frame. Due to that we did not further explore this direction ad did not deploy it on the Jetson Nano. 
 
-## <a name='TrackerOliver'></a>Tracker (Oliver)
+## <a name='Tracker'></a>Tracker 
+
+(Oliver)
 A simple Centroid tracker was implemented. At first, the tracker from https://www.pyimagesearch.com/2018/07/23/simple-object-tracking-with-opencv/ was used. The tracker can be integrated as an object. Using the update function, the current bounding boxes of frame t are passed to the tracker, which matches them with the bounding boxes from the previous step t-1 and thus assigns the tracking IDs. The matching takes place via the distances between the centres of the bounding boxes. Current bounding boxes that are not matched get a new ID. For IDs / past bounding boxes that are not matched with current bounding boxes, the disappearance counter is increased by one. If it reaches a certain threshold, the ID is deleted and not reassigned. The counter is set to 0 again when these are matched again. 
 
 A new tracker was implemented based on the functionality of the previous tracker. As the tracker described above has no argument to set a threshold that limits the pixel distance of the matching. Furthermore, the code of the tracker was significantly shortened, the basis of the matching is still the pixel distance of the centres of the bounding boxes, but the actual matching is now solved by linear sum assignment of scipy. The linear sum assignment problem is also known as minimum weight matching in bipartite graphs. 
