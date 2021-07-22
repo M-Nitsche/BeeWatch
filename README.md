@@ -450,6 +450,39 @@ We did that for 50 iterations assuming that after 10 epochs good parameters woul
 | second hyp. tuning (inc. aug.)| 0,809 | 0,621 |    0,66    | 0,72  | 0,721 |    0,693    |
 | third hyp. tuning (inc. aug.) | 0,803 | 0,576 |    0,639   | 0,765 | 0,568 |    0,57     |
 
+The specifications of the hyperameters from our final model (second hyp. tuning (inc. aug.) are listed below and the file is also available in the repository together with weights.
+
+```yaml
+hyp:
+      anchor_t: 4.05
+      box: 0.04
+      cls: 0.6
+      cls_pw: 1.0
+      copy_paste: 0.0
+      degrees: 0.373
+      fl_gamma: 0.0
+      fliplr: 0.5
+      flipud: 0.05
+      hsv_h: 0.015
+      hsv_s: 0.7
+      hsv_v: 0.363
+      iou_t: 0.2
+      lr0: 0.01
+      lrf: 0.2
+      mixup: 0.0
+      momentum: 0.938
+      mosaic: 1.0
+      obj: 1.02
+      obj_pw: 1.0
+      perspective: 0.0
+      scale: 0.898
+      shear: 0.602
+      translate: 0.245
+      warmup_bias_lr: 0.0711
+      warmup_epochs: 3.18
+      warmup_momentum: 0.802
+      weight_decay: 0.0005
+```
 
 ### <a name='FinalResults'></a>Final Results 
 
