@@ -644,17 +644,35 @@ Compared to object detection, the fps increases by 0.7 to 6.3 fps when using blo
 
 # <a name='Flask'></a>Flask - Frontend
 (Oliver) 
-
+A frontend with a Flask server was implemented. The server hosts a website which acts as our frontend. To implement this new packages a required to be installed. These can be installed on the Jetson via pip:
 ```
   Flask >= 2.0.1
   Flask-Bootstrap >= 3.3.7.1
   natsort >= 7.1.1
 ```
+The Flask package is a micro web framework for python, it allows to add extensions to it like Flask-Bootstrap, which renders the HTML with free and open-source CSS from Bootstrap 3 (Bootstrap 3 is rather old).
+
+The server makes it easy to control the Jetson within a network. The detection is almost completely configurable in the website. Exemplary process on the website is shown [here]( https://www.youtube.com/watch?v=pLGIwBwWGps) (real time on the Jetson Nano, screen capture).
+
+The server structure can be seen in the image below. Here, shapes highlighted in blue are websites. The individual arrows represent links. When the server is started, you are on the start page, from here you can go to a short documentation or to the source and method selection. The dotted shapes represent arguments that can be configured on the website. Arguments like the method selection determine the further course on the website. For example, the hybrid methods can only be used with the Centroid tracker. As the hybrid methods are based on matching by the tracker. Blob detection does not use object detection and you are therefore not redirected to the page where you configure object detection. If you select the Centroid tracker, you can configure it further. This is followed by the inference. Here the image with the tracking information / object recognition etc. is streamed. From here you can go on to the results at any moment. On the results page you can select an evaluation file and the graphs will be updated with the evaluation data. 
+
+![flask](doku_resources/flask3.png)
+
+Important: in the yolov5 folder there must be a folder called data, here the system searches for images/videos to recognise bees on them, put videos or photos here to be able to recognise them. Furthermore, there must be a folder called eval_data in the tracking folder for the evaluation, the JSON file for the evaluation should be located here. 
+
+All tracker files have a yield return and are therefore generators. The Flask server only starts the script of the tracker, which returns the tracking information and the current image. The image is streamed via a Flask Response element. Here the image is streamed without compression, which means that the Jetson should also have a good internet connection for the upload in its own network. 
 
 Running the prerecorded video on the flask server led to a performance of 0,16 seconds per frame. A slight decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.17 seconds per frame. 
 
 ## <a name='Camera'></a> Integration of the CSI camera and in real life deployment
 (Oliver)
+
+Based on the [GIT repository](https://github.com/JetsonHacksNano/CSI-Camera) the file datasets.py under yolov5/utils/ was extended by another object LoadWebcam_Jetson. A GStreamer pipeline is defined here. The handling of the camera is very fragile and it took some time to integrate it. If problems occur, it is recommended to restart the daemon with the command: sudo service nvargus-daemon restart. 
+
+In order to collect real recordings with the Jeston, it was deployed in a real environment. It was controlled from the outside via the Flask interface. To attract bees, several different flowers were collected and the camera was pointed at them. Unfortunately, only one bee was attracted and filmed in 6 hours. The video can be found [here]( https://www.youtube.com/watch?v=S1K3mEyAv1s). To prevent overheating during this time, a sunshade was set up. 
+
+The GStreamer pipeline used for the camera requires a connection that can display a graphical terminal, even if one does not want to use it. So an X11 server had to be set up. This is not directly supported by Windows. For this purpose, Xming for Windows was installed and Putty was configured: the configuration can be found [at](https://www.tutonaut.de/x11-forwarding/). On the Jetson, this server is started in the terminal using startx. In another terminal, the display output must be specified by export DISPLAY=:0.0 (given this is 0.0). 
+
 # <a name='Lessons-Learned'> Lessons Learned
 
 
