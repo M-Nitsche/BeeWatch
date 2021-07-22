@@ -8,7 +8,7 @@ def create_label_map(objs_path, label_map_path):
 
     classes = ['bee']
 
-    # save label_map as json for Mask R-CNN
+    # save label_map as json 
     label_map = {}
     for id, label_class in enumerate(classes, start=1):
         label_map[id] = label_class
