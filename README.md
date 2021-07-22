@@ -37,6 +37,8 @@
 * [Deployment process](#Deploymentprocess)
 * [Tracker - Centroid tracker](#Tracker)
 * [Hybrid and other methods for detection](#Hybrid)
+ 	* [Blob detection with object detection as a corrector](#BlobCorr) 
+	* [Blob detection and object detection](#BlobAnd) 
 * [Flask - Frontend](#Flask)
 	* [Integration of the camera and real life deployment](#Camera)
 * [Extra - Case](#Extra-Case)
@@ -588,6 +590,10 @@ The output of all trackers are the IDs, tracking information and the image with 
 Furthermore, an attempt was made to implement the MultiTracker from OpenCV. These are no longer up to date and in legacy of OpenCV. They are very cumbersome to implement, lead to many errors and were therefore discarded.
 
 # <a name='Hybrid'></a> Hybrid and other methods for bee detection with trackers
+(Oliver)
+## <a name='BlobCorr'></a> Blob detection with object detection as a corrector
+
+## <a name='BlobAnd'></a> Blob detection and object detection
 
 # <a name='Flask'></a>Flask - Frontend
 (Oliver) 
@@ -596,7 +602,7 @@ Furthermore, an attempt was made to implement the MultiTracker from OpenCV. Thes
 Running the prerecorded video on the flask server led to a performance of 0,16 seconds per frame. A slight decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.17 seconds per frame. 
 
 ## <a name='Camera'></a> Integration of the CSI camera and in real life deployment
-
+(Oliver)
 # <a name='Lessons-Learned'> Lessons Learned
 
 
