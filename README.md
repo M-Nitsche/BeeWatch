@@ -401,7 +401,7 @@ However data's effectiveness is best measured when in use, so we tried multiple 
 artificial data to the training set. Starting at 100 images (which adds up to 5% of training set) moving up to 450 images (19.5%). 
 We found, that adding data the models' performance increased noticeably up to about 500 images. After that, the performace tended to decrease again on the validation set. This may be because the model learns features that the synthetic data brings, but which are not typical for the real world.
 However, the limited number of artificial images in the training set led to a significant increase in the model as can be seen in table below. While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
-
+The plot below shows the distribution of the two datasets - with and without the artificial images.
 <p float="center">
   <img src="doku_resources/labels_with_artificial.jpg" width="400" />
   <img src="/doku_resources/labels_without_artificial.jpg" width="400" /> 
@@ -412,7 +412,6 @@ However, the limited number of artificial images in the training set led to a si
 |------------------------------|-------|-------|------------|-------|-------|-------------|
 | without artificial data (baseline)      |  0,75 | 0,546 |    0,574   | 0,544 |  0,43 |    0,449    |
 | with artificial data (19.5%) | 0,741 | 0,597 |    0,626   | 0,805 | 0,767 |    0,763    |
-| modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 
 ### <a name='AddedDataAugmentation'></a>Added Data Augmentation
 (Andrea Bartos)
@@ -426,9 +425,6 @@ The performance after 300 epochs is as follows. Compared to the performance with
 | with artificial data (19.5%) & adjusted run-time augmentation| 0.789 | 0.524 |    0.608  |  0.769 | 0.697  |    0.739  |           
 ---------------------------------------------------------------------------------------------------------------------------
 
-
-            
-
 Exemplary training images will look as follows:
 
 <p align="center">
@@ -440,13 +436,16 @@ Exemplary training images will look as follows:
 ### <a name='HyperparameterTuning'></a>Hyperparameter Tuning
 (David Blumenthal)
 
-Apart from perfecting the training dataset, hyperparameter tuning can be used to increase the models performance. YOLOv5 offers 25 hyperparameters including those with regard to test time augmentation. The YOLOv5 implementation offers functionality that can support in finding good hyperparameters.
-With Google Colab as our training environnement computing resources - especially time - is very limited, hence we had to work to with assumptions. First we defined a base scenario from which we wanted to approve. The base scenario was a standard YOLOv5s model with pretrained weights on the COCO dataset which we trained for 10 epochs. With the "evolve" function the model tries to find better parameters using a genetic algorithm with the main operators crossover and mutation with a 90% probability and 0.04 variance. [Github Yolov5](https://github.com/ultralytics/yolov5/issues/607)
-We did that for 50 iterations. We assumed that after 10 epochs good parameters would be found and would be also beneficial in a full training.  
+Apart from perfecting the training dataset, hyperparameter tuning can be used to increase the models performance. YOLOv5 offers 25 hyperparameters including those with regard to test time augmentation. The best model is selected based on its fitness. The fitness function is a weighted combination of the metrics [Recall, Precision, mAP@0.5, mAP@0.5:0.95] with standard allocations of [0, 0, 0.1, 0.9]. As we are struggling with low recall, we have put more emphasis on it, and redistributed mainly from mAP@0.5:0.95. However in the evaluation the model performed slightly worse than our benchmark model - even on Recall...
+Hence for further hyperparameter tuning we left the fitness function on its standard allocation.
+The YOLOv5 implementation offers functionality that can support in finding good hyperparameters.
+With Google Colab as our training environnement computing resources - especially time - is very limited, hence we had to work with assumptions. First we defined a base scenario from which we wanted to approve. The base scenario was a standard YOLOv5s model with pretrained weights on the COCO dataset which we trained for 10 epochs on our dataset. With the "evolve" function the model tries to find better parameters using a genetic algorithm with the main operators crossover and mutation, with a 90% probability and 0.04 variance. [Github Yolov5](https://github.com/ultralytics/yolov5/issues/607)
+We did that for 50 iterations assuming that after 10 epochs good parameters would be found that would also be beneficial in a full training. Multiple runs were conducted and the best 3 are listed below.  The row 'tuned hyperparameters' is the run with the exact parameters the evolve function returned after 50 epochs. In third row, we took the same hyperparameters but increased the augmentations further than what resulted from the evolve function. Since increasing the augmentation parameters led to a further improvement, we increased the parameters again (third hyp.), but this turned out to be too much, as the performance of the model decreased again.
 
 
 | Training                      | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
 |-------------------------------|-------|-------|------------|-------|-------|-------------|
+| modified fitness function    | 0,721 | 0,563 |    0,595   | 0,768 | 0,616 |    0,668    |
 | tuned hyperparameter          | 0,788 | 0,562 |    0,611   | 0,831 | 0,686 |    0,747    |
 | second hyp. tuning (inc. aug.)| 0,809 | 0,621 |    0,66    | 0,72  | 0,721 |    0,693    |
 | third hyp. tuning (inc. aug.) | 0,803 | 0,576 |    0,639   | 0,765 | 0,568 |    0,57     |
@@ -456,8 +455,8 @@ We did that for 50 iterations. We assumed that after 10 epochs good parameters w
 
 The the following plots of the two best models we trained are shown to support argumentation why we choose one model over the other.
 Model 1 = with artificial data (19.5%); Model 2 = second hyp. tuning
-As seen in the charts below Model 2 outperformed Model 1 overall except for precision. However as seen in the table above Model 1 did better on our (small) test set. In order to come to a final decision we did a descriptive analysis of the performance of both models  on a video which contained clips from various flowers and perspectives. 
-This lead to chose Model 2 over Model 1. 
+As seen in the charts below, Model 2 outperformed Model 1 overall except for precision. However as seen in the table above Model 1 did better on our (small) test set. In order to come to a final decision we did a descriptive analysis of the performance of both models  on a video which contained clips from various flowers and perspectives. 
+This lead us to chose Model 2 over Model 1. 
 
 <p float="center">
   <img src="doku_resources/preci.png" width="300" />
@@ -465,7 +464,10 @@ This lead to chose Model 2 over Model 1.
   <img src="doku_resources/map05.png" width="300" />
 </p>
 
-The next step was to determine the correct confidence level for the model, because the level of confidence has a significant influence on its performance. The correct confidence is a tradeoff between recall and precision.  As is clearly visualised by the plots below. Recall drops steeply with a confidence > 0.7, whereas the modus operandi of precision is reversed relative to recall. We further evaluated on the test video already mentioned in the previous part and the results of 0.7 and 0.5 confidence are uploaded.
+The next step was to determine the correct confidence level for the model, because the level of confidence has a significant influence on its performance. The correct confidence is a tradeoff between recall and precision.  As is clearly visualised by the plots below. Recall drops steeply with a confidence > 0.7, whereas the modus operandi of precision is reversed relative to recall. We further evaluated on the test video already mentioned in the previous parts and the results of 0.7 and 0.5 confidence are uploaded and are available for download.
+
+[conf_0.5](doku_resources/test_video_conf05.mp4)
+[conf_0.7](doku_resources/test_video_conf07.mp4)
 
 <p float="center">
   <img src="doku_resources/prec_conf.png" width="300" />
@@ -473,15 +475,12 @@ The next step was to determine the correct confidence level for the model, becau
   <img src="doku_resources/f1_conf.png" width="300" />
 </p>
 
-We further evaluated on the test video already mentioned in the previous part and the results of 0.7 and 0.5 confidence are uploaded.
-
-(![conf_0.5](doku_resources/test_video_conf05.mp4))
-(![conf_0.7](doku_resources/test_video_conf07.mp4))
-
 Judging from the plots and the videos we decided to with a 0.7 confidence.
 
+*What is also clear from the videos is that the quality of the models predictions depends strongly on the background flowers. As we did not manage to acquire enough pictures of different flowers in this short time, we recommend using the weights provided and finetuning them to new flowers. The early layers should be frozen and the model trained for a small number of epochs on images of the new flower. A small data set should be sufficient for this. Unfortunately, due to time constraints, we were not able to evaluate this in detail.*
 
 # Deployment
+
 (Christin Scheib)  
 The Jetson Nano is a small powerful device optimized for IoT applications. It comes  with a Quad-core ARM Cortex-A57 MPCore processor, NVIDIA Maxwell architecture with 128 NVIDIA CUDA cores and 4GB RAM. The Jetson Nano does not come with the Linux architecture already setup, instead it is the first step to write the Image file to the SD Card to boot and setup the system. After a successful setup we also added an ssh connection in order to control the device from a laptop. 
 
