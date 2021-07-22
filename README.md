@@ -37,7 +37,7 @@
 * [Deployment process](#Deploymentprocess)
 * [Tracker](#Tracker)
 * [Flask](#Flask)
-* [Extra - Case](#Extra - Case)
+* [Extra - Case](#Extra-Case)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -599,7 +599,7 @@ Running the prerecorded video on the flask server led to a performance of 0,16 s
 
 Even though the Jetson Nano is optimized for IoT applications it has its limitations. As YOLOv5 is a quite large model it uses a lot of the system's resources. This leads to non-responsiveness and freezing during the loading of the model. Here it would be interesting to compare the performance of smaller models that are optimized to running on these devices. 
 
-# <a name='Extra - Case'></a> Extra - Case
+# <a name='Extra-Case'></a> Extra - Case
 (Oliver)
 A suitable case was modelled in honeycomb structure for the deployment. This was commissioned, but could not be printed to the required standard. 
 
