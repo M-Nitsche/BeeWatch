@@ -592,12 +592,20 @@ Furthermore, an attempt was made to implement the MultiTracker from OpenCV. Thes
 
 # <a name='Hybrid'></a> Hybrid and other methods for bee detection with trackers
 (Oliver)
+The pure object recognition has been extended by three additional methods for bee recognition. These can be found in the tracking folder. One of these methods uses only blob detection for bee detection, the procedure is shown below. Here blob detection stands for two steps: the calculation of the background subtraction by the OpenCV background subtractor MOG2 and the actual blob detection on the background subtraction. To use this method, blob_det_correct_tracker_centroid.py or blob_det_add_tracker_centroid.py can be used by setting the argument det_and_blob to False. 
+
+<p float="center">
+  <img src="doku_resources/blob_centroid.png" width="300" />
+</p>
+
+The other two methods combine object detection and blob detection into a hybrid model. The hybrid methods try to combine the advantages of both methods. Blob detection is slightly faster (per frame on the Jetson 0.14 seconds) and also detects fast, blurred bees. While object detection can also detect standing bees and is more trustworthy in its prediction. Further, blob detection (background substraction and blob detection) could be accelerated with OpenCV for GPUs. So far, this runs on the CPU, which means that the advantage of this hybrid method is greater on other edge devices like the Raspberry Pi.
+
 ## <a name='BlobCorr'></a> Blob detection with object detection as a corrector
-
+(Oliver)
 ## <a name='BlobAnd'></a> Blob detection and object detection
-
+(Oliver)
 ## <a name='Compar'></a> Comparing the methods
-
+(Oliver)
 # <a name='Flask'></a>Flask - Frontend
 (Oliver) 
 
