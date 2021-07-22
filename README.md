@@ -6,28 +6,27 @@
 * [Labeling](#Labeling)
 	* [Object detection labeling](#Objectdetectionlabeling)
 	* [Object tracking labeling](#Objecttrackinglabeling)
-	* [Dataset](#Dataset)
-		* [Additional data sources](#Additionaldatasources)
-		* [Mosaic dataset](#Mosaicdataset)
-		* [Synthetic dataset generation](#Syntheticdatasetgeneration)
+* [Additional data sources](#Additionaldatasources)
+	* [Mosaic dataset](#Mosaicdataset)
+	* [Synthetic dataset generation](#Syntheticdatasetgeneration)
 	* [Resulting datasets](#Resultingdatasets)
 * [Data Preprocessing](#DataPreprocessing)
 	* [Final Dataset](#FinalDataset)
 	* [Data Augmentation](#DataAugmentation)
 * [Model building](#Modelbuilding)
+ 	* [Model selection](#Modelselection)
 	* [Background subtraction](#Backgroundsubtraction)
 	* [Baseline with background subtraction and blob detection](#Baselinewithbackgroundsubtractionandblobdetection)
 	* [Background subtraction + Tiny YOLO](#BackgroundsubtractionTinyYOLO)
-	* [Model selection](#Modelselection)
-	* [Evaluation Metric](#EvaluationMetric)
-	* [Training Enviornment](#TrainingEnviornment)
 	* [SSD (OLI)](#SSDOLI)
-	* [EfficientDet](#EfficientDet)
 	* [YOLO](#YOLO)
 	* [YOLOv4](#YOLOv4)
 	* [YOLOv5](#YOLOv5)
 		* [Why did we go with YOLOv5?](#WhydidwegowithYOLOv5)
 * [Model Training](#ModelTraining)
+ 	* [Evaluation Metric](#EvaluationMetric)
+	* [Training Enviornment](#TrainingEnviornment)
+	* [Training Baseline](#BaselineModelTraining)
 	* [Freezing Layers](#FreezingLayers)
 	* [Adding Artificial Data](#AddingArtificialData)
 	* [Added Data Augmentation](#AddedDataAugmentation)
@@ -72,7 +71,7 @@ Detection of individual bees to quantify activity TODO
 
 ## <a name='DataGathering'></a>Data Gathering
 (Aleksandar Ilievski)  
-For the data collection process, pictures and videos were taken of bees using different devices. A summary of the devices that were used can be found in the table below. The data collection process proved to be difficult for a multitude of reasons. First, bee activity is highly dependent on the weather. Since the project started in the end of April, the weather in Karlsruhe was very rainy. In May, Karlsruhe had 22 rainy days and in June there were 17.[29] This meant that there was quite a short time frame for data collection. Both pictures and videos were collected. During the first data collection round there was also a lot of wind which caused movement of plants in the videos. This is particularly problematic for the usage of background subtraction, since it creates a lot of noise in the footage (see Background subtraction + Tiny YOLO). In general, collecting data outside can be difficult because the quality of data is also impacted by sunlight exposure which is something the model needs to be robust again and thus, proving this use case to be quite complex. Second, it is challenging to take pictures of living insects as they are very small and move fast. When there was wind, the bees tended to move even more rapidly. Therefore, taking a clear picture from an acceptable distance took some practice in the beginning. 
+For the data collection process, pictures and videos were taken of bees using different devices. A summary of the devices that were used can be found in the table below. The data collection process proved to be difficult for a multitude of reasons. First, bee activity is highly dependent on the weather. Since the project started in the end of April, the weather in Karlsruhe was very rainy. In May, Karlsruhe had 22 rainy days and in June there were 17.[29] This meant that there was quite a short time frame for data collection. Both pictures and videos were collected. During the first data collection round there was also a lot of wind which caused movement of plants in the videos. This is particularly problematic for the usage of background subtraction, since it creates a lot of noise in the footage (see Background subtraction + Tiny YOLO). In general, collecting data outside can be difficult because the quality of data is also impacted by sunlight exposure which is something the model needs to be robust again and thus, proving this use case to be quite complex. Second, it is challenging to take pictures of living insects as they are very small and move fast. When there was wind, the bees tended to move even more rapidly. Therefore, taking a clear picture from an acceptable distance took some practice in the beginning. We manged to colled
 
 | Device        | Camera/Resolution  |
 | ------------- |:-------------:|
@@ -81,6 +80,22 @@ For the data collection process, pictures and videos were taken of bees using di
 | iPhone 7      | 12 MP         |  
 | iPhone 11 Pro | 12 MP         |
 | iPhone 12 Pro | 12 MP         |
+
+
+In total we managed to collect 2400 bee images. 
+
+| Image source  | count         |
+| ------------- |:-------------:|
+| own images    | 2.400           
+
+Exemplary images can be found below 
+
+<p align="center">
+  <img src="/doku_resources/image_1.jpg" width="350" />
+  <img src="/doku_resources/image_2.jpg" width="350" />
+  <img src="/doku_resources/image_3.jpg" width="350" />
+  <img src="/doku_resources/image_4.jpg" width="350" />
+</p>
 
 
 ## <a name='Labeling'></a>Labeling 
@@ -108,28 +123,10 @@ Unfortunately, the tool did not support a standard label format, such as YOLO or
 
 The resulting labels are later on used by the Flask interface to visually evaluate various tracking approaches regarding their over- or underestimation of bee activity within a given timespan.
 
-### <a name='Dataset'></a>Dataset 
-(David Blumenthal)
-To further extend the dataset we made use of various other openly accessible sources. Searching online, we found a labeld bee dataset from researchers of the Monash University. However as this training set only offers images with two different background flowers, we were only able to use a limited number of images so that the model would not specialise on these specific backgrounds. The distribution of images sources can be seen in the table below. 
-
-| Image source  | count         |
-| ------------- |:-------------:|
-| [Malika Nisal Ratnayake et. al.](https://bridges.monash.edu/articles/dataset/Honeybee_video_tracking_data/12895433)| 436       |  
-| own images    | 2.400           
-
-The images below show different images that are in the training dataset. 
-
-<p align="center">
-  <img src="/doku_resources/image_1.jpg" width="350" />
-  <img src="/doku_resources/image_2.jpg" width="350" />
-  <img src="/doku_resources/image_3.jpg" width="350" />
-  <img src="/doku_resources/image_4.jpg" width="350" />
-</p>
-
-#### <a name='Additionaldatasources'></a>Additional data sources 
+### <a name='Additionaldatasources'></a>Additional data sources
 (Maximilian Nitsche)
 
-The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality ("Garbage in, garbage out") and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images. In order to collect another 1000 bee images we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. As the quality of the queried images heavily depend on the search string, we evaluated various keywords in advance. The search strings were iteratively evluated by a brief review of the responses and resulted in the following final search string: "bee flowers", "flowers" and "flower bushes".
+The collected image footage is quite limited regarding the diversitiy of different flower types and colors. As the performance of computer vision applications primarly depend on the quality ("Garbage in, garbage out") and especially the diversity of the training dataset, we decided to complement the collected data by a more comprehensive and diverse set of images from various other openly accessible sources. Searching online, we found a labeld bee dataset from researchers of the Monash University.  However as this training set only offers images with two different background flowers, we were only able to use a limited number of images so that the model would not specialise on these specific backgrounds. In order to collect another 1000 bee images we picked the public image and video hosting platform [flickr](https://www.flickr.com) to do a structured search string query. Flickr is due to the extensive supply of word-tagged images from various domains a common and well-known tool for the creation of computer vision datasets. In order for us to comply with data privacy and protection guidelines, we only queried images listed under creative common licence. As the quality of the queried images heavily depend on the search string, we evaluated various keywords in advance. The search strings were iteratively evluated by a brief review of the responses and resulted in the following final search string: "bee flowers", "flowers" and "flower bushes".
 
 We first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###Labeling) an additional batch of 1000 bee images and two videos, which were seperated into individual frames. Moreover, we downloaded 1000 images of flowers or bushes without any bees as these are especially usefull as null images and were used for the proceeding synthetic data generation as background images (see [Synthetic dataset generation](####Synthetic-dataset-generation)).
 
@@ -170,6 +167,7 @@ Exemplary representations of the synthetically generated data can be found below
 | Flickr - (Mosaic) images| 1000  |  1034 | 0
 | Flickr - Video frames | 741 (360 + 381) |  2398 | 167 
 | Synthetic images  | 1000     | 7801 | 0
+| [Malika Nisal Ratnayake et. al.](https://bridges.monash.edu/articles/dataset/Honeybee_video_tracking_data/12895433)| 436       |  ? |  ? 
 
 
 ## <a name='DataPreprocessing'></a>Data Preprocessing
@@ -234,6 +232,31 @@ Copy_paste: 0.0  -> only available for segment labels not bounding boxes; theref
 
 
 ## <a name='Modelbuilding'></a>Model building
+
+### <a name='Modelselection'></a>Model selection
+(Andrea Bartos)
+
+To solve the task of object detection there are generally two available approaches, namely one-stage and two stage detection algorithms. When performing object detection, there are two tasks that need to be solved. For one, object localization and for the other the task of object classification. In two stage algorithms, such as R-CNN, Fast R-CNN, Faster R-CNN, these tasks are performed separately. In one-stage detection algorithms, such as YOLO, object classification and localization are performed in a single pass. This has the advantage that these algorithms are usually faster than two-stage detectors, but under the trade off that they are less accurate. With respect to our goal of real-time object detection of bees with a deployed model on the Jetson nano, inference speed plays a major role. Among the two-stage detection algorithms, only the Faster R-CNN is suitable as an algorithm, which can be derived from the following diagram.[31] 
+
+<p align="center">
+  <img src="doku_resources/Comparison of test-time speed of object detection algorithms.png" width="500" />
+</p>
+
+However, since fast inference is key when it comes to real-time detection, thus to our use case, we decided to place our focus on one stage detection algorithms as they tend to fulfill this property. Therefore, we were searching for models with low inference time (ms) and therefore a high score of FPS and high mAP. Furthermore, since the storage capacity is limited on the jetson nano, the size of these models is also taken into consideration.
+
+Looking at the following diagrams and [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) while considering our decision criteria, we decided to look into the following models: YOLOtiny, Yolov5, SSD
+
+<p align="center">
+   <img src="doku_resources/Inference Benchmarks jetson.png" width="700" />
+</p>
+sourced from https://developer.nvidia.com/embedded/jetson-nano-dl-inference-benchmarks
+
+<p align="center">
+   <img src="doku_resources/MS_COCO.png" width="500" />
+  <img src="doku_resources/YOLOv5_performance.png"  width="500" />
+</p>
+sourced from https://arxiv.org/pdf/2004.10934.pdf and https://blog.roboflow.com/yolov5-is-here/
+
 ### <a name='Backgroundsubtraction'></a>Background subtraction
 (Maximilian Nitsche)
 
@@ -259,58 +282,11 @@ We first [split](tracking/video_splitter.py) the videos and labeled the resultin
 
 Since background subtraction can become very slow in cases of a lot of movement and as it is already a data reduction technique we decided that a more shallow but faster model version of YOLO would be sufficient. Hence, we trained a YOLOv4-Tiny on the given dataset. 
 
-
-
-### <a name='Modelselection'></a>Model selection
-(Andrea Bartos)
-
-To solve the task of object detection there are generally two available approaches, namely one-stage and two stage detection algorithms. When performing object detection, there are two tasks that need to be solved. For one, object localization and for the other the task of object classification. In two stage algorithms, such as R-CNN, Fast R-CNN, Faster R-CNN, these tasks are performed separately. In one-stage detection algorithms, such as YOLO, object classification and localization are performed in a single pass. This has the advantage that these algorithms are usually faster than two-stage detectors, but under the trade off that they are less accurate. With respect to our goal of real-time object detection of bees with a deployed model on the Jetson nano, inference speed plays a major role. Among the two-stage detection algorithms, only the Faster R-CNN is suitable as an algorithm, which can be derived from the following diagram.[31] 
-
-<p align="center">
-  <img src="doku_resources/Comparison of test-time speed of object detection algorithms.png" width="500" />
-</p>
-
-
-
-However, since fast inference is key when it comes to real-time detection, thus to our use case, we decided to place our focus on one stage detection algorithms as they tend to fulfill this property. Therefore, we were searching for models with low inference time (ms) and therefore a high score of FPS and high mAP. Furthermore, since the storage capacity is limited on the jetson nano, the size of these models is also taken into consideration.
-
-Looking at the following diagrams and [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) while considering our decision criteria, we decided to look into the following models: EfficientDet, SSD and YOLO
-
-<p align="center">
-   <img src="doku_resources/Inference Benchmarks jetson.png" width="700" />
-</p>
-sourced from https://developer.nvidia.com/embedded/jetson-nano-dl-inference-benchmarks
-
-<p align="center">
-   <img src="doku_resources/MS_COCO.png" width="500" />
-  <img src="doku_resources/YOLOv5_performance.png"  width="500" />
-</p>
-sourced from https://arxiv.org/pdf/2004.10934.pdf and https://blog.roboflow.com/yolov5-is-here/
-
-
-
-
-### <a name='EvaluationMetric'></a>Evaluation Metric
- (Andrea Bartos)
-
-While researching possible evaluation metrics, we quickly came to realize that there are many variations to the two numerical metrics average precision (AP) and average recall (AR). AP can be defined as the area under the interpolated precision-recall curve.  AR is the recall averaged over all IoU ∈ [0.5,1.0].
-Mean average precision (mAP) is defined as the mean of AP across all K classes. Accordingly, Mean average recall (mAR) is defined as the mean of AR across all 
-K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [32] 
-With our use case in mind, we decided to adopt average precision at IOU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IOU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
-
-### <a name='TrainingEnviornment'></a>Training Enviornment
-(David Blumenthal)
-Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives one simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
-
-
 ### <a name='SSDOLI'></a>SSD (OLI)
-
-### <a name='EfficientDet'></a>EfficientDet 
-(Maximilian Nitsche)
-
 
 ### <a name='YOLO'></a>YOLO
 (David Blumenthal)
+
 YOLO has been first introduced in 2016 and set a milestone in object detection research due its capability to detect object in real-time with better accuracy.
 It was first introduced by Joseph Redmon and developed further by him up to Yolov3. The versions were implemented in the Darknet framework. Later the v3 Version was also implemented in PyTorch by Glenn Jocher of Ultralytics LLC who as we will later see is also responsible for the controversially discussed yolov5. [https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109](https://towardsdatascience.com/yolo-v4-or-yolo-v5-or-pp-yolo-dad8e40f7109)
 Joseph Redmon, the initiator of Yolo, announced in the spring of 2020 that he has stopped his research in computer vision due to several concerns regarding military applications and privacy concerns. [His tweet](https://twitter.com/pjreddie/status/1230524770350817280) 
@@ -330,6 +306,7 @@ To improve performance the authors introduced different methods to improve the m
 YOLOv4 gets its improvements through a selection and implementations of different BoF-methods like CutMix and Mosaic data augmentation, CIoU-loss, Optimal hyperameters (evolution) etc. and for BoS-methods mish activation and using multiple anchors for a single ground truth are used. Just to name a few - a full list and explanation can be found in the released paper. ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf))
 ### <a name='YOLOv5'></a>YOLOv5
 (David Blumenthal)
+
 Like already mentioned only two months after the initial of YOLOv4, YOLOv5 was published by Glenn Jocher. 
 YOLOv5 differs most from all other releases because this is a PyTorch implementation rather than a fork from the original Darknet. Same as the v4 version it implements the **CSP backbone**, the **PANet** as neck and the same head as **v3 and v4**. YOLOv5 has a total of 4 versions which mainly differ in number of parameters and layers. 
 ![yolov5_architecture](doku_resources/yolov5_architecture.jpg)
@@ -340,6 +317,21 @@ One huge advantage is model size in mb. The smallest versions weights (yolov5s) 
 
 
 ## <a name='ModelTraining'></a>Model Training
+
+### <a name='EvaluationMetric'></a>Evaluation Metric
+ (Andrea Bartos)
+
+While researching possible evaluation metrics, we quickly came to realize that there are many variations to the two numerical metrics average precision (AP) and average recall (AR). AP can be defined as the area under the interpolated precision-recall curve.  AR is the recall averaged over all IoU ∈ [0.5,1.0].
+Mean average precision (mAP) is defined as the mean of AP across all K classes. Accordingly, Mean average recall (mAR) is defined as the mean of AR across all 
+K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [32] 
+With our use case in mind, we decided to adopt average precision at IOU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IOU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
+
+### <a name='TrainingEnviornment'></a>Training Enviornment
+(David Blumenthal)
+
+Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives one simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
+
+### <a name='BaselineModelTraining'></a> Training Baseline
 To establish a baseline performance we trained the yolov5s - which is the smallest model of the yolov5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
 
 
@@ -349,6 +341,11 @@ To establish a baseline performance we trained the yolov5s - which is the smalle
 Throughout the process of model training, we quickly learned that it is a lot of trial and error. One main hurdle is the long training time before one can actually tell whether the given modification improves performance or not. Hence, we decided to leverage transfer learning to speed up the training time and thus have more time to train different configurations. Looking at Glenn Jocher's [implementation and results](https://github.com/ultralytics/yolov5/issues/1314), this approach seems promising. By freezing the backbone of yolov5 (layers 0-9), the performance was slightly lower, but the training time was significantly reduced. 
 
 Unfortunately, we experienced a different result. The training time was reduced significantly, yet the performance also decreased substantially, which is why we discarded this approach.
+
+| Training                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test | Training time|
+|------------------------------|-------|-------|------------|-------|-------|-------------||-------------|
+| without freezing layers     | ?  | ? |    ?   |  |  ?|   ?    ||
+| with freezing backbone | ? | ? |    ?   | ? | ? |    ?    | |
 
 ### <a name='AddingArtificialData'></a>Adding Artificial Data 
 (David Blumenthal)
@@ -381,7 +378,7 @@ The performance after 300 epochs is as follows:
 
 | Training                                                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
 |--------------------------------------------------------------|-------|-------|------------|-------|-------|-------------|
-| with artificial data (19.5%) & adjusted run-time augmentation| xxxxx | xxxxx |    xxxxx   | xxxxx | xxxxx |    xxxxx    |
+| with artificial data (19.5%) & adjusted run-time augmentation| xx?xx | xxx?x |    x?xxx   | x?xxx | x?xxx |    x?xxx    |
 ---------------------------------------------------------------------------------------------------------------------------
 
 Exemplary training images will look as follows:
