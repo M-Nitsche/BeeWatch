@@ -513,7 +513,37 @@ After completing the installation process we ran our model. Here we faced some p
 ```
 Please note that this is the performance without tracking. As previously mentioned it is considered good practice to use a virtual environment for every project you work on. However, we could not find the error that led to the torchvision version error. To reduce inference time we converted our model weights to TensorFlow Lite Format. This is a lightweight version of TensorFlow specially developed to run on small devices. Surprisingly this did not lead to any reduction in performance when testing it on a Macbook Pro. Instead the inference time per frame was around 24 seconds per frame. Due to that we did not further explore this direction ad did not deploy it on the Jetson Nano. 
 
-##  10. <a name='FlaskOliver'></a>Flask (Oliver)
+##  10. <a name='Tracker'></a>Tracker (Oliver)
+A simple Centroid tracker was implemented. At first, the tracker from https://www.pyimagesearch.com/2018/07/23/simple-object-tracking-with-opencv/ was used. The tracker can be integrated as an object. Using the update function, the current bounding boxes of frame t are passed to the tracker, which matches them with the bounding boxes from the previous step t-1 and thus assigns the tracking IDs. The matching takes place via the distances between the centres of the bounding boxes. Current bounding boxes that are not matched get a new ID. For IDs / past bounding boxes that are not matched with current bounding boxes, the disappearance counter is increased by one. If it reaches a certain threshold, the ID is deleted and not reassigned. The counter is set to 0 again when these are matched again. 
+
+A new tracker was implemented based on the functionality of the previous tracker. As the tracker described above has no argument to set a threshold that limits the pixel distance of the matching. Furthermore, the code of the tracker was significantly shortened, the basis of the matching is still the pixel distance of the centres of the bounding boxes, but the actual matching is now solved by linear sum assignment of scipy. The linear sum assignment problem is also known as minimum weight matching in bipartite graphs. 
+
+In the picture below you can see how the tracking on bees works. Within the threshold, the IDs or past midpoints of bounding boxes t-1 are matched with the current bounding boxes (ID 0 and 1).  Bees / bounding boxes outside the threshold get a new ID, here ID 3. ID 2 is not matched and the disapperance counter is incremented by one. 
+
+<p float="center">
+  <img src="doku_resources/Tracker_Describtion.png" width="150" />
+</p>
+
+Furthermore, the tracker was extended by the function new_id_registered. This provides information on whether new IDs would be assigned for given bounding boxes. This becomes important in the hybrid methods mentioned below.
+
+The trackers can be found in the tracking folder. All trackers can be used independently of the Flask environment, though the Flak environment uses them itself. The detect.py file from Yolov5 has been rewritten (run_detection) so that it is loaded as an object together with the Centroid tracker object in the individual trackers scripts. This does not affect the functionality of the detect file and all arguments and functions can still be used. 
+
+For example, tracker_centroid.py is a script that applies object detection and centroid tracking to given images/videos/streams, the sequence of the script is shown in the figure below.
+
+<p float="center">
+  <img src="doku_resources/obj_centroid.png" width="150" />
+</p>
+
+The output of all trackers are the IDs, tracking information and the image with tracking information. All trackers can record the tracking results per frame in txt files and save them under runs/detect/.../tracking/, under ../labels/ the object detection results can be found. Furthermore, tracking information can be written on the image. See the picture below. Detections and tracking describe the current objects detected and how many IDs are tracked (in the frame). Total detections are the summed detections up to this frame. Total bees describes the IDs detected so far, these describe the bees tracked. Furthermore, the trajectories of the bees are represented by the centres of the previous bounding boxes. All trackers extend the object detection arguments from detect.py with arguments that control these functions. 
+
+<p float="center">
+  <img src="doku_resources/tracking_example.png" width="500" />
+</p>
+
+Furthermore, an attempt was made to implement the MultiTracker from OpenCV. These are no longer up to date and in legacy of OpenCV. They are very cumbersome to implement, lead to many errors and were therefore discarded.
+
+
+##  11. <a name='FlaskOliver'></a>Flask (Oliver)
 to do 
 
 (Christin Scheib)
