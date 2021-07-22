@@ -615,6 +615,10 @@ If none of the above applies, the bounding boxes of the blob detection are passe
 If object detection is applied, new bounding boxes are obtained. These are matched with those of the blob detection. It is also done using the pixel distance (same procedure as with the Centroid tracker, with its own threshold: matching_threshold). This is where the correction takes place through the object detection. If there is no matching for a blob bounding box, it is discarded. If the object detection and blob detection bounding boxes are similar, the object detection bounding box is trusted more and the blob detection bounding box is ignored. If a bounding box of object detection is not matched, it is added to the bounding boxes which are passed to the Centroid tracker. Only these bounding boxes and their information are shown in the image. 
 
 <p float="center">
+  <img src="doku_resources/Tracker_Description2.png" width="300" />
+</p>
+
+<p float="center">
   <img src="doku_resources/ComparisonMethod1.PNG" width="600" />
 </p>
 
@@ -626,8 +630,35 @@ This tracker can be found in blob_det_correct_tracker_centroid.py.
 
 ## <a name='BlobAnd'></a> Blob detection and object detection
 (Oliver)
+As can be seen in the flow chart, this is very similar to the blob detection with object detection as a corrector method. The difference is that the blob bounding boxes that are not made are not discarded but continue to be used and also passed to the Centroid tracker, so they can also be given an ID without checking the object detection. 
+
+<p float="center">
+  <img src="doku_resources/Add_blob_obj.png" width="600" />
+</p>
+
+Compared to the other methods blob detection and object detection uses every detection from object and blob detection.
+
+<p float="center">
+  <img src="doku_resources/ComparisonMethod2.PNG" width="600" />
+</p>
+
+This tracker can be found in blob_det_add_tracker_centroid.py.
+
 ## <a name='Compar'></a> Comparing the methods
 (Oliver)
+The comparison between the methods can be seen in [video](https://www.youtube.com/watch?v=nTc-nwEKkl8). On the top left, object detection is used, on the top right only blob detections (with background subtraction), on the bottom left blob detection with object detection as a corrector and on the bottom right blob detection and object detection. All the methods have the same settings and use the same centroid tracker (threshold 150, disapperance maximum 5).
+
+The sum of individual bees over the whole video is 19, object detection finds 37, blob detection a total of 45, blob detection with object detection as a corrector finds 29 and blob detection and object detection 48 bees. 
+The video presents a difficult tracking situation. There are both non-moving bees and very fast bees. Blob detection with object detection as a corrector can combine the advantages of blob detection and object detection. It is possible to detect non-moving bees (detected by object detection) and fast, blurred bees (detected by blob detection).
+
+<p float="center">
+  <img src="doku_resources/ComparisonMethod3.PNG" width="600" />
+</p>
+
+The image above displays the results graph from the flask enviroment.
+
+Compared to object detection, the fps increases by 0.7 to 6.3 fps when using blob detection with object detection as a corrector. This difference comes solely from the slightly faster blob detection (0.14 sec vs. 0.15 sec). 
+
 # <a name='Flask'></a>Flask - Frontend
 (Oliver) 
 
