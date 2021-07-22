@@ -1,6 +1,4 @@
 <!-- vscode-markdown-toc -->
-
-# BeeWatch
 * [Use Case](#UseCase)
 	* [Motivation](#Motivation)
 	* [Problem Statement](#ProblemStatement)
@@ -20,29 +18,26 @@
 	* [Background subtraction](#Backgroundsubtraction)
 	* [Baseline with background subtraction and blob detection](#Baselinewithbackgroundsubtractionandblobdetection)
 	* [Background subtraction + YOLOv4 tiny](#BackgroundsubtractionYOLOv4tiny)
-	* [SSD](#SSDOLI)
+	* [SSD](#SSD)
 	* [YOLO](#YOLO)
 	* [YOLOv4](#YOLOv4)
+	* [YOLOv4 tiny](#YOLOv4tiny)
 	* [YOLOv5](#YOLOv5)
 		* [Why did we go with YOLOv5?](#WhydidwegowithYOLOv5)
 * [Model Training](#ModelTraining)
- 	* [Evaluation Metric](#EvaluationMetric)
+	* [Evaluation Metric](#EvaluationMetric)
 	* [Training Environment](#TrainingEnvironment)
-	* [Training Baseline](#BaselineModelTraining)
+	* [ Training Baseline](#TrainingBaseline)
 	* [Freezing Layers](#FreezingLayers)
 	* [Adding Artificial Data](#AddingArtificialData)
 	* [Added Data Augmentation](#AddedDataAugmentation)
 	* [Hyperparameter Tuning](#HyperparameterTuning)
 	* [Final Results](#FinalResults)
 * [Deployment process](#Deploymentprocess)
-* [Tracker - Centroid tracker](#Tracker)
-* [Hybrid and other methods for detection](#Hybrid)
- 	* [Blob detection with object detection as a corrector](#BlobCorr) 
-	* [Blob detection and object detection](#BlobAnd) 
-	* [Comparing the methods](#Compar)
-* [Flask - Frontend](#Flask)
-	* [Integration of the camera and real life deployment](#Camera)
-* [Extra - Case](#Extra-Case)
+* [ Blob detection with object detection as a corrector](#Blobdetectionwithobjectdetectionasacorrector)
+* [ Blob detection and object detection](#Blobdetectionandobjectdetection)
+* [ Comparing the methods](#Comparingthemethods)
+* [ Integration of the CSI camera and in real life deployment](#IntegrationoftheCSIcameraandinreallifedeployment)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -315,7 +310,7 @@ The results of the hybrid approach first seemed to be very promising as the YOLO
 
 Therefore, the hybrid approach of background subtraction together with a more simplistic detection model like blob dection or shallow CNNs is utilized by the system in very calm situations. The full details of how we make use of the combination can be found in the [tracking section](#Tracker).
 
-### <a name='SSDOLI'></a>SSD
+### <a name='SSD'></a>SSD
 (Oliver Becker)
 Both SSD mobilenet V1 and V2 where trained in the tensorflow detection api. SSD has two components: a backbone model and SSD head. Backbone model usually is a pre-trained image classification network as a feature extractor (here we worked with ResNet and ImageNet). The SSD head is just one or more convolutional layers added to this backbone. SSD divides the image using a grid and have each grid cell be responsible for detecting objects in that region of the image. Each grid cell in SSD are assigned with multiple anchor boxes. These anchor boxes are pre-defined.
 
@@ -342,7 +337,7 @@ To improve performance the authors introduced different methods to improve the m
 
 YOLOv4 gets its improvements through a selection and implementations of different BoF-methods like CutMix and Mosaic data augmentation, CIoU-loss, Optimal hyperameters (evolution) etc. and for BoS-methods mish activation and using multiple anchors for a single ground truth are used. Just to name a few - a full list and explanation can be found in the released paper. ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf))
 
-### YOLOv4 tiny
+### <a name='YOLOv4tiny'></a>YOLOv4 tiny
 (Maximilian Nitsche)
 
 In the context of our use case we face the challenge to detect very small objects within a short timeperiod as bees are fast and otherwise a tracking system would not be able to identify bees across frames. Especially this trade-off between detection accuracy and inference time is often one of the key criteria when one has to choose the appropiate model architecture for the use case. A very popular architecture in this trade-off is the shallower version YOLOv4 tiny. The primary difference between the "regular" YOLOv4 and it's smaller version was already depicted when training a [YOLOv4 tiny on background subtraction](###Background-subtraction-+-YOLOv4-tiny) frames. However, we again trained a YOLOv4 tiny on our final dataset and in the already setup darknet environment in Google Colab. The performance of YOLOv4 tiny can be found below.
@@ -379,7 +374,7 @@ With our use case in mind, we decided to adopt average precision at IoU=0.5 as t
 
 Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives one simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
 
-### <a name='BaselineModelTraining'></a> Training Baseline
+### <a name='TrainingBaseline'></a> Training Baseline
 To establish a baseline performance we trained the YOLOv5s - which is the smallest model of the YOLOv5 - on real images, meaning we didn't use any of the artificial data. All of the hyperparameter were left on default settings.
 
 
@@ -610,7 +605,7 @@ The pure object recognition has been extended by three additional methods for be
 
 The other two methods combine object detection and blob detection into a hybrid model. The hybrid methods try to combine the advantages of both methods. Blob detection is slightly faster (per frame on the Jetson 0.14 seconds) and also detects fast, blurred bees. While object detection can also detect non moving bees and is more trustworthy in its prediction. Further, blob detection (background substraction and blob detection) could be accelerated with OpenCV for GPUs. So far, this runs on the CPU, which means that the advantage of this hybrid method is greater on other edge devices like the Raspberry Pi.
 
-## <a name='BlobCorr'></a> Blob detection with object detection as a corrector
+## <a name='Blobdetectionwithobjectdetectionasacorrector'></a> Blob detection with object detection as a corrector
 (Oliver)
 To understand the procedure of this method, the flow chart below is helpful. 
 
@@ -632,7 +627,7 @@ In short: The blob detection is checked by the object detection and extended by 
 
 This tracker can be found in blob_det_correct_tracker_centroid.py.
 
-## <a name='BlobAnd'></a> Blob detection and object detection
+## <a name='Blobdetectionandobjectdetection'></a> Blob detection and object detection
 (Oliver)
 As can be seen in the flow chart, this is very similar to the blob detection with object detection as a corrector method. The difference is that the blob bounding boxes that are not made are not discarded but continue to be used and also passed to the Centroid tracker, so they can also be given an ID without checking the object detection. 
 
@@ -644,7 +639,7 @@ Compared to the other methods blob detection and object detection uses every det
 
 This tracker can be found in blob_det_add_tracker_centroid.py.
 
-## <a name='Compar'></a> Comparing the methods
+## <a name='Comparingthemethods'></a> Comparing the methods
 (Oliver)
 The comparison between the methods can be seen in [video](https://www.youtube.com/watch?v=nTc-nwEKkl8). On the top left, object detection is used, on the top right only blob detections (with background subtraction), on the bottom left blob detection with object detection as a corrector and on the bottom right blob detection and object detection. All the methods have the same settings and use the same centroid tracker (threshold 150, disapperance maximum 5).
 
@@ -682,7 +677,7 @@ All tracker files have a yield return and are therefore generators. The Flask se
 
 Running the prerecorded video on the flask server led to a performance of 0,16 seconds per frame. A slight decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.17 seconds per frame. 
 
-## <a name='Camera'></a> Integration of the CSI camera and in real life deployment
+## <a name='IntegrationoftheCSIcameraandinreallifedeployment'></a> Integration of the CSI camera and in real life deployment
 (Oliver)
 
 Based on the [GIT repository](https://github.com/JetsonHacksNano/CSI-Camera) the file datasets.py under yolov5/utils/ was extended by another object LoadWebcam_Jetson. A GStreamer pipeline is defined here. The handling of the camera is very fragile and it took some time to integrate it. If problems occur, it is recommended to restart the daemon with the command: sudo service nvargus-daemon restart. 
