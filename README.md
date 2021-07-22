@@ -137,7 +137,7 @@ We first [downloaded](dataset/flickr_dataset_collection.ipynb) and [labeled](###
 #### <a name='Mosaicdataset'></a>Mosaic dataset 
 (Maximilian Nitsche)
 
-After labeling bees in the downloaded datasets following the procedure presented in the [labeling section](###labeling) we used them to generate mosaic data. The mosaic augmentation is originally motivated in the YOLOv4 release and contributes significantly to its performance boost ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf)). As the downloaded images often show only individual bees on one flower the mosaic augmentation also makes sure the data meets our use case requirements to detect bees from further distance. In order to scale down the queried bees and benefit from the stated performance increase in model implementations beside YOLOv4/5 we [generated](dataset/mosaic_data_augmentation.ipynb) 3x4 mosaic images and the corresponding new annotation files. The probability of a bee image to be chosen for a individual mosaic tile was set to 0.3. The following shows an example mosaic image:
+After labeling bees in the downloaded datasets following the procedure presented in the [labeling section](###labeling) we used them to generate mosaic data. The mosaic augmentation is originally motivated in the YOLOv4 release and contributes significantly to its performance boost [33]([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf)). As the downloaded images often show only individual bees on one flower the mosaic augmentation also makes sure the data meets our use case requirements to detect bees from further distance. In order to scale down the queried bees and benefit from the stated performance increase in model implementations beside YOLOv4/5 we [generated](dataset/mosaic_data_augmentation.ipynb) 3x4 mosaic images and the corresponding new annotation files. The probability of a bee image to be chosen for a individual mosaic tile was set to 0.3. The following shows an example mosaic image:
 
 ![example-mosaic-image](doku_resources/mosaic_image.jpg)
 
@@ -324,7 +324,7 @@ It was first introduced by Joseph Redmon and developed further by him up to YOLO
 Joseph Redmon, the initiator of YOLO, announced in the spring of 2020 that he has stopped his research in computer vision due to several concerns regarding military applications and privacy concerns. [His tweet](https://twitter.com/pjreddie/status/1230524770350817280) 
 ![tweet](doku_resources/redmon_tweet.png)
 ### <a name='YOLOv4'></a>YOLOv4
-However this was not the end YOLO. In April 2020 **Alexey Bochkovsky et al.** introduced YOLOv4 in a paper titled: [YOLOv4: Optimal Speed and Accuracy of Object Detection](https://arxiv.org/abs/2004.10934). 
+However this was not the end YOLO. In April 2020 **Alexey Bochkovsky et al.** introduced YOLOv4 in a paper titled: [YOLOv4: Optimal Speed and Accuracy of Object Detection] [33] (https://arxiv.org/abs/2004.10934). 
 To improve performance the authors introduced different methods to improve the models performance. These methods can be devided into two categories:
 **Bag of freebies (BoF)** and **Bag of specials (BoS)**. BoF are methods that increase object detectors performance without increasing the inference cost. These methods only change the training strategy or in other words only increase the training costs. An example would be data augmentation techniques. In contrast to the Bof, bag of specials are methods that increase inference costs in order to achieve better accuracy in object detection. The trade off however is vastly in favour of accuracy as the inference cost is rather small in comparison to the achieved accuracy boost. These modules try to enhace certain attributes in a modules receptive field or strengthening feature integration capability, etc.
 **YOLOv4** consists of:
@@ -335,7 +335,7 @@ To improve performance the authors introduced different methods to improve the m
 
 🗣️  | Head: YOLOv3
 
-YOLOv4 gets its improvements through a selection and implementations of different BoF-methods like CutMix and Mosaic data augmentation, CIoU-loss, Optimal hyperameters (evolution) etc. and for BoS-methods mish activation and using multiple anchors for a single ground truth are used. Just to name a few - a full list and explanation can be found in the released paper. ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf))
+YOLOv4 gets its improvements through a selection and implementations of different BoF-methods like CutMix and Mosaic data augmentation, CIoU-loss, Optimal hyperameters (evolution) etc. and for BoS-methods mish activation and using multiple anchors for a single ground truth are used. Just to name a few - a full list and explanation can be found in the released paper. [33] ([Bochkovskiy et al., 2020](literature/Bochkovskiy%20et%20al.%20(2020)%20-%20YOLOv4:%20Optimal%20Speed%20and%20Accuracy%20of%20Object%20Detection.pdf))
 
 ### <a name='YOLOv4tiny'></a>YOLOv4 tiny
 (Maximilian Nitsche)
@@ -735,4 +735,5 @@ A suitable case was modelled in honeycomb structure for the deployment (find it 
 [30] Sergey I. Nikolenko (2021):Synthetic Data for Deep Learning. Springer Optimization and Its Applications, 174. Springer International Publishing
 [31] https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e, last accessed 20.07.2021
 [32] https://blog.zenggyu.com/en/post/2018-12-16/an-introduction-to-evaluation-metrics-for-object-detection/, last accessed 21.07.2021
+[33] Bochkovskiy, Alexey, Chien-Yao Wang and H. Liao. “YOLOv4: Optimal Speed and Accuracy of Object Detection.” ArXiv abs/2004.10934 (2020)
 
