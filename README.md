@@ -553,7 +553,7 @@ After completing the installation process we ran our model. Here we faced some p
 ```
 Please note that this is the performance without tracking. As previously mentioned it is considered good practice to use a virtual environment for every project you work on. However, we could not find the error that led to the torchvision version error. To reduce inference time we converted our model weights to TensorFlow Lite Format. This is a lightweight version of TensorFlow specially developed to run on small devices. Surprisingly this did not lead to any reduction in performance when testing it on a Macbook Pro. Instead the inference time per frame was around 24 seconds per frame. Due to that we did not further explore this direction ad did not deploy it on the Jetson Nano. 
 
-## <a name='Tracker'></a>Tracker 
+# <a name='Tracker'></a>Tracker 
 
 (Oliver)
 A simple Centroid tracker was implemented. At first, the tracker from [pyimagesearch](https://www.pyimagesearch.com/2018/07/23/simple-object-tracking-with-opencv/) was used. The tracker can be integrated as an object. Using the update function, the current bounding boxes of frame t are passed to the tracker, which matches them with the bounding boxes from the previous step t-1 and thus assigns the tracking IDs. The matching takes place via the distances between the centres of the bounding boxes. Current bounding boxes that are not matched get a new ID. For IDs / past bounding boxes that are not matched with current bounding boxes, the disappearance counter is increased by one. If it reaches a certain threshold, the ID is deleted and not reassigned. The counter is set to 0 again when these are matched again. 
@@ -585,7 +585,7 @@ The output of all trackers are the IDs, tracking information and the image with 
 Furthermore, an attempt was made to implement the MultiTracker from OpenCV. These are no longer up to date and in legacy of OpenCV. They are very cumbersome to implement, lead to many errors and were therefore discarded.
 
 
-## <a name='Flask'></a>Flask (Oliver)
+# <a name='Flask'></a>Flask (Oliver)
 to do 
 
 (Christin Scheib)
@@ -597,6 +597,15 @@ Running the prerecorded video on the flask server led to a performance of 0,16 s
 
 
 Even though the Jetson Nano is optimized for IoT applications it has its limitations. As YOLOv5 is a quite large model it uses a lot of the system's resources. This leads to non-responsiveness and freezing during the loading of the model. Here it would be interesting to compare the performance of smaller models that are optimized to running on these devices. 
+
+# Extra - Case
+
+A suitable case was modelled in honeycomb structure for the deployment. This was commissioned, but could not be printed to the required standard. 
+
+<p float="center">
+  <img src="doku_resources/Case1.png" width="400" />
+  <img src="doku_resources/Case2.png" width="400" />
+</p>
 
 # References
 [1] Klein, A. M., Vaissiere, B. E., Cane, J. H., Steffan-Dewenter, I., Cunningham, S. A., Kremen, C. & Tscharntke, T. (2007): Importance of pollinators in changing landscapes for world crops. Proceedings of the Royal Society B: Biological Sciences, 274, 303-313.  
