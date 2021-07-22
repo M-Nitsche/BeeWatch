@@ -671,6 +671,8 @@ Based on the [GIT repository](https://github.com/JetsonHacksNano/CSI-Camera) the
 
 In order to collect real recordings with the Jeston, it was deployed in a real environment. It was controlled from the outside via the Flask interface. To attract bees, several different flowers were collected and the camera was pointed at them. Unfortunately, only one bee was attracted and filmed in 6 hours. The video can be found [here]( https://www.youtube.com/watch?v=S1K3mEyAv1s). To prevent overheating during this time, a sunshade was set up. 
 
+![rldeploy](doku_resources/real_life_deploy.PNG)
+
 The GStreamer pipeline used for the camera requires a connection that can display a graphical terminal, even if one does not want to use it. So an X11 server had to be set up. This is not directly supported by Windows. For this purpose, Xming for Windows was installed and Putty was configured: the configuration can be found [at](https://www.tutonaut.de/x11-forwarding/). On the Jetson, this server is started in the terminal using startx. In another terminal, the display output must be specified by export DISPLAY=:0.0 (given this is 0.0). 
 
 # <a name='Lessons-Learned'> Lessons Learned
