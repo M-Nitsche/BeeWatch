@@ -606,7 +606,7 @@ If object detection is applied, new bounding boxes are obtained. These are match
 
 ![Tracker_Description2](doku_resources/Tracker_Description2.png)
 
-![ComparisonMethod1](doku_resources/ComparisonMethod1.png)
+![ComparisonMethod1](doku_resources/ComparisonMethod1.PNG)
 
 Yellow bounding boxes are those from the object detection and green circles come from the blob detection. As you can see in the read rectangles the hybrid model detects non moving bees but also can track bees over a faster moving period. 
 
