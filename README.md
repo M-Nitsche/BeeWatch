@@ -32,10 +32,14 @@
 	* [Hyperparameter Tuning](#HyperparameterTuning)
 	* [Final Results](#FinalResults)
 * [Deployment process](#Deploymentprocess)
-* [ Blob detection with object detection as a corrector](#Blobdetectionwithobjectdetectionasacorrector)
-* [ Blob detection and object detection](#Blobdetectionandobjectdetection)
-* [ Comparing the methods](#Comparingthemethods)
-* [ Integration of the CSI camera and in real life deployment](#IntegrationoftheCSIcameraandinreallifedeployment)
+* [Tracker](#Tracker)
+* [Hybrid and other methods for bee detection with trackers](#Hybrid)
+	* [ Blob detection with object detection as a corrector](#Blobdetectionwithobjectdetectionasacorrector)
+	* [ Blob detection and object detection](#Blobdetectionandobjectdetection)
+	* [ Comparing the methods](#Comparingthemethods)
+* [Flask - Frontend](#Flask)
+	* [ Integration of the CSI camera and in real life deployment](#IntegrationoftheCSIcameraandinreallifedeployment)
+* [Extra - Case](#Extra-Case)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
