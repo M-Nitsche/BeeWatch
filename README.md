@@ -568,9 +568,7 @@ A new tracker was implemented based on the functionality of the previous tracker
 
 In the picture below you can see how the tracking on bees works. Within the threshold, the IDs or past midpoints of bounding boxes t-1 are matched with the current bounding boxes (ID 0 and 1).  Bees / bounding boxes outside the threshold get a new ID, here ID 3. ID 2 is not matched and the disapperance counter is incremented by one. 
 
-<p float="center">
-  <img src="doku_resources/Tracker_Describtion.png" width="300" />
-</p>
+![tracker1](doku_resources/Tracker_Describtion.png)
 
 Furthermore, the tracker was extended by the function new_id_registered. This provides information on whether new IDs would be assigned for given bounding boxes. This becomes important in the hybrid methods mentioned below.
 
@@ -578,15 +576,11 @@ The trackers can be found in the tracking folder. All trackers can be used indep
 
 For example, tracker_centroid.py is a script that applies object detection and centroid tracking to given images/videos/streams, the sequence of the script is shown in the figure below.
 
-<p float="center">
-  <img src="doku_resources/obj_centroid.png" width="200" />
-</p>
+![obj_centroid](doku_resources/obj_centroid.png)
 
 The output of all trackers are the IDs, tracking information and the image with tracking information. All trackers can record the tracking results per frame in txt files and save them under runs/detect/.../tracking/, under ../labels/ the object detection results can be found. Furthermore, tracking information can be written on the image. See the picture below. Detections and tracking describe the current objects detected and how many IDs are tracked (in the frame). Total detections are the summed detections up to this frame. Total bees describes the IDs detected so far, these describe the bees tracked. Furthermore, the trajectories of the bees are represented by the centres of the previous bounding boxes. All trackers extend the object detection arguments from detect.py with arguments that control these functions. 
 
-<p float="center">
-  <img src="doku_resources/tracking_example.png" width="600" />
-</p>
+![tracking_example](doku_resources/tracking_example.png)
 
 Furthermore, an attempt was made to implement the MultiTracker from OpenCV. These are no longer up to date and in legacy of OpenCV. They are very cumbersome to implement, lead to many errors and were therefore discarded.
 
@@ -594,9 +588,7 @@ Furthermore, an attempt was made to implement the MultiTracker from OpenCV. Thes
 (Oliver)
 The pure object recognition has been extended by three additional methods for bee recognition. These can be found in the tracking folder. One of these methods uses only blob detection for bee detection, the procedure is shown below. Here blob detection stands for two steps: the calculation of the background subtraction by the OpenCV background subtractor MOG2 and the actual blob detection on the background subtraction. To use this method, blob_det_correct_tracker_centroid.py or blob_det_add_tracker_centroid.py can be used by setting the argument det_and_blob to False. 
 
-<p float="center">
-  <img src="doku_resources/blob_centroid.png" width="300" />
-</p>
+![blob_centroid](doku_resources/blob_centroid.png)
 
 The other two methods combine object detection and blob detection into a hybrid model. The hybrid methods try to combine the advantages of both methods. Blob detection is slightly faster (per frame on the Jetson 0.14 seconds) and also detects fast, blurred bees. While object detection can also detect non moving bees and is more trustworthy in its prediction. Further, blob detection (background substraction and blob detection) could be accelerated with OpenCV for GPUs. So far, this runs on the CPU, which means that the advantage of this hybrid method is greater on other edge devices like the Raspberry Pi.
 
@@ -604,9 +596,7 @@ The other two methods combine object detection and blob detection into a hybrid 
 (Oliver)
 To understand the procedure of this method, the flow chart below is helpful. 
 
-<p float="center">
-  <img src="doku_resources/Corrector_blob_obj.png" width="600" />
-</p>
+![Corrector_blob_obj](doku_resources/Corrector_blob_obj.png)
 
 An image is passed to the blob detection (first background subtraction on which the blob detection is performed), the found bounding boxes are passed to the Centroid Tracker using the method new_id_registered, which does not perform any tracking, but only returns whether new IDs would be assigned, given the bounding boxes. If new IDs would be registered, object detection is applied. Even if no new IDs are assigned, it is checked whether no bounding boxes were issued from the blob detection, if this is the case, object detection is also applied. This is certainly the case in the first frame, as background subtraction does not work on a single frame. In order to detect bees here, object detection is applied. Since, as mentioned above, Blob detection only detects moving bees, we need to apply object detection to find standing bees. If these are detected by object detection, they are not detected during blob detection, so before the disapperance threshold is reached, object detection must be performed to reset the disapperance counter of this to 0. To ensure this, an object detection is always applied in an interval of disapperance threshold - 1. 
 
@@ -614,13 +604,8 @@ If none of the above applies, the bounding boxes of the blob detection are passe
 
 If object detection is applied, new bounding boxes are obtained. These are matched with those of the blob detection. It is also done using the pixel distance (same procedure as with the Centroid tracker, with its own threshold: matching_threshold). This is where the correction takes place through the object detection. If there is no matching for a blob bounding box, it is discarded. If the object detection and blob detection bounding boxes are similar, the object detection bounding box is trusted more and the blob detection bounding box is ignored. If a bounding box of object detection is not matched, it is added to the bounding boxes which are passed to the Centroid tracker. Only these bounding boxes and their information are shown in the image. 
 
-<p float="center">
-  <img src="doku_resources/Tracker_Description2.png" width="300" />
-</p>
-
-<p float="center">
-  <img src="doku_resources/ComparisonMethod1.PNG" width="600" />
-</p>
+![Tracker_Description2](doku_resources/Tracker_Description2.png)
+![ComparisonMethod1](doku_resources/ComparisonMethod1.png)
 
 Yellow bounding boxes are those from the object detection and green circles come from the blob detection. As you can see in the read rectangles the hybrid model detects non moving bees but also can track bees over a faster moving period. 
 
@@ -636,7 +621,7 @@ As can be seen in the flow chart, this is very similar to the blob detection wit
 
 Compared to the other methods blob detection and object detection uses every detection from object and blob detection.
 
-![comp4](doku_resources/ComparisonMethod2.PNG)
+![comp2](doku_resources/ComparisonMethod2.PNG)
 
 This tracker can be found in blob_det_add_tracker_centroid.py.
 
@@ -647,10 +632,8 @@ The comparison between the methods can be seen in [video](https://www.youtube.co
 The sum of individual bees over the whole video is 19, object detection finds 37, blob detection a total of 45, blob detection with object detection as a corrector finds 29 and blob detection and object detection 48 bees. 
 The video presents a difficult tracking situation. There are both non-moving bees and very fast bees. Blob detection with object detection as a corrector can combine the advantages of blob detection and object detection. It is possible to detect non-moving bees (detected by object detection) and fast, blurred bees (detected by blob detection).
 
-<p float="center">
-  <img src="doku_resources/ComparisonMethod3.PNG" width="600" />
-  <img src="doku_resources/ComparisonMethod4.PNG" width="600" />
-</p>
+![comp3](doku_resources/ComparisonMethod3.PNG)
+![comp4](doku_resources/ComparisonMethod4.PNG)
 
 The images above displays the results graph from the flask enviroment.
 The line graph describes how many bees were found / tracked across frames in the video. The red line represents the current number of bees found by object detection, the dark green line represents how many bees are currently being tracked in the frame, the blue line is the summed individual bees, the black line is the ground truth of individual bees and the light green line is ground truth for the current frame. 
@@ -676,10 +659,9 @@ Even though the Jetson Nano is optimized for IoT applications it has its limitat
 (Oliver)
 A suitable case was modelled in honeycomb structure for the deployment. This was commissioned, but could not be printed to the required standard. 
 
-<p float="center">
-  <img src="doku_resources/Case1.jpg" width="400" />
-  <img src="doku_resources/Case2.jpg" width="400" />
-</p>
+![case1](doku_resources/Case1.jpg)
+![case2](doku_resources/Case2.jpg)
+
 
 # References
 [1] Klein, A. M., Vaissiere, B. E., Cane, J. H., Steffan-Dewenter, I., Cunningham, S. A., Kremen, C. & Tscharntke, T. (2007): Importance of pollinators in changing landscapes for world crops. Proceedings of the Royal Society B: Biological Sciences, 274, 303-313.  
