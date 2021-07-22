@@ -393,7 +393,7 @@ Exemplary training images will look as follows:
 (David Blumenthal)
 
 Apart from perfecting the training dataset, hyperparameter tuning can be used to increase the models performance. YOLOv5 offers 25 hyperparameters including those with regard to test time augmentation. The YOLOv5 implementation offers functionality that can support in finding good hyperparameters.
-With Google Colab as our training environnement computing resources - especially time - is very limited, hence we had to work to with assumptions. First we defined a base scenario from which we wanted to approve. The base scenario was a standard YOLOv5s model with pertained weights on the coco dataset which we trained for 10 epochs. With the "evolve" function the model tries to find better parameters using a genetic algorithm with the main operators crossover and mutation with a 90% probability and 0.04 variance. [Github Yolov5](https://github.com/ultralytics/yolov5/issues/607)
+With Google Colab as our training environnement computing resources - especially time - is very limited, hence we had to work to with assumptions. First we defined a base scenario from which we wanted to approve. The base scenario was a standard YOLOv5s model with pretained weights on the COCO dataset which we trained for 10 epochs. With the "evolve" function the model tries to find better parameters using a genetic algorithm with the main operators crossover and mutation with a 90% probability and 0.04 variance. [Github Yolov5](https://github.com/ultralytics/yolov5/issues/607)
 We did that for 50 iterations. We assumed that after 10 epochs good parameters would be found and would be also beneficial in a full training.  
 
 
