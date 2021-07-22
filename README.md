@@ -602,7 +602,7 @@ An image is passed to the blob detection (first background subtraction on which 
 
 If none of the above applies, the bounding boxes of the blob detection are passed on to the Centroid tracker and then the next frame is processed. 
 
-If object detection is applied, new bounding boxes are obtained. These are matched with those of the blob detection. It is also done using the pixel distance (same procedure as with the Centroid tracker, with its own threshold: matching_threshold). This is where the correction takes place through the object detection. If there is no matching for a blob bounding box, it is discarded. If the object detection and blob detection bounding boxes are similar, the object detection bounding box is trusted more and the blob detection bounding box is ignored. If a bounding box of object detection is not matched, it is added to the bounding boxes which are passed to the Centroid tracker. Only these bounding boxes and their information are shown in the image. 
+If object detection is applied, new bounding boxes are obtained. These are matched with those of the blob detection. It is also done using the pixel distance (same procedure as with the Centroid tracker, with its own threshold: matching_threshold (in blue)). This is where the correction takes place through the object detection. If there is no matching for a blob bounding box, it is discarded. If the object detection and blob detection bounding boxes are similar, the object detection bounding box is trusted more and the blob detection bounding box is ignored. If a bounding box of object detection is not matched, it is added to the bounding boxes which are passed to the Centroid tracker. Only these bounding boxes and their information are shown in the image. 
 
 ![Tracker_Description2](doku_resources/Tracker_Description2.png)
 
@@ -645,7 +645,12 @@ Compared to object detection, the fps increases by 0.7 to 6.3 fps when using blo
 # <a name='Flask'></a>Flask - Frontend
 (Oliver) 
 
-(Christin Scheib)
+```
+  Flask >= 2.0.1
+  Flask-Bootstrap >= 3.3.7.1
+  natsort >= 7.1.1
+```
+
 Running the prerecorded video on the flask server led to a performance of 0,16 seconds per frame. A slight decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.17 seconds per frame. 
 
 ## <a name='Camera'></a> Integration of the CSI camera and in real life deployment
