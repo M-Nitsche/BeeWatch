@@ -16,3 +16,6 @@ dataset/final_data+synth+mosaic_rebalanced
 *.tfevents.*
 dataset/**/*.jpg
 dataset/**/*.xml
+!tracking/eval_data/SeqLabel.json
+!yolov5/data/1.jpg
+!yolov5/data/bees_demo1.mp4
