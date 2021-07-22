@@ -24,9 +24,15 @@
 	* [YOLOv5](#YOLOv5)
 		* [Why did we go with YOLOv5?](#WhydidwegowithYOLOv5)
 * [Model Training](#ModelTraining)
+<<<<<<< HEAD
 	* [Evaluation Metric](#EvaluationMetric)
 	* [Training Environment](#TrainingEnvironment)
 	* [ Training Baseline](#TrainingBaseline)
+=======
+ 	* [Evaluation Metric](#EvaluationMetric)
+	* [Training Environment](#TrainingEnvironment)
+	* [Training Baseline](#BaselineModelTraining)
+>>>>>>> d3b473a0cdd2f4706b98341bba8f4274f8c13583
 	* [Freezing Layers](#FreezingLayers)
 	* [Adding Artificial Data](#AddingArtificialData)
 	* [Added Data Augmentation](#AddedDataAugmentation)
