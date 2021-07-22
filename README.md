@@ -39,6 +39,7 @@
 * [Hybrid and other methods for detection](#Hybrid)
  	* [Blob detection with object detection as a corrector](#BlobCorr) 
 	* [Blob detection and object detection](#BlobAnd) 
+	* [Comparing the methods](#Compar)
 * [Flask - Frontend](#Flask)
 	* [Integration of the camera and real life deployment](#Camera)
 * [Extra - Case](#Extra-Case)
@@ -594,6 +595,8 @@ Furthermore, an attempt was made to implement the MultiTracker from OpenCV. Thes
 ## <a name='BlobCorr'></a> Blob detection with object detection as a corrector
 
 ## <a name='BlobAnd'></a> Blob detection and object detection
+
+## <a name='Compar'></a> Comparing the methods
 
 # <a name='Flask'></a>Flask - Frontend
 (Oliver) 
