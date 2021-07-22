@@ -176,18 +176,18 @@ Exemplary representations of the synthetically generated data can be found below
 
 
 ## <a name='DataPreprocessing'></a>Data Preprocessing
-(David Blumenthal)
-To guarantee a uniform data format, the different image formats (png, jpg, etc.) were converted to .jpg using OpenCV. The quality was set to 90 to reduce the file size and at the same time maintain sufficient quality.
-In the first trials, we did not succeed in achieving good results for various reasons. One of the reasons was that the variance in the backgrounds (flowers) was still to low, but in the validation set flowers, of which there were few or none in the training data set managed to make up the majority. In further attempts to build the dataset, the images were better distributed across the splits, which meant that the results were suddenly very good. The reason for this was that the majority of the images consisted of videos. From these, consecutive frames - which did not differ much - ended up in the training and validation dataset. This in turn led to the model having very good metrics, but not performing (generalising) well on a test video. The same problem occurred both with rather large bees in test and small ones in val or vice versa. It took several iterations before a balanced data set emerged from the above problems. It took several iterations before a balanced data set emerged from the above problems. 
-The resulting dataset only has frames that are associated with completed videos in train, val and test. This has led to a split that is not necessarily common, with the training data here appearing lower, as everything was created in a back and forth process with artificial data beeing added ontop of the training split. 
+
+(David Blumenthal) 
+
+To guarantee a uniform data format, the different image formats (png, jpg, etc.) were converted to .jpg using OpenCV. The quality was set to 90 to reduce the file size and at the same time maintain sufficient quality. In the first trials, we did not succeed in achieving good results for various reasons. One of them was that in the beginning we still had limited amounts of data, with the biggest problem being the low variance in the backgrounds. In the first training & validation splits the main part of training images was made up with purple flowers in the background. In the validation set on the other hand, was the majority of none purple flowers.
+In further attempts to build a dataset (and after multiple labeling sessions), the images were better distributed across the splits. This lead to - unexpected - but very good performance on the validation set. The reason for this was that the majority of the images now consisted of videos. As the train, validation and test set was constructed using a script which draws images on a random basis and moves them into folders for the split, consecutive frames - which did not differ much - ended up in the validation and training set. Hence the model had no difficulty predicting almost identical frames. This manifested when we led the model predict a test video, on which it performed rather poorly.
+It took several iterations before a balanced data set emerged from the above problems. The resulting dataset now, has splits which are made of independent videos. This led to a split distribution that is not necessarily common, with the training data here appearing low. 
 Training - 0.65 Validation - 0.32 Test 0.03
+However the training set will be enriched with adding artificial data as described in section **Adding Artificial Data**.
+
 <p float="center">
   <img src="/doku_resources/labels_without_artificial.jpg" width="400" /> 
 </p>
-
-### <a name='FinalDataset'></a>Final Dataset 
-
-David?
 
 ### <a name='DataAugmentation'></a>Data Augmentation
 (Andrea Bartos)
@@ -319,6 +319,7 @@ Both SSD mobilenet V1 and V2 where trained in the tensorflow detection api. SSD 
 Both V1 and V2 did not result in promising detections. The resulting bounding boxes were really big and no where near bees. Further research discovered that SSD V2 is known to perform poorly on small objects, and in this case, we have very small objects. Therefore, the anchors were tuned in the their aspect ratios, size and numbers. This resulted in not fixable errors inside the tensorflow detection api. One fix could be to retrain the feature extractor completely since the weights do depend on the shape of the anchor. This was not followed up. 
 
 ### <a name='YOLO'></a>YOLO
+
 (David Blumenthal)
 
 Yolo has been first introduced in 2016 and set a milestone in object detection research due its capability to detect object in real-time with better accuracy.
@@ -350,16 +351,15 @@ In the context of our use case we face the challenge to detect very small object
 
 
 ### <a name='YOLOv5'></a>YOLOv5
+
 (David Blumenthal)
 
-Like already mentioned only two months after the initial of YOLOv4, YOLOv5 was published by Glenn Jocher. 
-YOLOv5 differs most from all other releases because this is a PyTorch implementation rather than a fork from the original Darknet. Same as the v4 version it implements the **CSP backbone**, the **PANet** as neck and the same head as **v3 and v4**. YOLOv5 has a total of 4 versions which mainly differ in number of parameters and layers. 
+Like already mentioned only two months after the initial of YOLOv4, YOLOv5 was published by Glenn Jocher. YOLOv5 differs most from all other releases because it is a native PyTorch implementation rather than a fork from the original Darknet. Same as the v4 version it implements the **CSP backbone**, the **PANet** as neck and the same **head as v3 and v4**. YOLOv5 also implements the augmentation methods like mosaic, which Glenn Jocher gets credit for in the Yolov4 paper. YOLOv5 has a total of 4 versions which mainly differ in number of parameters. To put this into perspective the smallest version v5s has a total of 7.3 million parameters whereas the largest model v5x has around 87.7 million. Pretrained Checkpoints from the COCO dataset are available for a all four models.
 ![yolov5_architecture](doku_resources/yolov5_architecture.jpg)
-The exact architecture of v5s model can be found [here](https://gist.github.com/mihir135/2e5113265515450c8da934e15d97fc6b).
-#### <a name='WhydidwegowithYOLOv5'></a>Why did we go with YOLOv5?
-One huge advantage is model size in mb. The smallest versions weights (yolov5s) only take up 13.7 MB of space. In addition, it benefited from a very large community of users, which meant that it was under active development with improvements being made on a weekly basis.
-**ToDo**
+The exact architecture of v5s model can be found [here](https://www.notion.so/2e5113265515450c8da934e15d97fc6b).
 
+One huge advantage is model size in mb. The smallest versions weights (yolov5s) only take up 13.7 MB of space.
+A large, active community has formed around Yolov5, which ensures that the modell is actively developed. New updates and improvements are released on a weekly basis. Yolov5 also offers rather fast training times through leveraging the PyTorch Ecosytem. The flask api and other interfaces make it easy to embed it applications. 
 
 ## <a name='ModelTraining'></a>Model Training
 
