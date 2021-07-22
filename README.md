@@ -20,7 +20,7 @@
 	* [Background subtraction](#Backgroundsubtraction)
 	* [Baseline with background subtraction and blob detection](#Baselinewithbackgroundsubtractionandblobdetection)
 	* [Background subtraction + YOLOv4 tiny](#BackgroundsubtractionYOLOv4tiny)
-	* [SSD (OLI)](#SSDOLI)
+	* [SSD](#SSDOLI)
 	* [YOLO](#YOLO)
 	* [YOLOv4](#YOLOv4)
 	* [YOLOv5](#YOLOv5)
