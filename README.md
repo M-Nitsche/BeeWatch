@@ -341,7 +341,12 @@ YOLOv4 gets its improvements through a selection and implementations of differen
 ### YOLOv4 tiny
 (Maximilian Nitsche)
 
-In the context of our use case we face the challenge to detect very small objects within a short timeperiod as bees are fast and otherwise a tracking system would not be able to identify bees across frames. Especially this trade-off between detection accuracy and inference time is often one of the key criteria when one has to choose the appropiate model architecture for the use case. A very popular architecture in this trade-off is the shallower version YOLOv4 tiny. The main difference between the "regular" YOLOv4 and it's smaller version was already depicted when training a [YOLOv4 tiny on background subtraction](###Background-subtraction-+-YOLOv4-tiny) frames. However, we again trained a YOLOv4 tiny on our final dataset.
+In the context of our use case we face the challenge to detect very small objects within a short timeperiod as bees are fast and otherwise a tracking system would not be able to identify bees across frames. Especially this trade-off between detection accuracy and inference time is often one of the key criteria when one has to choose the appropiate model architecture for the use case. A very popular architecture in this trade-off is the shallower version YOLOv4 tiny. The primary difference between the "regular" YOLOv4 and it's smaller version was already depicted when training a [YOLOv4 tiny on background subtraction](###Background-subtraction-+-YOLOv4-tiny) frames. However, we again trained a YOLOv4 tiny on our final dataset and in the already setup darknet environment in Google Colab. The performance of YOLOv4 tiny can be found below.
+
+| Training                                                     | mAP@0.5val | Ptest | Rtest | mAP@0.5test |
+|--------------------------------------------------------------|------------|-------|-------|-------------|
+| Training with augmentation                                   |     0.546  |  0.72 | 0.49  |    0.5235   |  
+
 
 ### <a name='YOLOv5'></a>YOLOv5
 (David Blumenthal)
@@ -365,7 +370,7 @@ Mean average precision (mAP) is defined as the mean of AP across all K classes. 
 K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [32] 
 With our use case in mind, we decided to adopt average precision at IoU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IoU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
 
-### <a name='TrainingEnviornment'></a>Training Environment
+### <a name='TrainingEnvironment'></a>Training Environment
 (David Blumenthal)
 
 Google Colaboratory was used as the training environment. Colab is a Google environment that allows Python code to be written and executed in the browser. This gives one simple, fast and free access to GPUs. Of course, there are also some disadvantages. The time that can be used in a session is limited, which means that training sessions that exceed a certain limit are aborted. In addition, a permanent connection in the browser is necessary. Here, too, there were problems because the connection often breaks down, which leads to the training being interrupted. This makes overnight training particularly difficult and we found that a fair amount of luck is needed for a session to run smoothly overnight. 
