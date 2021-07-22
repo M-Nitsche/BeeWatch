@@ -531,13 +531,13 @@ The trackers can be found in the tracking folder. All trackers can be used indep
 For example, tracker_centroid.py is a script that applies object detection and centroid tracking to given images/videos/streams, the sequence of the script is shown in the figure below.
 
 <p float="center">
-  <img src="doku_resources/obj_centroid.png" width="300" />
+  <img src="doku_resources/obj_centroid.png" width="200" />
 </p>
 
 The output of all trackers are the IDs, tracking information and the image with tracking information. All trackers can record the tracking results per frame in txt files and save them under runs/detect/.../tracking/, under ../labels/ the object detection results can be found. Furthermore, tracking information can be written on the image. See the picture below. Detections and tracking describe the current objects detected and how many IDs are tracked (in the frame). Total detections are the summed detections up to this frame. Total bees describes the IDs detected so far, these describe the bees tracked. Furthermore, the trajectories of the bees are represented by the centres of the previous bounding boxes. All trackers extend the object detection arguments from detect.py with arguments that control these functions. 
 
 <p float="center">
-  <img src="doku_resources/tracking_example.png" width="500" />
+  <img src="doku_resources/tracking_example.png" width="600" />
 </p>
 
 Furthermore, an attempt was made to implement the MultiTracker from OpenCV. These are no longer up to date and in legacy of OpenCV. They are very cumbersome to implement, lead to many errors and were therefore discarded.
