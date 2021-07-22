@@ -598,10 +598,32 @@ The pure object recognition has been extended by three additional methods for be
   <img src="doku_resources/blob_centroid.png" width="300" />
 </p>
 
-The other two methods combine object detection and blob detection into a hybrid model. The hybrid methods try to combine the advantages of both methods. Blob detection is slightly faster (per frame on the Jetson 0.14 seconds) and also detects fast, blurred bees. While object detection can also detect standing bees and is more trustworthy in its prediction. Further, blob detection (background substraction and blob detection) could be accelerated with OpenCV for GPUs. So far, this runs on the CPU, which means that the advantage of this hybrid method is greater on other edge devices like the Raspberry Pi.
+The other two methods combine object detection and blob detection into a hybrid model. The hybrid methods try to combine the advantages of both methods. Blob detection is slightly faster (per frame on the Jetson 0.14 seconds) and also detects fast, blurred bees. While object detection can also detect non moving bees and is more trustworthy in its prediction. Further, blob detection (background substraction and blob detection) could be accelerated with OpenCV for GPUs. So far, this runs on the CPU, which means that the advantage of this hybrid method is greater on other edge devices like the Raspberry Pi.
 
 ## <a name='BlobCorr'></a> Blob detection with object detection as a corrector
 (Oliver)
+To understand the procedure of this method, the flow chart below is helpful. 
+
+<p float="center">
+  <img src="doku_resources/Corrector_blob_obj.png" width="600" />
+</p>
+
+An image is passed to the blob detection (first background subtraction on which the blob detection is performed), the found bounding boxes are passed to the Centroid Tracker using the method new_id_registered, which does not perform any tracking, but only returns whether new IDs would be assigned, given the bounding boxes. If new IDs would be registered, object detection is applied. Even if no new IDs are assigned, it is checked whether no bounding boxes were issued from the blob detection, if this is the case, object detection is also applied. This is certainly the case in the first frame, as background subtraction does not work on a single frame. In order to detect bees here, object detection is applied. Since, as mentioned above, Blob detection only detects moving bees, we need to apply object detection to find standing bees. If these are detected by object detection, they are not detected during blob detection, so before the disapperance threshold is reached, object detection must be performed to reset the disapperance counter of this to 0. To ensure this, an object detection is always applied in an interval of disapperance threshold - 1. 
+
+If none of the above applies, the bounding boxes of the blob detection are passed on to the Centroid tracker and then the next frame is processed. 
+
+If object detection is applied, new bounding boxes are obtained. These are matched with those of the blob detection. It is also done using the pixel distance (same procedure as with the Centroid tracker, with its own threshold: matching_threshold). This is where the correction takes place through the object detection. If there is no matching for a blob bounding box, it is discarded. If the object detection and blob detection bounding boxes are similar, the object detection bounding box is trusted more and the blob detection bounding box is ignored. If a bounding box of object detection is not matched, it is added to the bounding boxes which are passed to the Centroid tracker. Only these bounding boxes and their information are shown in the image. 
+
+<p float="center">
+  <img src="doku_resources/ComparisonMethod1.PNG" width="600" />
+</p>
+
+Yellow bounding boxes are those from the object detection and green circles come from the blob detection. As you can see in the read rectangles the hybrid model detects non moving bees but also can track bees over a faster moving period. 
+
+In short: The blob detection is checked by the object detection and extended by it. This avoids trusting the blob detection too much, because the blob detection cannot distinguish between movements of bees or leaves. If the plants move, the output of the background subtraction is completely white and cannot be used. 
+
+This tracker can be found in blob_det_correct_tracker_centroid.py.
+
 ## <a name='BlobAnd'></a> Blob detection and object detection
 (Oliver)
 ## <a name='Compar'></a> Comparing the methods
