@@ -91,7 +91,15 @@ In total we managed to collect 2400 bee images.
 | ------------- |:-------------:|
 | own images    | 2.400           
 
-Exemplary images can be found below 
+
+### <a name='Labeling'></a>Labeling 
+#### <a name='Objectdetectionlabeling'></a>Object detection labeling
+
+(David Blumenthal) 
+
+After the process of gathering images/videos, the videos needed to be deconstructed into single frames in order to be labeled. To do that we used the command line tool [FFmpeg](https://www.ffmpeg.org/). Depending on the length of the video we created about 3-4 images per video second.
+
+After multiple labeling sessions we gathered enough, and most import a broader variety of images with different kinds of flowers in the background. A selection of sample images can be seen below.
 
 <p align="center">
   <img src="/doku_resources/image_1.jpg" width="350" />
@@ -100,17 +108,11 @@ Exemplary images can be found below
   <img src="/doku_resources/image_4.jpg" width="350" />
 </p>
 
+For the initial labeling the VGG Image Annotator was used. In order to distribute the effort and to work efficiently, we decided that everyone should label the images, he or she has collected. After that we wanted to merge them into a single data set. This quickly led to problems when merging, as e.g. label names were assigned differently or not at all. The limited export functionality (its own format, which is not common and Coco json format where we had problems exporting) required us to develop and search for functions/scripts, which allowed us to convert from one data format into others. This was necessary because at the beginning, we compared different models from different frameworks, each of which required a different format. 
 
-### <a name='Labeling'></a>Labeling 
-#### <a name='Objectdetectionlabeling'></a>Object detection labeling
-(David Blumenthal)
-Images where either taken as a single photo, or a video was taken and then deconstructed into single frames. To turn videos into single frames [FFmpeg](https://www.ffmpeg.org) was used. Images with various different backgrounds (flowers) are included - and selection of sample images can be seen below.
-For the initial labeling the [VGG Image Annotator](http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html) was used. 
-In order to distribute the effort and to work efficiently, we decided that everyone should label the images they had taken themselves and then later merge them into a single data set. This quickly led to problems when merging, as e.g. label names were assigned differently or not at all. The limited export functionality (its own format, which is not common and Coco json format where we had problems exporting) required us to develop and search for functions, which allowed us convert from one dataformat into others. This was necessary because at the beginning we compared different models from different frameworks, each of which required different data formats.
-This made us switch to another editor, because we experimented with different models and frameworks and therefore required different formats. 
-This lead us to the holistic object detection platform [Roboflow](https://roboflow.com) which offers several export formats. 
-Overall we manually labeled around 2.400 images of with 104 were null examples.
-On average each image has 1.1 annotations which results in 2.640 annotations overall distributed among one class [bee]. The images were annoteded with bounding boxes.
+This made us switch to another editor, because we experimented with different models and frameworks and therefore required different formats. This lead us to the holistic object detection platform Roboflow which offers several export formats. However our relationship with Roboflow was rather short because the allowed capacity of images one is allowed to store on the platform for free, was quickly reached. This forced us to move back, to converting with scripts and the command line.
+
+Overall we manually labeled around 2.400 images of with 104 were null examples. On average each image has 1.1 annotations which results in 2.640 annotations overall distributed among one class [bee]. The images were annoteded with bounding boxes.
 
 #### <a name='Objecttrackinglabeling'></a>Object tracking labeling
 (Maximilian Nitsche)
