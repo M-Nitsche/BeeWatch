@@ -36,7 +36,9 @@
 	* [Final Results](#FinalResults)
 * [Deployment process](#Deploymentprocess)
 * [Tracker](#Tracker)
+* [Hybrid and other methods for detection](#Hybrid)
 * [Flask](#Flask)
+* [Integration camera](#Camera)
 * [Extra - Case](#Extra-Case)
 
 <!-- vscode-markdown-toc-config
@@ -585,15 +587,17 @@ The output of all trackers are the IDs, tracking information and the image with 
 
 Furthermore, an attempt was made to implement the MultiTracker from OpenCV. These are no longer up to date and in legacy of OpenCV. They are very cumbersome to implement, lead to many errors and were therefore discarded.
 
+# <a name='Hybrid'></a> Hybrid and other methods for bee detection with trackers
 
-# <a name='Flask'></a>Flask
+# <a name='Flask'></a>Flask - Frontend
 (Oliver) 
 
 (Christin Scheib)
 Running the prerecorded video on the flask server led to a performance of 0,16 seconds per frame. A slight decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.17 seconds per frame. 
 
+# <a name='Camera'></a> Integration of the CSI camera and deployment in real life
 
-# Lessons Learned
+# <a name='Lessons-Learned'> Lessons Learned
 
 
 
