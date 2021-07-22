@@ -653,9 +653,12 @@ The video presents a difficult tracking situation. There are both non-moving bee
 
 <p float="center">
   <img src="doku_resources/ComparisonMethod3.PNG" width="600" />
+  <img src="doku_resources/ComparisonMethod4.PNG" width="600" />
 </p>
 
-The image above displays the results graph from the flask enviroment.
+The images above displays the results graph from the flask enviroment.
+The line graph describes how many bees were found / tracked across frames in the video. The red line represents the current number of bees found by object detection, the dark green line represents how many bees are currently being tracked in the frame, the blue line is the summed individual bees, the black line is the ground truth of individual bees and the light green line is ground truth for the current frame. 
+The candle stick graph shows how long and when a bee ID was found in the video. The disappearance threshold is subtracted from IDs that were not tracked to the end, as they continue to be tracked without detection. This deduction is shown as a small line on the candle stick
 
 Compared to object detection, the fps increases by 0.7 to 6.3 fps when using blob detection with object detection as a corrector. This difference comes solely from the slightly faster blob detection (0.14 sec vs. 0.15 sec). 
 
