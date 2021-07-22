@@ -32,14 +32,11 @@
 	* [Hyperparameter Tuning](#HyperparameterTuning)
 	* [Final Results](#FinalResults)
 * [Deployment process](#Deploymentprocess)
-* [Tracker](#Tracker)
-* [Hybrid and other methods for bee detection with trackers](#Hybrid)
-	* [ Blob detection with object detection as a corrector](#Blobdetectionwithobjectdetectionasacorrector)
-	* [ Blob detection and object detection](#Blobdetectionandobjectdetection)
-	* [ Comparing the methods](#Comparingthemethods)
-* [Flask - Frontend](#Flask)
-	* [ Integration of the CSI camera and in real life deployment](#IntegrationoftheCSIcameraandinreallifedeployment)
-* [Extra - Case](#Extra-Case)
+* [ Blob detection with object detection as a corrector](#Blobdetectionwithobjectdetectionasacorrector)
+* [ Blob detection and object detection](#Blobdetectionandobjectdetection)
+* [ Comparing the methods](#Comparingthemethods)
+* [ Integration of the CSI camera and in real life deployment](#IntegrationoftheCSIcameraandinreallifedeployment)
+* [Lessons learned](#Lessons-Learned)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -76,11 +73,12 @@ In order to be able to derive specific information about individual species, a d
 
 ## <a name='DataGathering'></a>Data Gathering
 (Aleksandar Ilievski)  
+
 For the data collection process, pictures and videos were taken of bees using different devices. A summary of the devices that were used can be found in the table below. The data collection process proved to be difficult for a multitude of reasons. First, bee activity is highly dependent on the weather. Since the project started in the end of April, the weather in Karlsruhe was very rainy. In May, Karlsruhe had 22 rainy days and in June there were 17.[29] This meant that there was quite a short time frame for data collection. Both pictures and videos were collected. During the first data collection round there was also a lot of wind which caused movement of plants in the videos. This is particularly problematic for the usage of background subtraction, since it creates a lot of noise in the footage (see Background subtraction + Tiny YOLO). In general, collecting data outside can be difficult because the quality of data is also impacted by sunlight exposure which is something the model needs to be robust again and thus, proving this use case to be quite complex. Second, it is challenging to take pictures of living insects as they are very small and move fast. When there was wind, the bees tended to move even more rapidly. Therefore, taking a clear picture from an acceptable distance took some practice in the beginning. 
 
 | Device        | Camera/Resolution  |
 | ------------- |:-------------:|
-| GoPro         | 720 with30 fps| 
+| GoPro         | 720 with 30 fps| 
 | iPhone 8      | 12 MP         |  
 | iPhone 7      | 12 MP         |  
 | iPhone 11 Pro | 12 MP         |
@@ -174,7 +172,7 @@ Exemplary representations of the synthetically generated data can be found below
 | Flickr - (Mosaic) images| 1000  |  1034 | 0
 | Flickr - Video frames | 741 (360 + 381) |  2398 | 167 
 | Synthetic images  | 1000     | 7801 | 0
-| [Malika Nisal Ratnayake et. al.](https://bridges.monash.edu/articles/dataset/Honeybee_video_tracking_data/12895433)| 436       |  ? |  ? 
+| [Malika Nisal Ratnayake et. al.](https://bridges.monash.edu/articles/dataset/Honeybee_video_tracking_data/12895433)| 436       |  481 |  0 
 
 
 ## <a name='DataPreprocessing'></a>Data Preprocessing
@@ -187,8 +185,8 @@ It took several iterations before a balanced data set emerged from the above pro
 Training - 0.65 Validation - 0.32 Test 0.03
 However the training set will be enriched with adding artificial data as described in section **Adding Artificial Data**.
 
-<p float="center">
-  <img src="/doku_resources/labels_without_artificial.jpg" width="400" /> 
+<p align="center">
+   <img src="/doku_resources/labels_without_artificial.jpg" width="400" />
 </p>
 
 ### <a name='DataAugmentation'></a>Data Augmentation
@@ -197,7 +195,7 @@ However the training set will be enriched with adding artificial data as describ
 Data augmentation is a method that allows to significantly increase the variety of data for the training of models without having to acquire additional new data. New training instances are created by performing transformation on already existing instances thus providing new situations and perspectives for model training. That way it can alleviate the problem of overfitting. Essential when performing augmentation in object detection tasks is, that the transformation is not only performed on the image itself but also on the bounding box defining an object’s position. There are several available libraries which provide a wide range of augmentation techniques. Such a library is [imgaug](https://imgaug.readthedocs.io/en/latest/index.html). 
 However, the wide range of augmentation techniques should not be applied thoughtlessly to the data. The choice of suitable techniques depends on the use case. 
 
-There are two options on how to perform augmentation, depending on the algorithm used. On the one hand, data augmentation can be applied as part of preprocessing. With new algorithms like YOLOv4, YOLOv5 and YOLOR an integrated augmentation at runtime is possible. The advantage of integrated (at run time) augmentation is the avoidance of intensive I/O workloads. On the other hand, certain functionalities that libraries like imgauge offer are not available as run-time augmentation techniques. Before we started experimenting with data augmentation, we have already decided on using YOLOv5 as our training model. Furthermore, at that point we were already struggling with storage capacities in Google Drive where we stored all data sets in order to make it easily accessible for everyone.  For this reason, we decided to perform augmentation at run time.
+There are two options on how to perform augmentation, depending on the algorithm used. On the one hand, data augmentation can be applied as part of preprocessing. With new algorithms like YOLOv4 and YOLOv5 an integrated augmentation at runtime is possible. The advantage of integrated (at run time) augmentation is the avoidance of intensive I/O workloads. On the other hand, certain functionalities that libraries like imgauge offer are not available as run-time augmentation techniques. Before we started experimenting with data augmentation, we have already decided on using YOLOv5 as our training model. Furthermore, at that point we were already struggling with storage capacities in Google Drive where we stored all data sets in order to make it easily accessible for everyone.  For this reason, we decided to perform augmentation at run time.
 
 The YOLOv5 [implementation](https://github.com/ultralytics/yolov5/blob/master/data/hyps/hyp.scratch.yaml) by  Glenn Jocher offers the following data augmentation techniques with the following default parameters.
 
@@ -251,9 +249,9 @@ To solve the task of object detection there are generally two available approach
   <img src="doku_resources/Comparison of test-time speed of object detection algorithms.png" width="500" />
 </p>
 
-However, since fast inference is key when it comes to real-time detection, thus to our use case, we decided to place our focus on one stage detection algorithms as they tend to fulfill this property. Therefore, we were searching for models with low inference time (ms) and therefore a high score of FPS and high mAP. Furthermore, since the storage capacity is limited on the jetson nano, the size of these models is also taken into consideration.
+However, since fast inference is key when it comes to real-time detection, thus to our use case, we decided to place our focus on one stage detection algorithms as they tend to fulfill this property. Therefore, we were searching for models with low inference time (ms) and therefore a high rate of FPS while still reaching a relatively high mAP. Since the RAM on the jetson nano is limited and the tracking system has to be deployed in addition to the model, a resource-efficient model is required.
 
-Looking at the following diagrams and [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) while considering our decision criteria, we decided to look into the following models: YOLOtiny, YOLOv5, SSD
+Looking at the following diagrams and [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) while considering our decision criteria, we decided to look into the following models: SSD, YOLOtiny and YOLOv5
 
 <p align="center">
    <img src="doku_resources/Inference Benchmarks jetson.png" width="700" />
@@ -261,10 +259,9 @@ Looking at the following diagrams and [TensorFlow 2 Detection Model Zoo](https:/
 sourced from https://developer.nvidia.com/embedded/jetson-nano-dl-inference-benchmarks
 
 <p align="center">
-   <img src="doku_resources/MS_COCO.png" width="500" />
   <img src="doku_resources/YOLOv5_performance.png"  width="500" />
 </p>
-sourced from https://arxiv.org/pdf/2004.10934.pdf and https://blog.roboflow.com/yolov5-is-here/
+sourced from https://blog.roboflow.com/yolov5-is-here/
 
 ### <a name='Backgroundsubtraction'></a>Background subtraction
 (Maximilian Nitsche)
@@ -316,6 +313,7 @@ Therefore, the hybrid approach of background subtraction together with a more si
 
 ### <a name='SSD'></a>SSD
 (Oliver Becker)
+
 Both SSD mobilenet V1 and V2 where trained in the tensorflow detection api. SSD has two components: a backbone model and SSD head. Backbone model usually is a pre-trained image classification network as a feature extractor (here we worked with ResNet and ImageNet). The SSD head is just one or more convolutional layers added to this backbone. SSD divides the image using a grid and have each grid cell be responsible for detecting objects in that region of the image. Each grid cell in SSD are assigned with multiple anchor boxes. These anchor boxes are pre-defined.
 
 Both V1 and V2 did not result in promising detections. The resulting bounding boxes were really big and no where near bees. Further research discovered that SSD V2 is known to perform poorly on small objects, and in this case, we have very small objects. Therefore, the anchors were tuned in the their aspect ratios, size and numbers. This resulted in not fixable errors inside the tensorflow detection api. One fix could be to retrain the feature extractor completely since the weights do depend on the shape of the anchor. This was not followed up. 
@@ -369,7 +367,7 @@ A large, active community has formed around Yolov5, which ensures that the model
  (Andrea Bartos)
 
 While researching possible evaluation metrics, we quickly came to realize that there are many variations to the two numerical metrics average precision (AP) and average recall (AR). AP can be defined as the area under the interpolated precision-recall curve.  AR is the recall averaged over all IoU ∈ [0.5,1.0].
-Mean average precision (mAP) is defined as the mean of AP across all K classes. Accordingly, Mean average recall (mAR) is defined as the mean of AR across all 
+Mean average precision (mAP) is defined as the mean of AP across all K classes. Accordingly, mean average recall (mAR) is defined as the mean of AR across all 
 K classes. According to literature, Pascal VOC Challenge's mAP is considered the standard metric for evaluating the performance of object detectors, which is identical to COCO's mAP @ IoU=.50. [32] 
 With our use case in mind, we decided to adopt average precision at IoU=0.5 as the evaluation metric for our model. Our goal is to be able to quantify the number of bees within a given time period. To fulfill this objective, the bounding box does not necessarily have to perfectly match the ground truth. For this reason, we decided to keep the IoU at 0.5 and not set a higher threshold. Since there is only one class (K=1), the two metrics mAP and AP are equivalent in our case.
 
@@ -389,11 +387,6 @@ Throughout the process of model training, we quickly learned that it is a lot of
 
 Unfortunately, we experienced a different result. The training time was reduced significantly, yet the performance also decreased substantially, which is why we discarded this approach.
 
-| Training                     | Pval  | Rval  | mAP@0.5val | Ptest | Rtest | mAP@0.5test | Training time|
-|------------------------------|-------|-------|------------|-------|-------|-------------||-------------|
-| without freezing layers     | ?  | ? |    ?   |  |  ?|   ?    ||
-| with freezing backbone | ? | ? |    ?   | ? | ? |    ?    | |
-
 ### <a name='AddingArtificialData'></a>Adding Artificial Data 
 (David Blumenthal)
 
@@ -404,7 +397,8 @@ artificial data to the training set. Starting at 100 images (which adds up to 5%
 We found, that adding data the models' performance increased noticeably up to about 500 images. After that, the performace tended to decrease again on the validation set. This may be because the model learns features that the synthetic data brings, but which are not typical for the real world.
 However, the limited number of artificial images in the training set led to a significant increase in the model as can be seen in table below. While Precision remained on a rather similar level we saw that Recall moved up - with a minor improvement on the validation set but a rather significant increase on the test set.
 The plot below shows the distribution of the two datasets - with and without the artificial images.
-<p float="center">
+
+<p align="center">
   <img src="doku_resources/labels_with_artificial.jpg" width="400" />
   <img src="/doku_resources/labels_without_artificial.jpg" width="400" /> 
 </p>
@@ -418,7 +412,7 @@ The plot below shows the distribution of the two datasets - with and without the
 ### <a name='AddedDataAugmentation'></a>Added Data Augmentation
 (Andrea Bartos)
 
-So far, all training has been done with the default augmentation values. As described in Data Augmentation, the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our use case. The changed parameters can also be found in Data Augmentation.
+So far, all training has been done with the default augmentation values. As described in Data Augmentation, the appropriate augmentation techniques strongly depend on the use case. For this reason, we see potential to improve performance even further by applying techniques relevant to our use case. The changed parameters can also be found in **Data Augmentation**.
 
 The performance after 300 epochs is as follows. Compared to the performance without customized data augmentation, the result is similar but marginally inferior. Since the difference is so small, this may also be due to the random initialization of the weights at the beginning of the training. 
 
@@ -430,7 +424,7 @@ The performance after 300 epochs is as follows. Compared to the performance with
 Exemplary training images will look as follows:
 
 <p align="center">
-   <img src="doku_resources/train_batch_example.jpg" alt="train_batch" width="500" />
+   <img src="doku_resources/train_cost_aug_batch0.jpg " alt="train_batch" width="500" />
 </p>
 
 
@@ -694,9 +688,7 @@ A frontend with a Flask server was implemented. The server hosts a website which
 ```
 The Flask package is a micro web framework for python, it allows to add extensions to it like Flask-Bootstrap, which renders the HTML with free and open-source CSS from Bootstrap 3 (Bootstrap 3 is rather old).
 
-The server makes it easy to control the Jetson within a network. The detection is almost completely configurable in the website and every step and argument is explained. Exemplary process on the website is shown [here]( https://www.youtube.com/watch?v=pLGIwBwWGps) (real time object detection and tracking on the Jetson Nano, screen capture) and in the image below (for object detection, read: left to right, top to bottom). 
-
-![website](doku_resources/Website.png)
+The server makes it easy to control the Jetson within a network. The detection is almost completely configurable in the website. Exemplary process on the website is shown [here]( https://www.youtube.com/watch?v=pLGIwBwWGps) (real time on the Jetson Nano, screen capture).
 
 The server structure can be seen in the image below. Here, shapes highlighted in blue are websites. The individual arrows represent links. When the server is started, you are on the start page, from here you can go to a short documentation or to the source and method selection. The dotted shapes represent arguments that can be configured on the website. Arguments like the method selection determine the further course on the website. For example, the hybrid methods can only be used with the Centroid tracker. As the hybrid methods are based on matching by the tracker. Blob detection does not use object detection and you are therefore not redirected to the page where you configure object detection. If you select the Centroid tracker, you can configure it further. This is followed by the inference. Here the image with the tracking information / object recognition etc. is streamed. From here you can go on to the results at any moment. On the results page you can select an evaluation file and the graphs will be updated with the evaluation data. 
 
@@ -719,11 +711,10 @@ In order to collect real recordings with the Jeston, it was deployed in a real e
 
 The GStreamer pipeline used for the camera requires a connection that can display a graphical terminal, even if one does not want to use it. So an X11 server had to be set up. This is not directly supported by Windows. For this purpose, Xming for Windows was installed and Putty was configured: the configuration can be found [at](https://www.tutonaut.de/x11-forwarding/). On the Jetson, this server is started in the terminal using startx. In another terminal, the display output must be specified by export DISPLAY=:0.0 (given this is 0.0). 
 
-# <a name='Lessons-Learned'> Lessons Learned
-
-
-
-Even though the Jetson Nano is optimized for IoT applications it has its limitations. As YOLOv5 is a quite large model it uses a lot of the system's resources. This leads to non-responsiveness and freezing during the loading of the model. Here it would be interesting to compare the performance of smaller models that are optimized to running on these devices. 
+# <a name='Lessons-Learned'></a> Lessons learned
+(Andrea Bartos)
+	
+While working on this project, we have learned quite a lot in very different areas. On the one hand, we learned about the value and benefits of bees for humanity through our use case. In terms of project management, we experienced that a clear distribution of responsibilities is necessary for progress. We also learned that when working with living creatures in nature, many things are unpredictable. Which is why we should always plan enough buffer for circumstances that cannot be influenced. We also learned that when a task is done by different people and their results have to be combined in the end, it is important to set standards. This saves a lot of extra work later on. In the end, the biggest improvements in performance were achieved with a more diverse and comprehensive data set. Thus we have learned what influence the composition of the training data set can have both positively and negatively on the performance. Using Google Colab as a training environment has its advantages, but it also has drawbacks like limited GPU capacity or the fact that you are kicked out if you are inactive. Furthermore, when implementing different models, we had the impression that Pytorch implementations are more user-friendly compared to Tensorflow. In terms of deployment, we learned that the Jetson Nano, although optimized for IoT applications, has its limitations. As YOLOv5 is a quite large model it uses a lot of the system's resources. This leads to non-responsiveness and freezing during the loading of the model. Here it would be interesting to compare the performance of smaller models that are optimized to running on these devices. 
 
 # <a name='Extra-Case'></a> Extra - Case
 (Oliver)
