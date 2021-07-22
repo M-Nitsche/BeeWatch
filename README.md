@@ -34,6 +34,7 @@
 	* [Hyperparameter Tuning](#HyperparameterTuning)
 	* [Final Results](#FinalResults)
 * [Deployment process](#Deploymentprocess)
+* [Tracker (Oliver)](#TrackerOliver)
 * [Flask (Oliver)](#FlaskOliver)
 
 <!-- vscode-markdown-toc-config
@@ -527,7 +528,7 @@ After completing the installation process we ran our model. Here we faced some p
 ```
 Please note that this is the performance without tracking. As previously mentioned it is considered good practice to use a virtual environment for every project you work on. However, we could not find the error that led to the torchvision version error. To reduce inference time we converted our model weights to TensorFlow Lite Format. This is a lightweight version of TensorFlow specially developed to run on small devices. Surprisingly this did not lead to any reduction in performance when testing it on a Macbook Pro. Instead the inference time per frame was around 24 seconds per frame. Due to that we did not further explore this direction ad did not deploy it on the Jetson Nano. 
 
-##  10. <a name='Tracker'></a>Tracker (Oliver)
+## <a name='TrackerOliver'></a>Tracker (Oliver)
 A simple Centroid tracker was implemented. At first, the tracker from https://www.pyimagesearch.com/2018/07/23/simple-object-tracking-with-opencv/ was used. The tracker can be integrated as an object. Using the update function, the current bounding boxes of frame t are passed to the tracker, which matches them with the bounding boxes from the previous step t-1 and thus assigns the tracking IDs. The matching takes place via the distances between the centres of the bounding boxes. Current bounding boxes that are not matched get a new ID. For IDs / past bounding boxes that are not matched with current bounding boxes, the disappearance counter is increased by one. If it reaches a certain threshold, the ID is deleted and not reassigned. The counter is set to 0 again when these are matched again. 
 
 A new tracker was implemented based on the functionality of the previous tracker. As the tracker described above has no argument to set a threshold that limits the pixel distance of the matching. Furthermore, the code of the tracker was significantly shortened, the basis of the matching is still the pixel distance of the centres of the bounding boxes, but the actual matching is now solved by linear sum assignment of scipy. The linear sum assignment problem is also known as minimum weight matching in bipartite graphs. 
@@ -557,7 +558,7 @@ The output of all trackers are the IDs, tracking information and the image with 
 Furthermore, an attempt was made to implement the MultiTracker from OpenCV. These are no longer up to date and in legacy of OpenCV. They are very cumbersome to implement, lead to many errors and were therefore discarded.
 
 
-##  11. <a name='FlaskOliver'></a>Flask (Oliver)
+## <a name='FlaskOliver'></a>Flask (Oliver)
 to do 
 
 (Christin Scheib)
