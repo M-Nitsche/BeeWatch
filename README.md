@@ -37,6 +37,7 @@
 * [Deployment process](#Deploymentprocess)
 * [Tracker](#Tracker)
 * [Flask](#Flask)
+* [Extra - Case](#Extra - Case)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -585,8 +586,8 @@ The output of all trackers are the IDs, tracking information and the image with 
 Furthermore, an attempt was made to implement the MultiTracker from OpenCV. These are no longer up to date and in legacy of OpenCV. They are very cumbersome to implement, lead to many errors and were therefore discarded.
 
 
-# <a name='Flask'></a>Flask (Oliver)
-to do 
+# <a name='Flask'></a>Flask
+(Oliver) 
 
 (Christin Scheib)
 Running the prerecorded video on the flask server led to a performance of 0,16 seconds per frame. A slight decrease in the runtime was running the model on a camera stream. Here we could only observe a performance of around 0.17 seconds per frame. 
@@ -599,12 +600,12 @@ Running the prerecorded video on the flask server led to a performance of 0,16 s
 Even though the Jetson Nano is optimized for IoT applications it has its limitations. As YOLOv5 is a quite large model it uses a lot of the system's resources. This leads to non-responsiveness and freezing during the loading of the model. Here it would be interesting to compare the performance of smaller models that are optimized to running on these devices. 
 
 # Extra - Case
-
+(Oliver)
 A suitable case was modelled in honeycomb structure for the deployment. This was commissioned, but could not be printed to the required standard. 
 
 <p float="center">
-  <img src="doku_resources/Case1.png" width="400" />
-  <img src="doku_resources/Case2.png" width="400" />
+  <img src="doku_resources/Case1.jpg" width="400" />
+  <img src="doku_resources/Case2.jpg" width="400" />
 </p>
 
 # References
