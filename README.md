@@ -260,7 +260,7 @@ sourced from https://arxiv.org/pdf/2004.10934.pdf and https://blog.roboflow.com/
 ### <a name='Backgroundsubtraction'></a>Background subtraction
 (Maximilian Nitsche)
 
-First of all we experiment with various background subtraction techniques as we are trying to detect moving and flying objects on relatively static backgrounds like flowers or bushes. 
+First of all we experimented with various background subtraction techniques as we are trying to detect moving and flying objects on relatively static backgrounds like flowers or bushes. 
 
 A common background subtraction technique is MOG which is a gaussian mixture-based background segmentation algorithm. The underlying assumption is that each pixel is derived from a mixture of K Gaussian distributions. The corresponding weight of the modeled mixture is the timespan that those colors were present in the video so far. Static background colors are therefore identified by higher weights. MOG2, which is an enhancement of MOG, is able to dynamically find the number of underlying gaussian distributuions by itself depending on the given scene. You can find a short implementation clip of the MOG2 on a recorded flower below.  
 
