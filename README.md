@@ -38,7 +38,7 @@
 * [Tracker](#Tracker)
 * [Hybrid and other methods for detection](#Hybrid)
 * [Flask](#Flask)
-* [Integration camera](#Camera)
+	* [Integration camera](#Camera)
 * [Extra - Case](#Extra-Case)
 
 <!-- vscode-markdown-toc-config
