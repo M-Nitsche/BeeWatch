@@ -694,7 +694,9 @@ A frontend with a Flask server was implemented. The server hosts a website which
 ```
 The Flask package is a micro web framework for python, it allows to add extensions to it like Flask-Bootstrap, which renders the HTML with free and open-source CSS from Bootstrap 3 (Bootstrap 3 is rather old).
 
-The server makes it easy to control the Jetson within a network. The detection is almost completely configurable in the website. Exemplary process on the website is shown [here]( https://www.youtube.com/watch?v=pLGIwBwWGps) (real time on the Jetson Nano, screen capture).
+The server makes it easy to control the Jetson within a network. The detection is almost completely configurable in the website. Exemplary process on the website is shown [here]( https://www.youtube.com/watch?v=pLGIwBwWGps) (real time object detection and tracking on the Jetson Nano, screen capture) and in the image below (for object detection, read: left to right, top to bottom). 
+
+![website](doku_resources/Website.png)
 
 The server structure can be seen in the image below. Here, shapes highlighted in blue are websites. The individual arrows represent links. When the server is started, you are on the start page, from here you can go to a short documentation or to the source and method selection. The dotted shapes represent arguments that can be configured on the website. Arguments like the method selection determine the further course on the website. For example, the hybrid methods can only be used with the Centroid tracker. As the hybrid methods are based on matching by the tracker. Blob detection does not use object detection and you are therefore not redirected to the page where you configure object detection. If you select the Centroid tracker, you can configure it further. This is followed by the inference. Here the image with the tracking information / object recognition etc. is streamed. From here you can go on to the results at any moment. On the results page you can select an evaluation file and the graphs will be updated with the evaluation data. 
 
