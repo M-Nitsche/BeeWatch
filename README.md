@@ -1,11 +1,13 @@
 <!-- vscode-markdown-toc -->
+
+# BeeWatch
 * [Use Case](#UseCase)
 	* [Motivation](#Motivation)
 	* [Problem Statement](#ProblemStatement)
 * [Data Gathering](#DataGathering)
-* [Labeling](#Labeling)
-	* [Object detection labeling](#Objectdetectionlabeling)
-	* [Object tracking labeling](#Objecttrackinglabeling)
+	* [Labeling](#Labeling)
+		* [Object detection labeling](#Objectdetectionlabeling)
+		* [Object tracking labeling](#Objecttrackinglabeling)
 	* [Additional data sources](#Additionaldatasources)
 		* [Mosaic dataset](#Mosaicdataset)
 		* [Synthetic dataset generation](#Syntheticdatasetgeneration)
@@ -42,7 +44,7 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-# BeeWatch
+
 ## <a name='UseCase'></a>Use Case
 ### <a name='Motivation'></a>Motivation
 (Christin Scheib)  
@@ -98,8 +100,8 @@ Exemplary images can be found below
 </p>
 
 
-## <a name='Labeling'></a>Labeling 
-### <a name='Objectdetectionlabeling'></a>Object detection labeling
+### <a name='Labeling'></a>Labeling 
+#### <a name='Objectdetectionlabeling'></a>Object detection labeling
 (David Blumenthal)
 Images where either taken as a single photo, or a video was taken and then deconstructed into single frames. To turn videos into single frames [FFmpeg](https://www.ffmpeg.org) was used. Images with various different backgrounds (flowers) are included - and selection of sample images can be seen below.
 For the initial labeling the [VGG Image Annotator](http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html) was used. 
@@ -109,7 +111,7 @@ This lead us to the holistic object detection platform [Roboflow](https://robofl
 Overall we manually labeled around 2.400 images of with 104 were null examples.
 On average each image has 1.1 annotations which results in 2.640 annotations overall distributed among one class [bee]. The images were annoteded with bounding boxes.
 
-### <a name='Objecttrackinglabeling'></a>Object tracking labeling
+#### <a name='Objecttrackinglabeling'></a>Object tracking labeling
 (Maximilian Nitsche)
 
 The primary technical objective of the use case is to quantify bee activity. Therefore, we are of course interested to track bees along a video-stream and to not double count a bee across frames as the model would otherwise overestimate the activity. Simple object detection labeling, i.e. drawing bounding boxes around individual bees, is therefore not sufficient to evaluate the overall use case. Detecting bees completely, i.e. without cutting off the wing for example, is therefore only of secondary importance. In order to test and evaluate our model and especially the tracking methods also on image sequences, we searched for a labeling tool where one can assign IDs across the individual frames in addition to drawing bounding boxes around objects. 
