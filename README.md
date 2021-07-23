@@ -280,7 +280,28 @@ A common background subtraction technique is MOG which is a gaussian mixture-bas
 The most important parameter of MOG2 is the kernel size which controls the sensitivity of the applied subtraction regarding minor background differences (here the kernel size is set to 2x2). The appropiate best kernel size depends on the distance and steadyness of the background and hence must be fine tuned on the given situation. 
 
 ### <a name='Baselinewithbackgroundsubtractionandblobdetection'></a>Baseline with background subtraction and blob detection
-(Aleks)
+(Aleksandar Ilievski)
+
+Blob detection is a method for detecting regions in a digital image that differ in properties, such as brightness or color, compared to surrounding regions. After implementing background subtraction on videos of moving bees on static backgrounds, the bees will appear white while the static background will remain dark. Blob detection can be used on this video to detect the bees. To implement the blob detection, OpenCV was used. Since the background in an outdoor setting is not static, the parameters for the blob detection were set in a way, so that they only recognize the bees without recognizing the small background movement of the flower. These are the set parameters for the blob detection:
+
+
+```yaml
+params.blobColor = 255
+params.filterByColor = True
+
+params.minArea = 300
+params.maxArea = 10000
+params.filterByArea = True
+
+params.minThreshold = 1;
+params.maxThreshold = 255;
+
+params.filterByInertia = False
+params.filterByConvexity = False
+
+params.filterByCircularity = True
+params.minCircularity = 0.1
+```
 
 ### <a name='BackgroundsubtractionYOLOv4tiny'></a>Background subtraction + YOLOv4 tiny 
 (Maximilian Nitsche)
